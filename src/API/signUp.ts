@@ -1,29 +1,29 @@
 import supabase from "../supabaseClient"
+import { toast } from 'react-toastify'
 
 interface signUpProps {
   email: string,
   password: string,
   setLoading: (b: boolean) => void,
-  setAuthError: (error: string) => void,
 }
 
-export const signUp = async ({ email, password, setLoading, setAuthError }: signUpProps) => {
+export const signUp = async ({ email, password, setLoading }: signUpProps) => {
   setLoading(true)
   try {
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
     })
 
     if (error) {
-      setAuthError('Sign up error')
+      toast.error('Sign up error')
       throw new Error(error.message)
     }
-    // toast.success(t('successfulSignUp'))
-    console.log('signUp data', data)
+    toast.info('Please confirm email letter', { autoClose: 5000 })
+    // console.log('signUp data', data)
   } catch (e) {
     console.log('signUpError', e)
-    // toast.error('SignUp error ' + e)
+    toast.error('SignUp error ' + e)
   } finally {
     setLoading(false)
   }

@@ -8,38 +8,63 @@ interface InputProps {
   onBlur?: () => void,
   onFocus?: () => void,
   isPassword?: boolean,
-  autoCompleteValue?: string
+  autoCompleteValue?: string,
+  error: string,
+  isFieldDirty: boolean,
+  name: string,
 }
 
-const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue }: InputProps) => {
+const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!isPassword)
+  const [isFocused, setIsFocused] = useState(false)
+
+  const onInputFocus = () => {
+    onFocus()
+    setIsFocused(true)
+  }
+
+  const onInputBlur = () => {
+    onBlur()
+    setIsFocused(false)
+  }
 
   const handlePasswordVisible = () => {
     setIsPasswordVisible(prev => !prev)
   }
 
   return (
-    <div className='relative'>
+    <div className='relative bg-inherit mb-4'>
+      <div className={`${isFocused || error || value ? '-translate-y-2 translate-x-2 px-1' : 'translate-x-3 translate-y-5'} 
+        absolute top-0 left-0 text-xs bg-bg1 select-none transition-transform duration-300 
+        ${error ? 'text-myred' : 'text-white'}
+      `}
+      >
+        {name}
+      </div>
       <input
         value={value}
         type={!isPasswordVisible && isPassword ? 'password' : 'text'}
         onChange={(e) => onInputChange(e)}
-        placeholder={placeholder}
+        placeholder={isFocused || error ? placeholder : ''}
         autoComplete={autoCompleteValue || 'on'}
-        className={`border-black bg-zinc-800 text-white} 
-          w-full border-b px-4 py-1 mb-1 outline-none flex items-center
+        className={`${error ? 'border-myred' : 'border-white'} bg-transparent text-white 
+          w-full border-2 rounded-[4px] px-3 text-sm py-4 mb-1 outline-none flex items-centers
         `}
         spellCheck={false}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onBlur={onInputBlur}
+        onFocus={onInputFocus}
       />
       {isPassword && (
         <EyeIcon
-          className={`absolute top-2 right-2 h-5 w-5 hover:cursor-pointer fill-slate-300`}
+          className={`absolute ${!!error && isFieldDirty ? 'top-1/4' : 'top-1/2 -translate-y-1/2'} 
+            right-3 h-5 w-5 hover:cursor-pointer fill-slate-300
+          `}
           onClick={handlePasswordVisible}
         />
-      )
-      }
+      )}
+      {!!error && isFieldDirty && (
+        <div className='text-myred pl-3 text-xs select-none'>{error}</div>
+      )}
     </div>
   )
 }

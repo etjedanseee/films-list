@@ -13,7 +13,6 @@ const AuthPage = () => {
   const [isFormValid, setIsFormValid] = useState(false)
   const [isSignIn, setIsSignIn] = useState(true)
   const [loading, setLoading] = useState(false)
-  const [authError, setAuthError] = useState('')
 
   const onAuthFormSubmit = () => {
     console.log('onSubmit', email, password)
@@ -21,23 +20,20 @@ const AuthPage = () => {
       return;
     }
     if (isSignIn) {
-      console.log('signIn')
       signIn({
         email,
         password,
         setLoading,
-        setAuthError,
         setUser,
         navigate,
       })
     } else {
-      console.log('signUp')
       signUp({
         email,
         password,
         setLoading,
-        setAuthError
       })
+      setIsSignIn(true)
     }
   }
 
@@ -57,8 +53,6 @@ const AuthPage = () => {
         isSignIn={isSignIn}
         setIsSignIn={setIsSignIn}
         onAuthFormSubmit={onAuthFormSubmit}
-        authError={authError}
-        setAuthError={setAuthError}
       />
     </div>
   )
