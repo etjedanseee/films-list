@@ -5,10 +5,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { searchDataOnSites } from './API/searchDataOnSites';
 import Home from './pages/Home';
+import { searchDataInfo } from './API/searchDataInfo';
 
 function App() {
   useEffect(() => {
     // searchDataOnSites({ search: 'imitation game', sites: ['uakino.lu'] })
+    // searchDataInfo('jack reacher')
   }, [])
   return (
     <div className='flex-1 bg-bg1 flex flex-col h-full'>
