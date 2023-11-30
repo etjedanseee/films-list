@@ -18,6 +18,18 @@
   font-style: normal;
 }
 
+body{
+  min-height: 100vh;
+  display: flex;
+  flex-direction:column;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction:column;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
