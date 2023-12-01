@@ -9,8 +9,6 @@ export interface AuthState {
 
 export enum AuthActionTypes {
   SET_USER = 'SET_USER',
-  SET_CHAT_LIST = 'SET_CHAT_LIST',
-  SET_FRIENDS = 'SET_FRIENDS'
 }
 
 interface setUser {

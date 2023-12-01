@@ -8,14 +8,15 @@ interface ButtonProps {
   p?: string,
   type?: 'button' | 'reset' | 'submit',
   onClick: () => void,
+  className?: string,
 }
 
-const Button = ({ title, variant, disabled, onClick, p, type }: ButtonProps) => {
+const Button = ({ title, variant, disabled, onClick, p, type, className }: ButtonProps) => {
   return (
     <button
       className={`border-2 ${disabled ? 'border-myred' : 'border-blue hover:shadow-myshadow'} 
         ${variant || 'rounded-md'} w-full px-4 ${p ? p : 'py-2'} 
-        text-center font-medium select-none cursor-pointer  active:border-cyan-500
+        text-center font-medium select-none cursor-pointer  active:border-cyan-500 ${className}
       `}
       onClick={onClick}
       type={type || 'button'}

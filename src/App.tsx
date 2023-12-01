@@ -1,22 +1,90 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import AuthPage from './pages/AuthPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { searchDataOnSites } from './API/searchDataOnSites';
-import Home from './pages/Home';
-import { searchDataInfo } from './API/searchDataInfo';
+import { privateRoutes, publicRoutes } from './utils/routes';
+import { useTypedSelector } from './hooks/useTypedSelector';
+import { useActions } from './hooks/useActions';
+import supabase from './supabaseClient';
+import NotFoundPage from './pages/NotFoundPage';
+import Search from './components/Search';
+import Navbar from './components/Navbar';
 
 function App() {
+  const { user } = useTypedSelector(state => state.auth)
+  const { lists } = useTypedSelector(state => state.lists)
+  const { sites } = useTypedSelector(state => state.sites)
+  const { fetchLists, fetchSites, setUser } = useActions()
+  const [isCheckingSession, setIsCheckingSession] = useState(true)
+
   useEffect(() => {
-    // searchDataOnSites({ search: 'imitation game', sites: ['uakino.lu'] })
-    // searchDataInfo('jack reacher')
+    const checkSession = async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession()
+        if (error) {
+          throw new Error(error.message)
+        }
+        if (data.session) {
+          setUser({ email: data.session.user.email || '', id: data.session.user.id })
+        }
+      } catch (e) {
+        console.error('get session error', e)
+      } finally {
+        setIsCheckingSession(false)
+      }
+    }
+    checkSession()
   }, [])
+
+  useEffect(() => {
+    if (user && !lists.length) {
+      fetchLists()
+    }
+  }, [user, lists.length])
+
+  useEffect(() => {
+    if (user && !sites.length) {
+      fetchSites()
+    }
+  }, [user, sites.length])
+
+  if (isCheckingSession) {
+    return (
+      <div className='text-5xl'>Loading...</div>
+    )
+  }
+
   return (
-    <div className='flex-1 bg-bg1 flex flex-col h-full'>
+    <div className='flex-1 bg-bg1 flex flex-col py-3 px-2'>
+      <div className='flex justify-between gap-x-8'>
+        {user && (
+          <>
+            <Search />
+            <Navbar />
+          </>
+        )}
+      </div>
       <Routes>
-        <Route element={<AuthPage />} path='/auth' />
-        <Route element={<Home />} path='/' />
+        {user
+          ? (
+            <>
+              {
+                privateRoutes.map(route => (
+                  <Route {...route} key={route.path} />
+                ))
+              }
+            </>
+          )
+          : (
+            <>
+              {
+                publicRoutes.map(route => (
+                  <Route {...route} key={route.path} />
+                ))
+              }
+            </>
+          )}
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <ToastContainer
         position="top-right"

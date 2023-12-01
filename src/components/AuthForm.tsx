@@ -98,6 +98,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           error={emailError}
           isFieldDirty={isEmailDirty}
           name='Email*'
+          className='mb-4'
         />
         <Input
           onInputChange={onPasswordChange}
@@ -108,6 +109,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           isFieldDirty={isPasswordDirty}
           name='Password*'
           isPassword={true}
+          className='mb-4'
         />
         <Button
           title={isSignIn ? 'Sign in' : 'Sign up'}
