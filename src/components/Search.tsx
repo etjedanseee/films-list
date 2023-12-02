@@ -1,8 +1,7 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react'
+import React, { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react'
 import Input from '../UI/Input'
 import Button from '../UI/Button'
 import { searchDataInfo } from '../API/searchDataInfo'
-import { ISearchDataItem } from '../types/search'
 import { useNavigate } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from '../hooks/useTypedSelector'
@@ -10,12 +9,11 @@ import { useTypedSelector } from '../hooks/useTypedSelector'
 const Search = () => {
   const [search, setSearch] = useState('')
   const [searchError, setSearchError] = useState('')
-  // const [loading, setLoading] = useState(false)
-  // const [results, setResults] = useState<ISearchDataItem[]>([])
   const [isFocused, setIsFocused] = useState(false)
+  const lastSearchRef = useRef('')
   const navigate = useNavigate()
   const { loading } = useTypedSelector(state => state.search)
-  const { setResults, setLoading } = useActions()
+  const { setResults, setLoading, setLastSearch } = useActions()
 
   const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -33,14 +31,15 @@ const Search = () => {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const trimmedSearch = search.trim()
-    if (trimmedSearch.length >= 3) {
-      console.log('submit search', trimmedSearch)
+    if (trimmedSearch.length >= 3 && trimmedSearch !== lastSearchRef.current) {
       searchDataInfo({
         title: trimmedSearch,
         setLoading,
         setResults
       })
-      navigate('/search/' + trimmedSearch)
+      setLastSearch(trimmedSearch)
+      lastSearchRef.current = trimmedSearch
+      navigate('/search/' + encodeURIComponent(trimmedSearch))
     }
   }
 
@@ -49,11 +48,19 @@ const Search = () => {
   }
 
   const onSearchBlur = () => {
-    setIsFocused(false)
+    setTimeout(() => { setIsFocused(false) }, 0)
     if (!search) {
       setSearchError('')
     }
   }
+
+  useEffect(() => {
+    const lastSearch = localStorage.getItem('lastSearch')
+    if (lastSearch) {
+      setSearch(lastSearch)
+      lastSearchRef.current = lastSearch
+    }
+  }, [])
 
   return (
     <form

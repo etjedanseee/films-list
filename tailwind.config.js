@@ -8,6 +8,7 @@ module.exports = {
         'bg2': '#323232',
         'myred': '#d3241c',
         'blue': '#184674',
+        'gray': '#1d1e1f',
       },
       boxShadow: {
         'myshadow': 'inset 0 0 10px #184674'

@@ -14,7 +14,7 @@ function App() {
   const { user } = useTypedSelector(state => state.auth)
   const { lists } = useTypedSelector(state => state.lists)
   const { sites } = useTypedSelector(state => state.sites)
-  const { fetchLists, fetchSites, setUser } = useActions()
+  const { fetchLists, fetchSites, setUser, setResults } = useActions()
   const [isCheckingSession, setIsCheckingSession] = useState(true)
 
   useEffect(() => {
@@ -47,6 +47,13 @@ function App() {
       fetchSites()
     }
   }, [user, sites.length])
+
+  useEffect(() => {
+    const lastResults = localStorage.getItem('searchResults')
+    if (lastResults) {
+      setResults(JSON.parse(lastResults))
+    }
+  }, [])
 
   if (isCheckingSession) {
     return (

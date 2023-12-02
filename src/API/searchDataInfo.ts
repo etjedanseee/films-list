@@ -1,5 +1,5 @@
 import { ISearchDataItem } from "../types/search"
-import { posterSizes } from "../utils/consts"
+import { baseImageUrl, posterSizes } from "../utils/consts"
 
 interface ISearchDataInfo {
   title: string,
@@ -34,23 +34,31 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
     const items = data?.results
     if (items && Array.isArray(items) && items.length > 0) {
       const imageSize = posterSizes[2]
-      const baseImageUrl = 'https://image.tmdb.org/t/p/';
-      items.forEach(item => {
-        // console.log('item', item)
+      for (const item of items) {
+        if (item.media_type === 'person') {
+          return;
+        }
         const posterPath = item?.poster_path || item?.backdrop_path || '';
         const obj: ISearchDataItem = {
           id: item?.id,
           title: item?.title || item?.original_title || item?.original_name || '',
-          fullPosterUrl: baseImageUrl + imageSize + posterPath,
+          fullPosterUrl: posterPath ? baseImageUrl + imageSize + posterPath : '',
           mediaType: item?.media_type || 'movie',
           releaseDate: item?.release_date || item?.first_air_date || '',
-          vote: item?.vote_average || 0
-        }
+          vote: item?.vote_average || 0,
+        };
+        // await fetch(`https://api.themoviedb.org/3/${obj.mediaType}/${obj.id}`, options)
+        //   .then(item => item.json())
+        //   .then((val: { genres: { name: string }[] }) => {
+        //     console.log('genres for', obj.mediaType, obj.title, val)
+        //     obj.genres = val.genres.map(genre => genre.name)
+        //     results.push(obj)
+        //   })
         results.push(obj)
-      })
+      }
       setResults(results)
     } else {
-      console.log('Ничего не найдено.');
+      console.log('No found items');
     }
   } catch (e) {
     console.error('Error fetch dataInfo', e)

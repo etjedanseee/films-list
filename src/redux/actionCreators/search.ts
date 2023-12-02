@@ -11,6 +11,15 @@ export const setLoading = (b: boolean) => {
   }
 }
 
+export const setLastSearch = (search: string) => {
+  return (dispatch: Dispatch<SearchAction>) => {
+    dispatch({
+      type: SearchActionTypes.SET_LAST_SEARCH,
+      payload: search
+    })
+  }
+}
+
 export const setResults = (results: ISearchDataItem[]) => {
   return (dispatch: Dispatch<SearchAction>) => {
     dispatch({

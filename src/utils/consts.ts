@@ -7,3 +7,5 @@ export const posterSizes = [
   "w780",
   "original"
 ]
+
+export const baseImageUrl = 'https://image.tmdb.org/t/p/'
