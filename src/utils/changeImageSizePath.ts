@@ -6,5 +6,5 @@ export const changeImageSizePath = (url: string): string => {
   if (!~index) {
     return url
   }
-  return url.slice(0, index) + posterSizes[2] + url.slice(index + 4)
+  return url.slice(0, index) + posterSizes[3] + url.slice(index + 4)
 }

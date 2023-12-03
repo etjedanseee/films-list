@@ -11,32 +11,40 @@ export interface ISearchDataOnSites {
   }
 }
 
-export interface ILink {
-  site: string,
+export interface IFoundLink {
   title: string,
   link: string,
+}
+
+export interface ILink {
+  site: string,
+  result: IFoundLink | null,
 }
 
 export type MediaType = 'movie' | 'tv'
 
 export interface ISearchDataItem {
-  id: number,
+  dataId: number,
   title: string,
   fullPosterUrl: string,
   mediaType: MediaType,
   releaseDate: string,
   vote: number,
+}
 
-}
-//rewrite
-export interface IDataItemWithLinks extends ISearchDataItem {
-  links: string[],
-  genres: string[],
-}
 export interface SearchState {
   results: ISearchDataItem[],
   loading: boolean,
   lastSearch: string,
+}
+
+export interface ISearchDataOnSitesResponse {
+  items?: {
+    displayLink: string,
+    link: string,
+    snippet: string,
+    title: string,
+  }[],
 }
 
 export enum SearchActionTypes {

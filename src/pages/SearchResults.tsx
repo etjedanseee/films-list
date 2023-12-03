@@ -15,12 +15,11 @@ const SearchResults = () => {
     <div>
       <div className='mb-3'>Results:</div>
       <div className='flex flex-wrap items-stretch gap-x-2 gap-y-4'>
-        {/* <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 items-stretch gap-x-2 gap-y-4'> */}
         {!!results.length && results.map(res => (
           <SearchItem
             item={res}
             search={search || ''}
-            key={res.id}
+            key={res.dataId}
           />
         ))}
       </div>

@@ -1,7 +1,7 @@
 import { ListsAction, ListsActionTypes, ListsState } from "../../types/lists"
 
 const initialState: ListsState = {
-  lists: []
+  lists: [],
 }
 
 export const listsReducer = (state = initialState, action: ListsAction): ListsState => {

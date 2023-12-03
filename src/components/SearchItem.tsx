@@ -8,7 +8,7 @@ interface SearchItemProps {
 }
 
 const SearchItem = ({ item, search }: SearchItemProps) => {
-  const { fullPosterUrl, id, mediaType, releaseDate, title, vote } = item
+  const { fullPosterUrl, dataId, mediaType, releaseDate, title, vote } = item
   const navigate = useNavigate()
 
   const voteBgColor = vote <= 5
@@ -21,7 +21,7 @@ const SearchItem = ({ item, search }: SearchItemProps) => {
     : 'bg-pink-700'
 
   const onItemClick = () => {
-    navigate(`/search/${search}/${id}`)
+    navigate(`/search/${encodeURIComponent(search)}/${dataId}`)
   }
 
   return (
