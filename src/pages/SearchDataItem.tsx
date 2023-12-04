@@ -23,13 +23,14 @@ const SearchDataItem = () => {
   const [sitesResults, setSitesResults] = useState<ILink[]>([])
   const isSearchedOnSites = useRef(false)
 
-  const searchSites = () => {
+  const onSearchOnSitesClick = () => {
     if (item && !isSearchedOnSites.current && sites.length) {
       isSearchedOnSites.current = true
       searchDataOnSites({
         search: item.title,
+        year: item.releaseDate.slice(0, 4),
         // sites,
-        sites: [sites[1], sites[4]],
+        sites: [sites[2], sites[4]],
         setSitesResults,
         setLoading: setSitesLoading,
       })
@@ -47,15 +48,15 @@ const SearchDataItem = () => {
   }, [id, results])
 
   useEffect(() => {
-    if (item) {
-      // fetchDataAdditionalInfo({
-      //   dataId: item.dataId,
-      //   mediaType: item.mediaType,
-      //   setAdditionalInfo,
-      //   setLoading:setInfoLoading,
-      // })
+    if (item && !additionalInfo) {
+      fetchDataAdditionalInfo({
+        dataId: item.dataId,
+        mediaType: item.mediaType,
+        setAdditionalInfo,
+        setLoading: setInfoLoading,
+      })
     }
-  }, [item])
+  }, [item, additionalInfo])
 
   if (!item || infoLoading) {
     return <div>Loading...</div>
@@ -63,7 +64,7 @@ const SearchDataItem = () => {
 
   return (
     <div className='mt-3 px-2 flex gap-x-10'>
-      <div className='bg-gray2 rounded-md p-4'>
+      <div className='bg-mygray2 rounded-md p-4'>
         <div className='w-[342px] m-auto'>
           <div className='relative'>
             <img
@@ -71,12 +72,15 @@ const SearchDataItem = () => {
               alt="poster"
             />
             <div className={`absolute top-0 left-0 px-3 py-2 
-            ${item.mediaType === 'movie' ? 'bg-blue' : 'bg-pink-700'} text-sm select-none
+            ${item.mediaType === 'movie' ? 'bg-myblue' : 'bg-pink-700'} text-sm select-none
           `}>
               {item.mediaType === 'tv' ? 'series' : item.mediaType}
             </div>
           </div>
-          <DataListManager />
+          <DataListManager
+            searchDataItem={item}
+            sitesResults={sitesResults}
+          />
         </div>
       </div>
       <div>
@@ -109,13 +113,13 @@ const SearchDataItem = () => {
             results={sitesResults}
           />
           : (
-            <>
+            <div>
               <Button
-                onClick={searchSites}
+                onClick={onSearchOnSitesClick}
                 title='Search on sites'
                 className='mt-6'
               />
-            </>
+            </div>
           )
         }
       </div>

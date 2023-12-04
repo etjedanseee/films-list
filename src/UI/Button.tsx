@@ -14,7 +14,7 @@ interface ButtonProps {
 const Button = ({ title, variant, disabled, onClick, p, type, className }: ButtonProps) => {
   return (
     <button
-      className={`border-2 ${disabled ? 'border-myred' : 'border-blue hover:shadow-myshadow'} 
+      className={`border-2 ${disabled ? 'border-myred' : 'border-myblue hover:shadow-myshadow'} 
         ${variant || 'rounded-md'} w-full px-4 ${p ? p : 'py-2'} 
         text-center font-medium select-none cursor-pointer  active:border-cyan-500 ${className}
       `}

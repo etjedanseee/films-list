@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { ILink } from '../types/search'
 import { ReactComponent as RejectedIcon } from '../assets/cancel.svg'
 import { ReactComponent as SuccessIcon } from '../assets/success.svg'
@@ -11,17 +11,6 @@ interface SitesProps {
 
 const Sites = ({ results, loading }: SitesProps) => {
   const { sites } = useTypedSelector(state => state.sites)
-  const sortedResults = useMemo(() => {
-    return [...results].sort((a, b) => {
-      if (a.result && b.result) {
-        return 0
-      }
-      else if (a.result && !b.result) {
-        return -1
-      }
-      else return 1
-    })
-  }, [results])
 
   return (
     <div className='mt-6'>
@@ -37,7 +26,7 @@ const Sites = ({ results, loading }: SitesProps) => {
       )
         : (
           <>
-            {!!sortedResults.length && sortedResults.map(item => (
+            {!!results.length && results.map(item => (
               <div key={item.site} className='flex items-center gap-x-4'>
                 {item.result ? (
                   <SuccessIcon className='h-7 w-7 fill-green-500' />

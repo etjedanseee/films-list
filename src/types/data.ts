@@ -1,9 +1,9 @@
-import { ISearchDataItem } from "./search";
+import { ILink, ISearchDataItem } from "./search";
 
 export interface IDataItemWithLinks extends ISearchDataItem {
   id: number,
-  listId: number,
-  links: string[],
+  listsIds: number[],
+  links: ILink[],
 }
 
 export interface DataState {
