@@ -1,15 +1,13 @@
 import React from 'react'
 import { ISearchDataItem } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
-import { useNavigate } from 'react-router-dom'
 interface SearchItemProps {
   item: ISearchDataItem,
-  search: string,
+  onItemClick: (dataId: number) => void,
 }
 
-const SearchItem = ({ item, search }: SearchItemProps) => {
+const SearchItem = ({ item, onItemClick }: SearchItemProps) => {
   const { fullPosterUrl, dataId, mediaType, releaseDate, title, vote } = item
-  const navigate = useNavigate()
 
   const voteBgColor = vote <= 5
     ? 'bg-orange-500'
@@ -20,14 +18,10 @@ const SearchItem = ({ item, search }: SearchItemProps) => {
     ? 'bg-myblue'
     : 'bg-pink-700'
 
-  const onItemClick = () => {
-    navigate(`/search/${encodeURIComponent(search)}/${dataId}`)
-  }
-
   return (
     <div
       className='max-w-[185px] w-full cursor-pointer flex flex-col'
-      onClick={onItemClick}
+      onClick={() => onItemClick(dataId)}
     >
       <div className='relative'>
         <img

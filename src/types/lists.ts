@@ -19,4 +19,8 @@ interface setLists {
   payload: IList[]
 }
 
+export interface ICountDataInLists {
+  [listId: number]: number,
+}
+
 export type ListsAction = setLists

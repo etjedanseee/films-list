@@ -1,11 +1,16 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import SearchItem from '../components/SearchItem'
 
 const SearchResults = () => {
   const { search } = useParams()
   const { loading, results } = useTypedSelector(state => state.search)
+  const navigate = useNavigate()
+
+  const onPreviewItemClick = (dataId: number) => {
+    navigate(`/search/${encodeURIComponent(search || '')}/${dataId}`)
+  }
 
   if (loading) {
     return <div>Loading...</div>
@@ -18,7 +23,7 @@ const SearchResults = () => {
         {!!results.length && results.map(res => (
           <SearchItem
             item={res}
-            search={search || ''}
+            onItemClick={onPreviewItemClick}
             key={res.dataId}
           />
         ))}

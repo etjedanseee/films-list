@@ -16,6 +16,7 @@ const SearchDataItem = () => {
   const { id } = useParams()
   const { results } = useTypedSelector(state => state.search)
   const { sites } = useTypedSelector(state => state.sites)
+  const { data } = useTypedSelector(state => state.data)
   const [item, setItem] = useState<ISearchDataItem | null>(null)
   const [additionalInfo, setAdditionalInfo] = useState<IDataAdditionalInfo | null>(null)
   const [infoLoading, setInfoLoading] = useState(false)
@@ -30,7 +31,7 @@ const SearchDataItem = () => {
         search: item.title,
         year: item.releaseDate.slice(0, 4),
         // sites,
-        sites: [sites[2], sites[4]],
+        sites: [sites[2]],
         setSitesResults,
         setLoading: setSitesLoading,
       })
@@ -41,22 +42,33 @@ const SearchDataItem = () => {
     if (!id) {
       return;
     }
-    const findItem = results.find(r => r.dataId === +id)
+    const findItem = data.find(i => i.dataId === +id) || results.find(r => r.dataId === +id)
     if (findItem) {
       setItem(findItem)
     }
-  }, [id, results])
+  }, [id, results, data])
 
   useEffect(() => {
     if (item && !additionalInfo) {
-      fetchDataAdditionalInfo({
-        dataId: item.dataId,
-        mediaType: item.mediaType,
-        setAdditionalInfo,
-        setLoading: setInfoLoading,
-      })
+      const localAdInfo = localStorage.getItem('additionalInfo' + item.dataId)
+      if (localAdInfo) {
+        setAdditionalInfo(JSON.parse(localAdInfo))
+      } else {
+        fetchDataAdditionalInfo({
+          dataId: item.dataId,
+          mediaType: item.mediaType,
+          setAdditionalInfo,
+          setLoading: setInfoLoading,
+        })
+      }
     }
   }, [item, additionalInfo])
+
+  useEffect(() => {
+    if (item && additionalInfo) {
+      localStorage.setItem('additionalInfo' + item.dataId, JSON.stringify(additionalInfo))
+    }
+  }, [additionalInfo, item])
 
   if (!item || infoLoading) {
     return <div>Loading...</div>
