@@ -32,7 +32,7 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
       const imageSize = posterSizes[2]
       for (const item of items) {
         if (item.media_type === 'person') {
-          return;
+          continue;
         }
         const posterPath = item?.poster_path || item?.backdrop_path || '';
         const obj: ISearchDataItem = {
@@ -45,9 +45,11 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
         };
         results.push(obj)
       }
+      console.log('results', results)
       setResults(results)
     } else {
       console.log('No found items');
+      setResults([])
     }
   } catch (e) {
     console.error('Error fetch dataInfo', e)

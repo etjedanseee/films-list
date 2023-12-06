@@ -126,7 +126,7 @@ const DataItem = () => {
             <span className='text-zinc-400'>Overview: </span>{additionalInfo.overview}
           </div>
         )}
-        {!!sitesResults.length ?
+        {!!sitesResults.length || sitesLoading ?
           <Sites
             loading={sitesLoading}
             results={sitesResults}

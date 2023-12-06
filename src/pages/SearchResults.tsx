@@ -17,7 +17,13 @@ const SearchResults = () => {
 
   return (
     <div>
-      <div className='mb-3'>Results:</div>
+      {!!results.length ? (
+        <div className='mb-3 text-xl font-medium mt-1'>Results:</div>
+      )
+        : (
+          <div className=' text-xl font-medium mt-3'>No found results. Please search in English.</div>
+        )
+      }
       <div className='flex flex-wrap items-stretch gap-x-2 gap-y-4'>
         {!!results.length && results.map(res => (
           <SearchItem
