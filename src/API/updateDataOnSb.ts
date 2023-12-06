@@ -1,16 +1,19 @@
 import supabase from "../supabaseClient"
+import { IInLists } from "../types/data"
 
-export const updateDataOnSb = async (itemId: number, listsIds: number[]) => {
+export const updateDataOnSb = async (itemId: number, inLists: IInLists[], setLoading: (b: boolean) => void) => {
+  setLoading(true)
   try {
-    const { data, error } = await supabase.from('Data')
-      .update({ lists_ids: listsIds })
+    const { error } = await supabase.from('Data')
+      .update({ inLists })
       .eq('id', itemId)
 
     if (error) {
       throw new Error(error.message)
     }
-    console.log('update data', data)
   } catch (e) {
     console.error('Error update data', e)
+  } finally {
+    setLoading(false)
   }
 }

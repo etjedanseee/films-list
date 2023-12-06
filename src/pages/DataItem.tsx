@@ -11,8 +11,9 @@ import { formatMinToHours } from '../utils/formatMinToHours'
 import { searchDataOnSites } from '../API/searchDataOnSites'
 import Sites from '../components/Sites'
 import Button from '../UI/Button'
+import { formatVote } from '../utils/formatVote'
 
-const SearchDataItem = () => {
+const DataItem = () => {
   const { id } = useParams()
   const { results } = useTypedSelector(state => state.search)
   const { sites } = useTypedSelector(state => state.sites)
@@ -22,11 +23,9 @@ const SearchDataItem = () => {
   const [infoLoading, setInfoLoading] = useState(false)
   const [sitesLoading, setSitesLoading] = useState(false)
   const [sitesResults, setSitesResults] = useState<ILink[]>([])
-  const isSearchedOnSites = useRef(false)
 
   const onSearchOnSitesClick = () => {
-    if (item && !isSearchedOnSites.current && sites.length) {
-      isSearchedOnSites.current = true
+    if (item && !sitesResults.length && sites.length) {
       searchDataOnSites({
         search: item.title,
         year: item.releaseDate.slice(0, 4),
@@ -42,11 +41,11 @@ const SearchDataItem = () => {
     if (!id) {
       return;
     }
-    const findItem = data.find(i => i.dataId === +id) || results.find(r => r.dataId === +id)
+    const findItem = results.find(r => r.dataId === +id)
     if (findItem) {
       setItem(findItem)
     }
-  }, [id, results, data])
+  }, [id, results])
 
   useEffect(() => {
     if (item && !additionalInfo) {
@@ -69,6 +68,14 @@ const SearchDataItem = () => {
       localStorage.setItem('additionalInfo' + item.dataId, JSON.stringify(additionalInfo))
     }
   }, [additionalInfo, item])
+
+  useEffect(() => {
+    const dataItem = data.find(i => i.dataId === (id ? +id : 0))
+    if (dataItem) {
+      setItem(dataItem)
+      setSitesResults(dataItem.links)
+    }
+  }, [data, id])
 
   if (!item || infoLoading) {
     return <div>Loading...</div>
@@ -104,7 +111,7 @@ const SearchDataItem = () => {
         )}
         <div className='font-medium'>
           <span className='text-zinc-400'>Vote: </span>
-          {item.vote.toFixed(1).lastIndexOf('.0') !== -1 ? item.vote.toFixed(0) : item.vote.toFixed(1)}
+          {formatVote(item.vote)}
         </div>
         {additionalInfo && !!additionalInfo.runtime && (
           <div className='font-medium'>
@@ -119,7 +126,7 @@ const SearchDataItem = () => {
             <span className='text-zinc-400'>Overview: </span>{additionalInfo.overview}
           </div>
         )}
-        {isSearchedOnSites.current ?
+        {!!sitesResults.length ?
           <Sites
             loading={sitesLoading}
             results={sitesResults}
@@ -139,4 +146,4 @@ const SearchDataItem = () => {
   )
 }
 
-export default SearchDataItem
+export default DataItem

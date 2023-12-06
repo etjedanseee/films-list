@@ -25,7 +25,7 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
       .catch(error => ({ error }))
   })
 
-  const results: ILink[] = []
+  const results: ILink[] = sites.map(site => ({ site, result: null }))
   try {
     const responses = await Promise.allSettled(promises);
     let index = 0
@@ -34,7 +34,6 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
         const data = response.value;
         if ('error' in data) {
           console.error('Rejected:', data.error);
-          results.push({ site: sites[index], result: null })
         } else {
           const res = data as ISearchDataOnSitesResponse
           if (res?.items && res.items.length) {
@@ -49,21 +48,16 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
                 } else return 1
               })
             if (filteredItems.length) {
-              results.push({
+              results[index] = {
                 site: sites[index], result: {
                   link: filteredItems[0].link,
                   title: filteredItems[0].title,
                 }
-              })
-            } else {
-              results.push({ site: sites[index], result: null })
+              }
             }
-          } else {
-            results.push({ site: sites[index], result: null })
           }
         }
       } else {
-        results.push({ site: sites[index], result: null })
         const reason = response.reason;
         console.error('Rejected:', reason);
       }
@@ -75,8 +69,7 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
       }
       else if (a.result && !b.result) {
         return -1
-      }
-      else return 1
+      } else return 1
     })
     console.log('sorted results', sortedResults)
     setSitesResults(sortedResults)

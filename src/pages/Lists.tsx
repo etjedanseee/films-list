@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ICountDataInLists, IList } from '../types/lists'
 import { calcCountDataInLists } from '../utils/calcCountDataInLists'
-import SearchItem from '../components/SearchItem'
+import List from '../components/List'
 
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
@@ -12,10 +12,6 @@ const Lists = () => {
 
   const onListClick = (list: IList) => {
     setCurrentList(list)
-  }
-
-  const onPreviewItemClick = (dataId: number) => {
-    console.log('onPreviewItemClick', dataId)
   }
 
   useEffect(() => {
@@ -48,18 +44,9 @@ const Lists = () => {
             </div>
           ))}
         </div>
-        <div className='flex flex-wrap items-stretch gap-x-2 gap-y-4'>
-          {currentList && (
-            <>
-              {data.filter(item => item.listsIds.includes(currentList.id)).map(item => (
-                <SearchItem
-                  item={item}
-                  onItemClick={onPreviewItemClick}
-                  key={item.id} />
-              ))}
-            </>
-          )}
-        </div>
+        {currentList && lists.find(list => list.id === currentList.id) && (
+          <List listId={currentList.id} />
+        )}
       </div>
     </div>
   )

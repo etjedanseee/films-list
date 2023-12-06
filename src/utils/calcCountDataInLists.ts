@@ -10,10 +10,9 @@ export const calcCountDataInLists = (data: IDataItemWithLinks[], lists: IList[])
   }
 
   for (let item of data) {
-    const itemLists = item.listsIds
-    for (let itemListId of itemLists) {
-      const currCount = map[itemListId]
-      map[itemListId] = currCount + 1
+    for (let itemInList of item.inLists) {
+      const currCount = map[itemInList.id]
+      map[itemInList.id] = currCount + 1
     }
   }
 

@@ -1,15 +1,14 @@
 import React from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
-import SearchItem from '../components/SearchItem'
+import SearchItem from '../components/PreviewItem'
 
 const SearchResults = () => {
-  const { search } = useParams()
   const { loading, results } = useTypedSelector(state => state.search)
   const navigate = useNavigate()
 
   const onPreviewItemClick = (dataId: number) => {
-    navigate(`/search/${encodeURIComponent(search || '')}/${dataId}`)
+    navigate(`/data/${dataId}`)
   }
 
   if (loading) {

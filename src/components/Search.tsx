@@ -31,14 +31,16 @@ const Search = () => {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const trimmedSearch = search.trim()
-    if (trimmedSearch.length >= 3 && trimmedSearch !== lastSearchRef.current) {
-      searchDataInfo({
-        title: trimmedSearch,
-        setLoading,
-        setResults
-      })
-      setLastSearch(trimmedSearch)
-      lastSearchRef.current = trimmedSearch
+    if (trimmedSearch.length >= 3) {
+      if (trimmedSearch !== lastSearchRef.current) {
+        searchDataInfo({
+          title: trimmedSearch,
+          setLoading,
+          setResults
+        })
+        setLastSearch(trimmedSearch)
+        lastSearchRef.current = trimmedSearch
+      }
       navigate('/search/' + encodeURIComponent(trimmedSearch))
     }
   }

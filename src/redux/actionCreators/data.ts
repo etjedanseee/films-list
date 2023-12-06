@@ -23,7 +23,7 @@ export const fetchData = () => {
       const dataArr: IDataItemWithLinks[] = data.map(item => ({
         id: item.id,
         dataId: item.data_id,
-        listsIds: item.lists_ids,
+        inLists: item.inLists,
         title: item.title,
         fullPosterUrl: item.full_poster_url,
         mediaType: item.media_type,

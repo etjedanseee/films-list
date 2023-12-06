@@ -1,19 +1,18 @@
 import React from 'react'
-import { ISearchDataItem } from '../types/search'
+import { ILink, ISearchDataItem } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
+import DataListManager from '../UI/DataListManager'
+import { getVoteBgColor } from '../utils/getVoteBgColor'
+import { formatVote } from '../utils/formatVote'
 interface SearchItemProps {
   item: ISearchDataItem,
   onItemClick: (dataId: number) => void,
+  sitesResults?: ILink[],
 }
 
-const SearchItem = ({ item, onItemClick }: SearchItemProps) => {
+const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
   const { fullPosterUrl, dataId, mediaType, releaseDate, title, vote } = item
 
-  const voteBgColor = vote <= 5
-    ? 'bg-orange-500'
-    : vote <= 8
-      ? 'bg-yellow-500'
-      : 'bg-green-500'
   const mediaTypeBgColor = mediaType === 'movie'
     ? 'bg-myblue'
     : 'bg-pink-700'
@@ -31,9 +30,9 @@ const SearchItem = ({ item, onItemClick }: SearchItemProps) => {
         />
         {!!vote && (
           <div className={`absolute top-2 left-0 pl-2 pr-3 py-1 rounded-r-full text-sm select-none
-            ${voteBgColor} text-zinc-800 font-medium
+            ${getVoteBgColor(vote)} text-zinc-800 font-medium
           `}>
-            {vote.toFixed(1).lastIndexOf('.0') !== -1 ? vote.toFixed(0) : vote.toFixed(1)}
+            {formatVote(vote)}
           </div>
         )}
         <div className={`absolute bottom-0 left-0 px-2 py-1 ${mediaTypeBgColor} text-xs select-none`}>
@@ -44,8 +43,15 @@ const SearchItem = ({ item, onItemClick }: SearchItemProps) => {
         <div className='px-3 text-sm leading-tight font-bold mb-1'>{title}</div>
         <div className='text-xs px-3'>{releaseDate.slice(0, 4)}</div>
       </div>
+      {sitesResults && !!sitesResults.length && (
+        <DataListManager
+          searchDataItem={item}
+          sitesResults={sitesResults}
+          isHideListsTitles={true}
+        />
+      )}
     </div>
   )
 }
 
-export default SearchItem
+export default PreviewItem
