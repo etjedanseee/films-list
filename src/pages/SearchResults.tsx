@@ -21,7 +21,7 @@ const SearchResults = () => {
         <div className='mb-3 text-xl font-medium mt-1'>Results:</div>
       )
         : (
-          <div className=' text-xl font-medium mt-3'>No found results. Please search in English.</div>
+          <div className='text-xl font-medium mt-3'>No found results. Note: search in English.</div>
         )
       }
       <div className='flex flex-wrap items-stretch gap-x-2 gap-y-4'>

@@ -12,7 +12,7 @@ const Search = () => {
   const [isFocused, setIsFocused] = useState(false)
   const lastSearchRef = useRef('')
   const navigate = useNavigate()
-  const { loading } = useTypedSelector(state => state.search)
+  const { loading, lastSearch } = useTypedSelector(state => state.search)
   const { setResults, setLoading, setLastSearch } = useActions()
 
   const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +64,10 @@ const Search = () => {
     }
   }, [])
 
+  useEffect(() => {
+    setSearch(lastSearch)
+  }, [lastSearch])
+
   return (
     <form
       onSubmit={onSubmit}
@@ -79,18 +83,19 @@ const Search = () => {
         onFocus={onSearchFocus}
         name='Search*'
         className='flex-1'
-        py='py-3'
+        py='py-2'
       />
       {loading
         ? <div>Loading...</div>
         : isFocused && (
-          <div className=''>
+          <div>
             <Button
               title={'Search'}
               onClick={() => { }}
               disabled={!!searchError}
               type='submit'
-              className='mt-[2px] px-6'
+              className='px-6'
+              p='py-[6px]'
             />
           </div>
         )

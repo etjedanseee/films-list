@@ -26,7 +26,6 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
   try {
     const response = await fetch(`${url}?query=${title}`, options)
     const data = await response.json()
-    console.log('data', data)
     const items = data?.results
     if (items && Array.isArray(items) && items.length > 0) {
       const imageSize = posterSizes[2]
@@ -45,7 +44,6 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
         };
         results.push(obj)
       }
-      console.log('results', results)
       setResults(results)
     } else {
       console.log('No found items');

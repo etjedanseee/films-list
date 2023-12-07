@@ -38,7 +38,12 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
     <div className={`relative bg-inherit ${className}`}>
       <div className={`${isFocused || error || value
         ? '-translate-y-2 translate-x-2 px-1'
-        : `translate-x-3 ${py === 'py-3' ? 'translate-y-4' : 'translate-y-5'}`} 
+        : `translate-x-3 ${py === 'py-4'
+          ? 'translate-y-5'
+          : py === 'py-3'
+            ? 'translate-y-4'
+            : 'translate-y-3'
+        }`} 
         absolute top-0 left-0 text-xs bg-bg1 select-none transition-transform duration-300 
         ${error ? 'text-myred' : 'text-white'}
       `}
@@ -51,7 +56,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
         onChange={(e) => onInputChange(e)}
         placeholder={isFocused || error ? placeholder : ''}
         autoComplete={autoCompleteValue || 'on'}
-        className={`${error ? 'border-myred' : 'border-white'} bg-transparent text-white 
+        className={`${error ? 'border-myred' : 'border-white'} bg-transparent text-white  
           w-full border-2 rounded-[4px] px-3 text-sm ${py ? py : 'py-4'} mb-1 outline-none flex items-centers
         `}
         spellCheck={false}

@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom'
 
 interface IListProps {
   listId: number,
+  searchByTitle: string,
 }
 
-const List = ({ listId }: IListProps) => {
+const List = ({ listId, searchByTitle }: IListProps) => {
   const { data } = useTypedSelector(state => state.data)
   const navigate = useNavigate()
   const [sortedData, setSortedData] = useState(data)
@@ -17,18 +18,26 @@ const List = ({ listId }: IListProps) => {
   }
 
   useEffect(() => {
-    const filteredData = data.filter(item => item.inLists.find(i => i.id === listId))
-    const sortedData = filteredData.sort((a, b) => {
+    const sortedByListId = data.filter(item => item.inLists.find(i => i.id === listId))
+    const trimmedSearchByTitle = searchByTitle.trim().toLowerCase()
+    const sortedByTitle = trimmedSearchByTitle
+      ? sortedByListId.filter(item => item.title.toLowerCase().includes(trimmedSearchByTitle))
+      : sortedByListId
+    const sortedData = [...sortedByTitle].sort((a, b) => {
       const aDate = new Date(a.inLists.find(i => i.id === listId)?.date || 0)
       const bDate = new Date(b.inLists.find(i => i.id === listId)?.date || 0)
       return +bDate - +aDate
     })
     setSortedData(sortedData)
-  }, [data, listId])
+  }, [data, listId, searchByTitle])
+
+  if (!sortedData.length) {
+    return <div className='flex-1 text-center text-xl font-medium py-6'>No found results.</div>
+  }
 
   return (
     <div className='flex flex-wrap items-stretch gap-x-3 gap-y-4'>
-      {!!sortedData.length && sortedData.map(item => (
+      {sortedData.map(item => (
         <PreviewItem
           item={item}
           onItemClick={onPreviewItemClick}

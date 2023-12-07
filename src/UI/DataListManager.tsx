@@ -119,16 +119,18 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
         <SuccessIcon className='h-7 w-7 fill-white' />
         {!isHideListsTitles && <div>{lists[2].name}</div>}
       </div>
+      {/* currentData && lists.length > 3 && currentData.inLists.find(i => lists.slice(3).find(a => a.id === i.id)) */}
       <div
         className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
-            px-1 hover:cursor-pointer rounded-br-md ${isDataInList(lists[1].id) ? 'bg-yellow-500 text-black' : ''}
+            px-1 hover:cursor-pointer rounded-br-md 
+            ${isDataInList(9999) ? 'bg-yellow-500 text-black' : ''}
           `}
         // onClick={() => onListClick()}
         title={'Save'}
       >
-        <BookmarkIcon className={`h-7 w-7 ${isDataInList(lists[1].id) ? 'fill-black' : 'fill-white'}`} />
+        <BookmarkIcon className={`h-7 w-7 ${isDataInList(9999) ? 'fill-black' : 'fill-white'}`} />
         {!isHideListsTitles && (
-          <div className={`${isDataInList(lists[1].id) ? 'text-black font-medium' : 'text-white'} font-medium`}
+          <div className={`${isDataInList(9999) ? 'text-black font-medium' : 'text-white'} font-medium`}
           >
             Save
           </div>

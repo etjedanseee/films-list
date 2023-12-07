@@ -4,10 +4,12 @@ import SearchResults from "../pages/SearchResults"
 import Settings from "../pages/Settings"
 import { IRoute } from "../types/route"
 import DataItem from "../pages/DataItem"
+import { Navigate } from "react-router-dom"
 
 //userPanel with sites and signOut, lists, listItem, searchItems, searchDataItem
 export const publicRoutes: IRoute[] = [
   { path: '/auth', element: <AuthPage /> },
+  { path: '*', element: <Navigate to={'/auth'} /> }
 ]
 
 export const privateRoutes: IRoute[] = [
