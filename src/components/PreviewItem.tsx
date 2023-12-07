@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { } from 'react'
 import { ILink, ISearchDataItem } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import DataListManager from '../UI/DataListManager'

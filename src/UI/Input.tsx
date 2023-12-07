@@ -14,9 +14,10 @@ interface InputProps {
   name: string,
   className?: string,
   py?: string,
+  titleBg?: string,
 }
 
-const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py }: InputProps) => {
+const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1' }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!isPassword)
   const [isFocused, setIsFocused] = useState(false)
 
@@ -44,7 +45,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
             ? 'translate-y-4'
             : 'translate-y-3'
         }`} 
-        absolute top-0 left-0 text-xs bg-bg1 select-none transition-transform duration-300 
+        absolute top-0 left-0 text-xs ${titleBg} select-none transition-transform duration-300 
         ${error ? 'text-myred' : 'text-white'}
       `}
       >
@@ -57,7 +58,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
         placeholder={isFocused || error ? placeholder : ''}
         autoComplete={autoCompleteValue || 'on'}
         className={`${error ? 'border-myred' : 'border-white'} bg-transparent text-white  
-          w-full border-2 rounded-[4px] px-3 text-sm ${py ? py : 'py-4'} mb-1 outline-none flex items-centers
+          w-full border-2 rounded-[4px] px-3 text-sm ${py} mb-1 outline-none flex items-centers
         `}
         spellCheck={false}
         onBlur={onInputBlur}

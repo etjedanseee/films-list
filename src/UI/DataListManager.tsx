@@ -12,6 +12,7 @@ import { saveDataToSb } from '../API/saveDataToSb'
 import { updateDataOnSb } from '../API/updateDataOnSb'
 import { deleteDataOnSb } from '../API/deleteDataOnSb'
 import { listIdToInLists } from '../utils/listIdToInLists'
+import SaveToListsModal from './SaveToListsModal'
 
 interface DataListManagerProps {
   searchDataItem: ISearchDataItem,
@@ -26,6 +27,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
   const { user } = useTypedSelector(state => state.auth)
   const [currentData, setCurrentData] = useState<IDataItemWithLinks | null>(null)
   const [loading, setLoading] = useState(false)
+  const [isSaveToListsModalVisible, setIsSaveToListsModalVisible] = useState(false)
 
   const onListClick = async (e: MouseEvent, listId: number) => {
     e.stopPropagation()
@@ -60,6 +62,16 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
       }
     }
     fetchData()
+  }
+
+  const handleSaveToListsModalVisible = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    setIsSaveToListsModalVisible(prev => !prev)
+  }
+
+  const onSaveClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    handleSaveToListsModalVisible(e)
   }
 
   const isDataInList = (listId: number) => {
@@ -125,7 +137,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
             px-1 hover:cursor-pointer rounded-br-md 
             ${isDataInList(9999) ? 'bg-yellow-500 text-black' : ''}
           `}
-        // onClick={() => onListClick()}
+        onClick={onSaveClick}
         title={'Save'}
       >
         <BookmarkIcon className={`h-7 w-7 ${isDataInList(9999) ? 'fill-black' : 'fill-white'}`} />
@@ -136,6 +148,12 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
           </div>
         )}
       </div>
+      {isSaveToListsModalVisible && (
+        <SaveToListsModal
+          handleClose={e => handleSaveToListsModalVisible(e)}
+          additionalLists={lists.slice(3)}
+        />
+      )}
     </div>
   )
 }

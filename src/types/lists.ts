@@ -11,7 +11,7 @@ export interface ListsState {
 }
 
 export enum ListsActionTypes {
-  SET_LISTS = 'SET_LISTS'
+  SET_LISTS = 'SET_LISTS',
 }
 
 interface setLists {
