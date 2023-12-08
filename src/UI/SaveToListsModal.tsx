@@ -6,13 +6,16 @@ import Input from './Input'
 import { createList } from '../API/createList'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { useActions } from '../hooks/useActions'
+import { IInLists } from '../types/data'
 
 interface SaveToListsModalProps {
   handleClose: (e: MouseEvent<HTMLDivElement>) => void,
   additionalLists: IList[],
+  dataInLists: IInLists[],
+  onListClick: (e: MouseEvent, listId: number) => void,
 }
 
-const SaveToListsModal = ({ handleClose, additionalLists }: SaveToListsModalProps) => {
+const SaveToListsModal = ({ handleClose, additionalLists, dataInLists, onListClick }: SaveToListsModalProps) => {
   const { user } = useTypedSelector(state => state.auth)
   const { fetchLists } = useActions()
   const [isCreateNewList, setIsCreateNewList] = useState(false)
@@ -59,8 +62,14 @@ const SaveToListsModal = ({ handleClose, additionalLists }: SaveToListsModalProp
         <div className='flex flex-col gap-y-2 mb-6'>
           {!!additionalLists.length && additionalLists.map(list => (
             <div key={list.id} className='flex gap-x-4 items-center'>
-              <input type='checkbox' />
-              <div className='flex-1'>{list.name}</div>
+              <div
+                className={`${!!dataInLists.find(l => l.id === list.id)
+                  ? 'bg-yellow-400 shadow-md shadow-blue-300' : ' '} 
+                  p-2 border-2 border-yellow-400 transition-colors duration-500 cursor-pointer
+                `}
+                onClick={(e) => onListClick(e, list.id)}
+              />
+              <div className='flex-1 font-medium'>{list.name}</div>
               <div>Edit</div>
             </div>
           ))}

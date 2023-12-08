@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import PreviewItem from './PreviewItem'
 import { useNavigate } from 'react-router-dom'
+import { IDataItemWithLinks } from '../types/data'
 
 interface IListProps {
   listId: number,
@@ -11,7 +12,7 @@ interface IListProps {
 const List = ({ listId, searchByTitle }: IListProps) => {
   const { data } = useTypedSelector(state => state.data)
   const navigate = useNavigate()
-  const [sortedData, setSortedData] = useState(data)
+  const [sortedData, setSortedData] = useState<IDataItemWithLinks[]>([])
 
   const onPreviewItemClick = (dataId: number) => {
     navigate('/data/' + dataId)

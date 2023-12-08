@@ -121,7 +121,7 @@ const DataItem = () => {
         <div className='font-medium'>
           <span className='text-zinc-400'>Release date:</span> {item.releaseDate}
         </div>
-        {additionalInfo && (
+        {additionalInfo && additionalInfo.overview && (
           <div className='font-medium'>
             <span className='text-zinc-400'>Overview: </span>{additionalInfo.overview}
           </div>

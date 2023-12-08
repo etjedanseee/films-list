@@ -71,7 +71,11 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
 
   const onSaveClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    handleSaveToListsModalVisible(e)
+    if (sitesResults.length) {
+      handleSaveToListsModalVisible(e)
+    } else {
+      toast.error('You need to search on sites')
+    }
   }
 
   const isDataInList = (listId: number) => {
@@ -131,18 +135,26 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
         <SuccessIcon className='h-7 w-7 fill-white' />
         {!isHideListsTitles && <div>{lists[2].name}</div>}
       </div>
-      {/* currentData && lists.length > 3 && currentData.inLists.find(i => lists.slice(3).find(a => a.id === i.id)) */}
       <div
         className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
             px-1 hover:cursor-pointer rounded-br-md 
-            ${isDataInList(9999) ? 'bg-yellow-500 text-black' : ''}
+            ${currentData && currentData.inLists.find(i => lists.slice(3).find(l => l.id === i.id))
+            ? 'bg-yellow-500 text-black' : ''}
           `}
         onClick={onSaveClick}
         title={'Save'}
       >
-        <BookmarkIcon className={`h-7 w-7 ${isDataInList(9999) ? 'fill-black' : 'fill-white'}`} />
+        <BookmarkIcon
+          className={`h-7 w-7
+              ${currentData && currentData.inLists.find(i => lists.slice(3).find(a => a.id === i.id))
+              ? 'fill-black' : 'fill-white'
+            }`}
+        />
         {!isHideListsTitles && (
-          <div className={`${isDataInList(9999) ? 'text-black font-medium' : 'text-white'} font-medium`}
+          <div className={`
+            ${currentData && currentData.inLists.find(i => lists.slice(3).find(a => a.id === i.id))
+              ? 'text-black font-medium' : 'text-white'} font-medium
+            `}
           >
             Save
           </div>
@@ -152,6 +164,8 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
         <SaveToListsModal
           handleClose={e => handleSaveToListsModalVisible(e)}
           additionalLists={lists.slice(3)}
+          onListClick={onListClick}
+          dataInLists={(currentData && currentData.inLists.length && currentData.inLists) || []}
         />
       )}
     </div>
