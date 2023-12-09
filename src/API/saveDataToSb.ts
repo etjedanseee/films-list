@@ -1,7 +1,7 @@
 import supabase from "../supabaseClient"
 import { IDataItemWithLinks } from "../types/data"
 
-export const saveDataToSb = async (item: IDataItemWithLinks, userId: string, setLoading: (b: boolean) => void) => {
+export const saveDataToSb = async (item: IDataItemWithLinks, userId: string, setLoading: (b: boolean) => void, setId: (id: number) => void) => {
   setLoading(true)
   const sbItem = {
     data_id: item.dataId,
@@ -15,9 +15,14 @@ export const saveDataToSb = async (item: IDataItemWithLinks, userId: string, set
     user_id_owner: userId,
   }
   try {
-    const { error } = await supabase.from('Data').insert(sbItem)
+    const { data, error } = await supabase.from('Data')
+      .insert(sbItem)
+      .select('*')
     if (error) {
       throw new Error(error.message)
+    }
+    if (data && data.length) {
+      setId(data[0].id)
     }
   } catch (e) {
     console.error('Error insert data', e)

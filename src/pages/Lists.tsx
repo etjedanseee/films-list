@@ -5,22 +5,35 @@ import { calcCountDataInLists } from '../utils/calcCountDataInLists'
 import List from '../components/List'
 import { useDebounce } from '../hooks/useDebounce'
 import Input from '../UI/Input'
+import { useActions } from '../hooks/useActions'
 
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
   const { lists } = useTypedSelector(state => state.lists)
+  const { fetchData } = useActions()
   const [currentList, setCurrentList] = useState<IList | null>(null)
+  const [isNeedToUpdateData, setIsNeedToUpdateData] = useState(false)
   const [countDataInLists, setCountDataInLists] = useState<ICountDataInLists>({})
   const [searchByTitle, setSearchByTitle] = useState('')
   const debouncedSearchByTitle = useDebounce(searchByTitle, 500)
 
   const onListClick = (list: IList) => {
-    setCurrentList(list)
+    if (currentList && list.id !== currentList.id) {
+      setIsNeedToUpdateData(true)
+      setCurrentList(list)
+    }
   }
 
   const onSearchByTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchByTitle(e.target.value)
   }
+
+  useEffect(() => {
+    if (isNeedToUpdateData) {
+      fetchData()
+      setIsNeedToUpdateData(false)
+    }
+  }, [isNeedToUpdateData, fetchData])
 
   useEffect(() => {
     if (data.length && lists.length) {

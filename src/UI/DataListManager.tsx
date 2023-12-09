@@ -1,12 +1,11 @@
-import React, { useState, useEffect, MouseEvent } from 'react'
+import React, { useState, useEffect, MouseEvent, useRef } from 'react'
 import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/bookmark.svg'
 import { ReactComponent as HeartIcon } from '../assets/DataListManagerIcons/heart.svg'
 import { ReactComponent as PlayIcon } from '../assets/DataListManagerIcons/play.svg'
 import { ReactComponent as SuccessIcon } from '../assets/DataListManagerIcons/success.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
-import { IDataItemWithLinks } from '../types/data'
+import { IInLists } from '../types/data'
 import { ILink, ISearchDataItem } from '../types/search'
-import { useActions } from '../hooks/useActions'
 import { toast } from 'react-toastify'
 import { saveDataToSb } from '../API/saveDataToSb'
 import { updateDataOnSb } from '../API/updateDataOnSb'
@@ -21,20 +20,22 @@ interface DataListManagerProps {
 }
 
 const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = false }: DataListManagerProps) => {
-  const { fetchData } = useActions()
   const { lists } = useTypedSelector(state => state.lists)
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
-  const [currentData, setCurrentData] = useState<IDataItemWithLinks | null>(null)
+  const [inLists, setInLists] = useState<IInLists[]>([])
+  const [id, setId] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [isSaveToListsModalVisible, setIsSaveToListsModalVisible] = useState(false)
+  const isNeedToUpdateData = useRef(true)
 
   const onListClick = async (e: MouseEvent, listId: number) => {
     e.stopPropagation()
     if (!user) {
       return;
     }
-    if (!currentData) {
+    const currentList = listIdToInLists(listId)
+    if (!inLists.length) {
       if (!sitesResults.length) {
         toast.error('You need to search on sites')
         return;
@@ -42,26 +43,28 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
       const itemWithLinks = {
         ...searchDataItem,
         links: sitesResults,
-        inLists: [listIdToInLists(listId)],
+        inLists: [currentList],
         id: 999,
       }
-      await saveDataToSb(itemWithLinks, user.id, setLoading)
-    } else {
-      if (currentData.inLists.find(list => list.id === listId)) {
-        const filteredLists = currentData.inLists.filter(l => l.id !== listId)
+      setInLists([currentList])
+      await saveDataToSb(itemWithLinks, user.id, setLoading, setId)
+    } else if (id != null) {
+      if (inLists.find(list => list.id === listId)) {
+        const filteredLists = inLists.filter(l => l.id !== listId)
         if (filteredLists.length) {
-          await updateDataOnSb(currentData.id, filteredLists, setLoading)
+          setInLists(filteredLists)
+          await updateDataOnSb(id, filteredLists, setLoading)
         } else {
-          await deleteDataOnSb(currentData.id, setLoading)
-          setCurrentData(null)
+          const currId = id
+          setInLists([])
+          setId(null)
+          await deleteDataOnSb(currId, setLoading)
         }
-      } else if (currentData.inLists.length) {
-        await updateDataOnSb(currentData.id, [...currentData.inLists, listIdToInLists(listId)], setLoading)
       } else {
-        await saveDataToSb(currentData, user.id, setLoading)
+        setInLists([...inLists, currentList])
+        await updateDataOnSb(id, [...inLists, currentList], setLoading)
       }
     }
-    fetchData()
   }
 
   const handleSaveToListsModalVisible = (e: MouseEvent<HTMLDivElement>) => {
@@ -79,18 +82,20 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
   }
 
   const isDataInList = (listId: number) => {
-    if (!currentData) {
+    if (!inLists.length) {
       return false
     }
-    return currentData.inLists.find(list => list.id === listId)
+    return inLists.find(list => list.id === listId)
   }
 
   useEffect(() => {
     const currData = data.find(item => item.dataId === searchDataItem.dataId)
-    if (currData) {
-      setCurrentData(currData)
+    if (isNeedToUpdateData.current && !id && currData) {
+      setInLists(currData.inLists)
+      setId(currData.id)
+      isNeedToUpdateData.current = false
     }
-  }, [searchDataItem.dataId, data])
+  }, [searchDataItem.dataId, data, id])
 
   if (!lists.length || loading) {
     return (
@@ -138,7 +143,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
       <div
         className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
             px-1 hover:cursor-pointer rounded-br-md 
-            ${currentData && currentData.inLists.find(i => lists.slice(3).find(l => l.id === i.id))
+            ${inLists.find(i => lists.slice(3).find(l => l.id === i.id))
             ? 'bg-yellow-500 text-black' : ''}
           `}
         onClick={onSaveClick}
@@ -146,13 +151,13 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
       >
         <BookmarkIcon
           className={`h-7 w-7
-              ${currentData && currentData.inLists.find(i => lists.slice(3).find(a => a.id === i.id))
+              ${inLists.find(i => lists.slice(3).find(a => a.id === i.id))
               ? 'fill-black' : 'fill-white'
             }`}
         />
         {!isHideListsTitles && (
           <div className={`
-            ${currentData && currentData.inLists.find(i => lists.slice(3).find(a => a.id === i.id))
+            ${inLists.find(i => lists.slice(3).find(a => a.id === i.id))
               ? 'text-black font-medium' : 'text-white'} font-medium
             `}
           >
@@ -165,7 +170,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
           handleClose={e => handleSaveToListsModalVisible(e)}
           additionalLists={lists.slice(3)}
           onListClick={onListClick}
-          dataInLists={(currentData && currentData.inLists.length && currentData.inLists) || []}
+          dataInLists={inLists}
         />
       )}
     </div>
