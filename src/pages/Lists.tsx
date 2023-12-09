@@ -68,7 +68,7 @@ const Lists = () => {
           {!!lists.length && currentList && lists.map(list => (
             <div
               key={list.id}
-              className={`font-medium flex gap-x-1 hover:cursor-pointer
+              className={`font-medium flex gap-x-1 hover:cursor-pointer select-none
                 ${currentList.id === list.id ? 'text-yellow-500' : 'text-white'}
               `}
               onClick={() => onListClick(list)}

@@ -1,8 +1,5 @@
 import React, { useState, useEffect, MouseEvent, useRef } from 'react'
 import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/bookmark.svg'
-import { ReactComponent as HeartIcon } from '../assets/DataListManagerIcons/heart.svg'
-import { ReactComponent as PlayIcon } from '../assets/DataListManagerIcons/play.svg'
-import { ReactComponent as SuccessIcon } from '../assets/DataListManagerIcons/success.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { IInLists } from '../types/data'
 import { ILink, ISearchDataItem } from '../types/search'
@@ -11,7 +8,8 @@ import { saveDataToSb } from '../API/saveDataToSb'
 import { updateDataOnSb } from '../API/updateDataOnSb'
 import { deleteDataOnSb } from '../API/deleteDataOnSb'
 import { listIdToInLists } from '../utils/listIdToInLists'
-import SaveToListsModal from './SaveToListsModal'
+import SavedListsModal from './SavedListsModal'
+import DataListManagetItem from './DataListManagetItem'
 
 interface DataListManagerProps {
   searchDataItem: ISearchDataItem,
@@ -28,6 +26,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
   const [loading, setLoading] = useState(false)
   const [isSaveToListsModalVisible, setIsSaveToListsModalVisible] = useState(false)
   const isNeedToUpdateData = useRef(true)
+  const isDataInSavedList = inLists.find(i => lists.slice(3).find(a => a.id === i.id))
 
   const onListClick = async (e: MouseEvent, listId: number) => {
     e.stopPropagation()
@@ -85,17 +84,19 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
     if (!inLists.length) {
       return false
     }
-    return inLists.find(list => list.id === listId)
+    return !!inLists.find(list => list.id === listId)
   }
 
   useEffect(() => {
-    const currData = data.find(item => item.dataId === searchDataItem.dataId)
-    if (isNeedToUpdateData.current && !id && currData) {
-      setInLists(currData.inLists)
-      setId(currData.id)
-      isNeedToUpdateData.current = false
+    if (isNeedToUpdateData.current) {
+      const currData = data.find(item => item.dataId === searchDataItem.dataId)
+      if (currData) {
+        setInLists(currData.inLists)
+        setId(currData.id)
+        isNeedToUpdateData.current = false
+      }
     }
-  }, [searchDataItem.dataId, data, id])
+  }, [searchDataItem.dataId, data])
 
   if (!lists.length || loading) {
     return (
@@ -107,66 +108,41 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
 
   return (
     <div className='grid grid-cols-4 text-small tracking-tighter rounded-b-md bg-mygray3'>
-      <div
-        className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'}  
-          border-r-[2px] border-zinc-900 ${isDataInList(lists[0].id) ? 'bg-myblue' : ''}
-          px-1 hover:cursor-pointer rounded-bl-md`
-        }
-        onClick={(e) => onListClick(e, lists[0].id)}
-        title={lists[0].name}
-      >
-        <HeartIcon className='h-7 w-7 fill-white' />
-        {!isHideListsTitles && <div>{lists[0].name}</div>}
-      </div>
-      <div
-        className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'}  
-          border-r-[2px] border-zinc-900 ${isDataInList(lists[1].id) ? 'bg-myblue' : ''}
-          px-1 hover:cursor-pointer`
-        }
-        onClick={(e) => onListClick(e, lists[1].id)}
-        title={lists[1].name}
-      >
-        <PlayIcon className='h-8 w-8 -mt-[2px] ml-1 fill-white' />
-        {!isHideListsTitles && <div>{lists[1].name}</div>}
-      </div>
-      <div
-        className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
-          border-r-[2px] border-zinc-900 ${isDataInList(lists[2].id) ? 'bg-myblue' : ''}
-          px-1 hover:cursor-pointer`
-        }
-        onClick={(e) => onListClick(e, lists[2].id)}
-        title={lists[2].name}
-      >
-        <SuccessIcon className='h-7 w-7 fill-white' />
-        {!isHideListsTitles && <div>{lists[2].name}</div>}
-      </div>
+      <DataListManagetItem
+        isDataInList={isDataInList(lists[0].id)}
+        isHideListsTitles={isHideListsTitles}
+        list={lists[0]}
+        onListClick={onListClick}
+      />
+      <DataListManagetItem
+        isDataInList={isDataInList(lists[1].id)}
+        isHideListsTitles={isHideListsTitles}
+        list={lists[1]}
+        onListClick={onListClick}
+      />
+      <DataListManagetItem
+        isDataInList={isDataInList(lists[2].id)}
+        isHideListsTitles={isHideListsTitles}
+        list={lists[2]}
+        onListClick={onListClick}
+      />
       <div
         className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
             px-1 hover:cursor-pointer rounded-br-md 
-            ${inLists.find(i => lists.slice(3).find(l => l.id === i.id))
-            ? 'bg-yellow-500 text-black' : ''}
+            ${isDataInSavedList ? 'bg-yellow-500 text-black' : ''}
           `}
         onClick={onSaveClick}
-        title={'Save'}
+        title={isDataInSavedList ? 'Saved' : 'Save'}
       >
-        <BookmarkIcon
-          className={`h-7 w-7
-              ${inLists.find(i => lists.slice(3).find(a => a.id === i.id))
-              ? 'fill-black' : 'fill-white'
-            }`}
-        />
+        <BookmarkIcon className={`h-7 w-7 ${isDataInSavedList ? 'fill-black' : 'fill-white'}`} />
         {!isHideListsTitles && (
-          <div className={`
-            ${inLists.find(i => lists.slice(3).find(a => a.id === i.id))
-              ? 'text-black font-medium' : 'text-white'} font-medium
-            `}
-          >
+          <div className={`${isDataInSavedList ? 'text-black font-medium' : 'text-white'} font-medium`}>
             Save
           </div>
         )}
       </div>
       {isSaveToListsModalVisible && (
-        <SaveToListsModal
+        <SavedListsModal
           handleClose={e => handleSaveToListsModalVisible(e)}
           additionalLists={lists.slice(3)}
           onListClick={onListClick}

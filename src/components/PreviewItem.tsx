@@ -19,7 +19,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
 
   return (
     <div
-      className='max-w-[185px] w-full cursor-pointer flex flex-col'
+      className='max-w-[185px] w-full cursor-pointer flex flex-col select-none'
       onClick={() => onItemClick(dataId)}
     >
       <div className='relative'>
@@ -29,13 +29,13 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
           className='w-[185px] h-[278px]'
         />
         {!!vote && (
-          <div className={`absolute top-2 left-0 pl-2 pr-3 py-1 rounded-r-full text-sm select-none
+          <div className={`absolute top-2 left-0 pl-2 pr-3 py-1 rounded-r-full text-sm 
             ${getVoteBgColor(vote)} text-zinc-800 font-medium
           `}>
             {formatVote(vote)}
           </div>
         )}
-        <div className={`absolute bottom-0 left-0 px-2 py-1 ${mediaTypeBgColor} text-xs select-none`}>
+        <div className={`absolute bottom-0 left-0 px-2 py-1 ${mediaTypeBgColor} text-xs`}>
           {mediaType === 'tv' ? 'series' : mediaType}
         </div>
       </div>

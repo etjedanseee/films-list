@@ -7,6 +7,8 @@ import { createList } from '../API/createList'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { useActions } from '../hooks/useActions'
 import { IInLists } from '../types/data'
+import AdditionalList from './AdditionalList'
+import { toast } from 'react-toastify'
 
 interface SaveToListsModalProps {
   handleClose: (e: MouseEvent<HTMLDivElement>) => void,
@@ -15,7 +17,7 @@ interface SaveToListsModalProps {
   onListClick: (e: MouseEvent, listId: number) => void,
 }
 
-const SaveToListsModal = ({ handleClose, additionalLists, dataInLists, onListClick }: SaveToListsModalProps) => {
+const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClick }: SaveToListsModalProps) => {
   const { user } = useTypedSelector(state => state.auth)
   const { fetchLists } = useActions()
   const [isCreateNewList, setIsCreateNewList] = useState(false)
@@ -33,14 +35,19 @@ const SaveToListsModal = ({ handleClose, additionalLists, dataInLists, onListCli
     setNewListName(value)
   }
 
-  const onCreateNewListClick = () => {
-    setIsCreateNewList(true)
+  const handleIsCreateNewList = () => {
+    setIsCreateNewList(prev => !prev)
   }
 
   const onCreateNewList = async () => {
+    const trimmedNewListName = newListName.trim()
+    if (!trimmedNewListName.length) {
+      toast.error('List must include name')
+      return;
+    }
     if (user) {
       const orderNum = additionalLists.length ? (additionalLists[additionalLists.length - 1].orderNum + 1) : 3
-      await createList(newListName, orderNum, user.id)
+      await createList(trimmedNewListName, orderNum, user.id)
       fetchLists()
     }
     setIsCreateNewList(false)
@@ -61,24 +68,19 @@ const SaveToListsModal = ({ handleClose, additionalLists, dataInLists, onListCli
         </div>
         <div className='flex flex-col gap-y-2 mb-6'>
           {!!additionalLists.length && additionalLists.map(list => (
-            <div key={list.id} className='flex gap-x-4 items-center'>
-              <div
-                className={`${!!dataInLists.find(l => l.id === list.id)
-                  ? 'bg-yellow-400 shadow-md shadow-blue-300' : ' '} 
-                  p-2 border-2 border-yellow-400 transition-colors duration-500 cursor-pointer
-                `}
-                onClick={(e) => onListClick(e, list.id)}
-              />
-              <div className='flex-1 font-medium'>{list.name}</div>
-              <div>Edit</div>
-            </div>
+            <AdditionalList
+              isDataInList={!!dataInLists.find(l => l.id === list.id)}
+              list={list}
+              onListClick={onListClick}
+              key={list.id}
+            />
           ))}
         </div>
         {isCreateNewList && (
           <div className='flex items-start gap-x-4 mb-4'>
             <Input
               error={newListNameError}
-              name='List name'
+              name='Name'
               onInputChange={onNewListNameChange}
               isFieldDirty={true}
               placeholder='Enter list name'
@@ -89,14 +91,14 @@ const SaveToListsModal = ({ handleClose, additionalLists, dataInLists, onListCli
             />
             <Button
               onClick={onCreateNewList}
-              title='Save'
+              title='Create'
               className='py-[6px]'
             />
           </div>
         )}
         <div
           className='flex items-center gap-x-2'
-          onClick={onCreateNewListClick}>
+          onClick={handleIsCreateNewList}>
           <CloseIcon className='rotate-45 fill-white h-4 w-4' />
           <div className='text-lg'>Create new list</div>
         </div>
@@ -105,4 +107,4 @@ const SaveToListsModal = ({ handleClose, additionalLists, dataInLists, onListCli
   )
 }
 
-export default SaveToListsModal
+export default SavedListsModal
