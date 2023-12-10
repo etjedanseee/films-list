@@ -6,6 +6,8 @@ import Button from './Button'
 import { toast } from 'react-toastify'
 import { updateListName } from '../API/updateListName'
 import { useActions } from '../hooks/useActions'
+import { deleteList } from '../API/deleteList'
+import { useTypedSelector } from '../hooks/useTypedSelector'
 
 interface AdditionalListProps {
   list: IList,
@@ -18,6 +20,7 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   const [isEdit, setIsEdit] = useState(false)
   const [listName, setListName] = useState(list.name)
   const [loading, setLoading] = useState(false)
+  const { user } = useTypedSelector(state => state.auth)
   const { fetchLists } = useActions()
 
   const handleEditVisible = () => {
@@ -41,8 +44,12 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
     setIsEdit(false)
   }
 
-  const onDeleteList = () => {
-    //
+  const onDeleteList = async () => {
+    if (user) {
+      await deleteList(list.id)
+      fetchLists()
+      setIsEdit(false)
+    }
   }
 
   if (loading) {

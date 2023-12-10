@@ -1,13 +1,12 @@
 import React, { useState, useEffect, MouseEvent, useRef } from 'react'
 import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/bookmark.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
-import { IInLists } from '../types/data'
+import { IDataItemWithLinks, IInLists } from '../types/data'
 import { ILink, ISearchDataItem } from '../types/search'
 import { toast } from 'react-toastify'
 import { saveDataToSb } from '../API/saveDataToSb'
 import { updateDataOnSb } from '../API/updateDataOnSb'
 import { deleteDataOnSb } from '../API/deleteDataOnSb'
-import { listIdToInLists } from '../utils/listIdToInLists'
 import SavedListsModal from './SavedListsModal'
 import DataListManagetItem from './DataListManagetItem'
 
@@ -21,47 +20,50 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
   const { lists } = useTypedSelector(state => state.lists)
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
-  const [inLists, setInLists] = useState<IInLists[]>([])
+  const [inLists, setInLists] = useState<IInLists>({})
   const [id, setId] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [isSaveToListsModalVisible, setIsSaveToListsModalVisible] = useState(false)
   const isNeedToUpdateData = useRef(true)
-  const isDataInSavedList = inLists.find(i => lists.slice(3).find(a => a.id === i.id))
+  const isDataInSavedList = Object.keys(inLists).find(key => lists.slice(3).find(a => a.id === +key))
 
   const onListClick = async (e: MouseEvent, listId: number) => {
     e.stopPropagation()
     if (!user) {
       return;
     }
-    const currentList = listIdToInLists(listId)
-    if (!inLists.length) {
+    const listsEntries = Object.entries(inLists)
+    const currentList = { [listId]: new Date().toISOString() }
+    if (!listsEntries.length) {
       if (!sitesResults.length) {
         toast.error('You need to search on sites')
         return;
       }
-      const itemWithLinks = {
+      const itemWithLinks: IDataItemWithLinks = {
         ...searchDataItem,
         links: sitesResults,
-        inLists: [currentList],
+        inLists: currentList,
         id: 999,
       }
-      setInLists([currentList])
+      setInLists(currentList)
       await saveDataToSb(itemWithLinks, user.id, setLoading, setId)
     } else if (id != null) {
-      if (inLists.find(list => list.id === listId)) {
-        const filteredLists = inLists.filter(l => l.id !== listId)
-        if (filteredLists.length) {
+      if (inLists[listId]) {
+        const filteredEntries = listsEntries.filter(entr => +entr[0] !== listId)
+        const filteredLists = Object.fromEntries(filteredEntries)
+        if (filteredEntries.length) {
           setInLists(filteredLists)
           await updateDataOnSb(id, filteredLists, setLoading)
         } else {
           const currId = id
-          setInLists([])
+          setInLists({})
           setId(null)
           await deleteDataOnSb(currId, setLoading)
         }
       } else {
-        setInLists([...inLists, currentList])
-        await updateDataOnSb(id, [...inLists, currentList], setLoading)
+        const updatedInLists = { ...inLists, ...currentList }
+        setInLists(updatedInLists)
+        await updateDataOnSb(id, updatedInLists, setLoading)
       }
     }
   }
@@ -81,10 +83,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
   }
 
   const isDataInList = (listId: number) => {
-    if (!inLists.length) {
-      return false
-    }
-    return !!inLists.find(list => list.id === listId)
+    return !!inLists[listId]
   }
 
   useEffect(() => {

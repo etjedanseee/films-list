@@ -19,14 +19,14 @@ const List = ({ listId, searchByTitle }: IListProps) => {
   }
 
   useEffect(() => {
-    const sortedByListId = data.filter(item => item.inLists.find(i => i.id === listId))
+    const sortedByListId = data.filter(item => !!item.inLists[listId])
     const trimmedSearchByTitle = searchByTitle.trim().toLowerCase()
     const sortedByTitle = trimmedSearchByTitle
       ? sortedByListId.filter(item => item.title.toLowerCase().includes(trimmedSearchByTitle))
       : sortedByListId
     const sortedData = [...sortedByTitle].sort((a, b) => {
-      const aDate = new Date(a.inLists.find(i => i.id === listId)?.date || 0)
-      const bDate = new Date(b.inLists.find(i => i.id === listId)?.date || 0)
+      const aDate = new Date(a.inLists[listId] || 0)
+      const bDate = new Date(b.inLists[listId] || 0)
       return +bDate - +aDate
     })
     setSortedData(sortedData)

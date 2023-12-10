@@ -13,7 +13,7 @@ import { toast } from 'react-toastify'
 interface SaveToListsModalProps {
   handleClose: (e: MouseEvent<HTMLDivElement>) => void,
   additionalLists: IList[],
-  dataInLists: IInLists[],
+  dataInLists: IInLists,
   onListClick: (e: MouseEvent, listId: number) => void,
 }
 
@@ -69,7 +69,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
         <div className='flex flex-col gap-y-2 mb-6'>
           {!!additionalLists.length && additionalLists.map(list => (
             <AdditionalList
-              isDataInList={!!dataInLists.find(l => l.id === list.id)}
+              isDataInList={!!dataInLists[list.id]}
               list={list}
               onListClick={onListClick}
               key={list.id}

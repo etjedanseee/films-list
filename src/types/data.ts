@@ -1,13 +1,12 @@
 import { ILink, ISearchDataItem } from "./search";
 
 export interface IInLists {
-  id: number,
-  date: string,
+  [id: number]: string,
 }
 
 export interface IDataItemWithLinks extends ISearchDataItem {
   id: number,
-  inLists: IInLists[],
+  inLists: IInLists,
   links: ILink[],
 }
 
