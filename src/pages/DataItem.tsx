@@ -88,6 +88,7 @@ const DataItem = () => {
           <div className='relative'>
             <img
               src={changeImageSizePath(item.fullPosterUrl) || noPicture}
+              className='w-[342px] h-[513px]'
               alt="poster"
             />
             <div className={`absolute top-0 left-0 px-3 py-2 

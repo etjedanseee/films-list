@@ -46,7 +46,7 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
 
   const onDeleteList = async () => {
     if (user) {
-      await deleteList(list.id)
+      await deleteList(list.id, setLoading)
       fetchLists()
       setIsEdit(false)
     }

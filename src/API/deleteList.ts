@@ -1,8 +1,9 @@
 import supabase from "../supabaseClient";
 import { IDataItemWithLinks } from "../types/data";
 
-export const deleteList = async (listId: number) => {
+export const deleteList = async (listId: number, setLoading: (b: boolean) => void) => {
   try {
+    setLoading(true)
     const { data, error } = await supabase.from('Data').select('*')
     if (error) {
       throw new Error(error.message)
@@ -59,5 +60,7 @@ export const deleteList = async (listId: number) => {
     }
   } catch (e) {
     console.error('Error delete list func:', e);
+  } finally {
+    setLoading(false)
   }
 }

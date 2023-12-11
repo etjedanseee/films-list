@@ -19,7 +19,6 @@ export const fetchData = () => {
       if (error) {
         throw new Error(error.message)
       }
-      // console.log('fetch data', data)
       const dataArr: IDataItemWithLinks[] = data.map(item => ({
         id: item.id,
         dataId: item.data_id,

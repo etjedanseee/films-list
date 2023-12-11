@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { privateRoutes, publicRoutes } from './utils/routes';
@@ -7,8 +7,7 @@ import { useTypedSelector } from './hooks/useTypedSelector';
 import { useActions } from './hooks/useActions';
 import supabase from './supabaseClient';
 import NotFoundPage from './pages/NotFoundPage';
-import Search from './components/Search';
-import Navbar from './components/Navbar';
+import Header from './UI/Header';
 
 function App() {
   const { user } = useTypedSelector(state => state.auth)
@@ -17,6 +16,7 @@ function App() {
   const { data } = useTypedSelector(state => state.data)
   const { fetchLists, fetchSites, setUser, setResults, fetchData } = useActions()
   const [isCheckingSession, setIsCheckingSession] = useState(true)
+  const location = useLocation()
 
   useEffect(() => {
     const checkSession = async () => {
@@ -50,10 +50,10 @@ function App() {
   }, [user, sites.length])
 
   useEffect(() => {
-    if (user && !data.length) {
+    if (user && !data.length && location.pathname !== '/') {
       fetchData()
     }
-  }, [user, data.length])
+  }, [user, data.length, location.pathname])
 
   useEffect(() => {
     const lastResults = localStorage.getItem('searchResults')
@@ -70,14 +70,7 @@ function App() {
 
   return (
     <div className='flex-1 bg-bg1 flex flex-col py-3 px-2'>
-      <div className='flex justify-between gap-x-8'>
-        {user && (
-          <>
-            <Search />
-            <Navbar />
-          </>
-        )}
-      </div>
+      {user && <Header />}
       <Routes>
         {user
           ? (

@@ -15,7 +15,5 @@ export const calcCountDataInLists = (data: IDataItemWithLinks[], lists: IList[])
       map[key] = currCount + 1
     }
   }
-
-  // console.log('map', map)
   return map
 }

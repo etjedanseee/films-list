@@ -12,13 +12,13 @@ const Lists = () => {
   const { lists } = useTypedSelector(state => state.lists)
   const { fetchData } = useActions()
   const [currentList, setCurrentList] = useState<IList | null>(null)
-  const [isNeedToUpdateData, setIsNeedToUpdateData] = useState(false)
+  const [isNeedToUpdateData, setIsNeedToUpdateData] = useState(true)
   const [countDataInLists, setCountDataInLists] = useState<ICountDataInLists>({})
   const [searchByTitle, setSearchByTitle] = useState('')
   const debouncedSearchByTitle = useDebounce(searchByTitle, 500)
 
   const onListClick = (list: IList) => {
-    if (currentList && list.id !== currentList.id) {
+    if (currentList && (list.id !== currentList.id)) {
       setIsNeedToUpdateData(true)
       setCurrentList(list)
     }
@@ -42,7 +42,7 @@ const Lists = () => {
   }, [data, lists])
 
   useEffect(() => {
-    if (!currentList && lists.length) {
+    if ((!currentList || !lists.find(list => list.id === currentList.id)) && lists.length) {
       setCurrentList(lists[0])
     }
   }, [lists, currentList])
@@ -63,10 +63,10 @@ const Lists = () => {
           />
         </div>
       </div>
-      <div className='flex gap-x-8'>
-        <div className='flex flex-col gap-y-2'>
+      <div className='flex gap-x-8 min-h-full'>
+        <ul className='sticky top-2 flex flex-col gap-y-2 h-full'>
           {!!lists.length && currentList && lists.map(list => (
-            <div
+            <li
               key={list.id}
               className={`font-medium flex gap-x-1 hover:cursor-pointer select-none
                 ${currentList.id === list.id ? 'text-yellow-500' : 'text-white'}
@@ -75,9 +75,9 @@ const Lists = () => {
             >
               <div title={list.name} className='truncate max-w-[150px] text-inherit'>{list.name}</div>
               <div className='text-inherit'>({countDataInLists[list.id]})</div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
         {currentList && lists.find(list => list.id === currentList.id) && (
           <List
             listId={currentList.id}
