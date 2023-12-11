@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ILink, ISearchDataItem } from '../types/search'

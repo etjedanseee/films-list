@@ -33,7 +33,9 @@ const List = ({ listId, searchByTitle }: IListProps) => {
   }, [data, listId, searchByTitle])
 
   if (!sortedData.length) {
-    return <div className='flex-1 text-center text-xl font-medium py-6'>No found results.</div>
+    return <div className='flex-1 text-center text-xl font-medium py-6'>
+      {searchByTitle ? 'No found results.' : 'List is empty.'}
+    </div>
   }
 
   return (

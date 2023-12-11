@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
 import { ReactComponent as EyeIcon } from '../assets/eye.svg';
+import { useFocus } from '../hooks/useFocus';
 
 interface InputProps {
   onInputChange: (e: ChangeEvent<HTMLInputElement>) => void,
@@ -20,6 +21,7 @@ interface InputProps {
 const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1' }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!isPassword)
   const [isFocused, setIsFocused] = useState(false)
+  const { inputRef, setInputFocus } = useFocus()
 
   const onInputFocus = () => {
     onFocus()
@@ -36,7 +38,10 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
   }
 
   return (
-    <div className={`relative bg-inherit ${className}`}>
+    <div
+      onClick={setInputFocus}
+      className={`relative bg-inherit ${className}`}
+    >
       <div className={`${isFocused || error || value
         ? '-translate-y-2 translate-x-2 px-1'
         : `translate-x-3 ${py === 'py-4'
@@ -53,6 +58,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
       </div>
       <input
         value={value}
+        ref={inputRef}
         type={!isPasswordVisible && isPassword ? 'password' : 'text'}
         onChange={(e) => onInputChange(e)}
         placeholder={isFocused || error ? placeholder : ''}
