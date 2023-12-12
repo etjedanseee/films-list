@@ -26,7 +26,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
         <img
           src={fullPosterUrl || noPicture}
           alt="poster"
-          className='w-[185px] h-[278px]'
+          className='w-full h-full bg-cover'
         />
         {!!vote && (
           <div className={`absolute top-2 left-0 pl-2 pr-3 py-1 rounded-r-full text-sm 

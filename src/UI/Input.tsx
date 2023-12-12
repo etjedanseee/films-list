@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, MouseEvent, useState } from 'react'
 import { ReactComponent as EyeIcon } from '../assets/eye.svg';
 import { useFocus } from '../hooks/useFocus';
 
@@ -33,7 +33,8 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
     setIsFocused(false)
   }
 
-  const handlePasswordVisible = () => {
+  const handlePasswordVisible = (e: MouseEvent) => {
+    e.stopPropagation()
     setIsPasswordVisible(prev => !prev)
   }
 
@@ -75,7 +76,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
           className={`absolute ${!!error && isFieldDirty ? 'top-1/4' : 'top-1/2 -translate-y-1/2'} 
             right-3 h-5 w-5 hover:cursor-pointer fill-slate-300
           `}
-          onClick={handlePasswordVisible}
+          onClick={e => handlePasswordVisible(e)}
         />
       )}
       {!!error && isFieldDirty && (

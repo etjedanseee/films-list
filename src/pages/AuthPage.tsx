@@ -11,11 +11,10 @@ const AuthPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isFormValid, setIsFormValid] = useState(false)
-  const [isSignIn, setIsSignIn] = useState(true)
+  const [isSignIn, setIsSignIn] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const onAuthFormSubmit = () => {
-    console.log('onSubmit', email, password)
     if (!isFormValid) {
       return;
     }
@@ -38,11 +37,11 @@ const AuthPage = () => {
   }
 
   if (loading) {
-    return <div className='text-4xl text-red-500'>Loading...</div>
+    return <div className='text-4xl text-center'>Loading...</div>
   }
 
   return (
-    <div>
+    <>
       <AuthForm
         setIsAuthFormValid={setIsFormValid}
         isFormValid={isFormValid}
@@ -54,7 +53,7 @@ const AuthPage = () => {
         setIsSignIn={setIsSignIn}
         onAuthFormSubmit={onAuthFormSubmit}
       />
-    </div>
+    </>
   )
 }
 

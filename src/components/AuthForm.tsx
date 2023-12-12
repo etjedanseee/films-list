@@ -89,6 +89,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
 
   return (
     <div className='py-10 w-1/3 m-auto'>
+      <div className='font-medium text-3xl mb-3'>Login or sign up</div>
       <form onSubmit={onSubmit}>
         <Input
           onInputChange={onEmailChange}
@@ -122,7 +123,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           className='mt-2 text-sm underline'
           onClick={onSignChange}
         >
-          {isSignIn ? 'Don\'t have an account? Sign Up' : 'Sign in'}
+          {isSignIn ? 'Don\'t have an account? Sign Up' : 'Already have an account? Sign in'}
         </button>
       </form>
     </div>

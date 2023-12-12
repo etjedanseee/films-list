@@ -16,7 +16,7 @@ const DataListManagetItem = ({ isHideListsTitles, isDataInList, list, onListClic
     <div
       className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'}  
       border-r-[2px] border-zinc-900 ${isDataInList ? 'bg-myblue' : ''}
-      px-1 hover:cursor-pointer rounded-bl-md`
+      px-1 hover:cursor-pointer ${list.name === 'Want to watch' && 'rounded-bl-md'}`
       }
       onClick={(e) => onListClick(e, list.id)}
       title={list.name}

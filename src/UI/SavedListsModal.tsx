@@ -55,7 +55,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
 
   return (
     <div
-      className='fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-60 flex items-center justify-center'
+      className='fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center'
       onClick={e => handleClose(e)}
     >
       <div

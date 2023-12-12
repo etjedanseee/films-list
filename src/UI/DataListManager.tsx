@@ -126,9 +126,9 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
             />
             <div
               className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
-            px-1 hover:cursor-pointer rounded-br-md 
-            ${isDataInSavedList ? 'bg-yellow-500 text-black' : ''}
-          `}
+                px-1 hover:cursor-pointer rounded-br-md 
+                ${isDataInSavedList ? 'bg-yellow-500 text-black' : ''}
+              `}
               onClick={onSaveClick}
               title={isDataInSavedList ? 'Saved' : 'Save'}
             >
