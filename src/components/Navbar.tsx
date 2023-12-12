@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
 
 const Navbar = () => {
@@ -11,9 +11,20 @@ const Navbar = () => {
   }
 
   return (
-    <div className='flex gap-x-6 text-lg px-4 pt-1'>
-      <Link to={'/'} className='px-2' onClick={onListsPageClick}>Lists</Link>
-      <Link to={'/settings'} className='px-2'>Settings</Link>
+    <div className='flex gap-x-6 text-xl px-4 pt-[6px] font-bold tracking-wider'>
+      <NavLink
+        to={'/'}
+        className={`px-2 hover:cursor-pointer hover:text-yellow-400 transition-colors duration-300`}
+        onClick={onListsPageClick}
+      >
+        Lists
+      </NavLink>
+      <NavLink
+        to={'/settings'}
+        className={`px-2 hover:cursor-pointer hover:text-yellow-400 transition-colors duration-300`}
+      >
+        Settings
+      </NavLink>
     </div>
   )
 }

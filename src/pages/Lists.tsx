@@ -69,7 +69,7 @@ const Lists = () => {
             <li
               key={list.id}
               className={`font-medium flex gap-x-1 hover:cursor-pointer select-none
-                ${currentList.id === list.id ? 'text-yellow-500' : 'text-white'}
+                ${currentList.id === list.id ? 'text-yellow-400' : 'text-white'}
               `}
               onClick={() => onListClick(list)}
             >

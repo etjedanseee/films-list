@@ -12,11 +12,11 @@ const Header = () => {
   }
 
   return (
-    <div className='flex justify-between gap-x-8'>
+    <div className='flex justify-between gap-x-8 border-b-2 px-3 py-2'>
       <div className='flex-1 flex items-start gap-x-4'>
-        <div className='p-1 border-[1px] border-white rounded-full hover:cursor-pointer'>
+        <div className='mt-1 p-1 border-[1px] border-white rounded-full hover:cursor-pointer'>
           <ArrowBackIcon
-            className='fill-white h-7 w-7'
+            className='fill-white h-6 w-6'
             onClick={onGoBackClick}
           />
         </div>

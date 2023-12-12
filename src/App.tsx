@@ -69,7 +69,7 @@ function App() {
   }
 
   return (
-    <div className='flex-1 bg-bg1 flex flex-col py-3 px-2'>
+    <div className='flex-1 bg-bg1 flex flex-col'>
       {user && <Header />}
       <Routes>
         {user

@@ -12,6 +12,7 @@ import { searchDataOnSites } from '../API/searchDataOnSites'
 import Sites from '../components/Sites'
 import Button from '../UI/Button'
 import { formatVote } from '../utils/formatVote'
+import { toast } from 'react-toastify'
 
 const DataItem = () => {
   const { id } = useParams()
@@ -34,6 +35,15 @@ const DataItem = () => {
         setSitesResults,
         setLoading: setSitesLoading,
       })
+    }
+  }
+
+  const onCopyTitle = () => {
+    if (item) {
+      navigator.clipboard.writeText(item.title)
+        .then(() => {
+          toast.success('Title copied!')
+        })
     }
   }
 
@@ -104,8 +114,13 @@ const DataItem = () => {
         </div>
       </div>
       <div>
-        <div className='text-3xl font-medium mb-3'>{item.title}</div>
-        {additionalInfo && (
+        <div
+          className='inline-block text-3xl font-medium mb-3 select-none hover:cursor-pointer'
+          onClick={onCopyTitle}
+        >
+          {item.title}
+        </div>
+        {additionalInfo && !!additionalInfo.genres.length && (
           <div className='font-medium'>
             <span className='text-zinc-400'>Genres: </span>{additionalInfo.genres.join(', ')}
           </div>
