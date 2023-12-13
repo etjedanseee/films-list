@@ -1,8 +1,11 @@
 import React from 'react'
+import SitesManager from '../components/SitesManager'
 
 const Settings = () => {
   return (
-    <div>Settings</div>
+    <div className='px-4 py-3'>
+      <SitesManager />
+    </div>
   )
 }
 
