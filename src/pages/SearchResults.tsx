@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import SearchItem from '../components/PreviewItem'
+import Loader from '../UI/Loader'
 
 const SearchResults = () => {
   const { loading, results } = useTypedSelector(state => state.search)
@@ -12,11 +13,13 @@ const SearchResults = () => {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className='flex-1 flex justify-center items-center'><Loader size='20' /></div>
+    )
   }
 
   return (
-    <div>
+    <div className='px-2'>
       {!!results.length ? (
         <div className='mb-3 text-xl font-medium mt-1'>Results:</div>
       )

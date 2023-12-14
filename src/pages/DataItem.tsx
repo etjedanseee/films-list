@@ -13,6 +13,7 @@ import Sites from '../components/Sites'
 import Button from '../UI/Button'
 import { formatVote } from '../utils/formatVote'
 import { toast } from 'react-toastify'
+import Loader from '../UI/Loader'
 
 const DataItem = () => {
   const { id } = useParams()
@@ -88,7 +89,11 @@ const DataItem = () => {
   }, [data, id])
 
   if (!item || infoLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className='flex-1 flex justify-center items-center bg-mygray'>
+        <Loader size='20' />
+      </div>
+    )
   }
 
   return (

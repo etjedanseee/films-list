@@ -5,6 +5,7 @@ import { searchDataInfo } from '../API/searchDataInfo'
 import { useNavigate } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from '../hooks/useTypedSelector'
+import Loader from '../UI/Loader'
 
 const Search = () => {
   const [search, setSearch] = useState('')
@@ -85,8 +86,9 @@ const Search = () => {
         className='flex-1'
         py='py-2'
       />
-      {loading
-        ? <div>Loading...</div>
+      {loading ? (
+        <div className='flex justify-center items-center -mt-[2px]'><Loader size='9' /></div>
+      )
         : isFocused && (
           <div>
             <Button

@@ -8,6 +8,7 @@ import { updateListName } from '../API/updateListName'
 import { useActions } from '../hooks/useActions'
 import { deleteList } from '../API/deleteList'
 import { useTypedSelector } from '../hooks/useTypedSelector'
+import Loader from './Loader'
 
 interface AdditionalListProps {
   list: IList,
@@ -53,7 +54,9 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   }
 
   if (loading) {
-    return <div className='py-2 text-center'>Loading...</div>
+    return (
+      <Loader size='6' />
+    )
   }
 
   return (

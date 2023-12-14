@@ -3,6 +3,7 @@ import { ILink } from '../types/search'
 import { ReactComponent as RejectedIcon } from '../assets/cancel.svg'
 import { ReactComponent as SuccessIcon } from '../assets/success.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
+import Loader from '../UI/Loader'
 
 interface SitesProps {
   loading: boolean,
@@ -15,10 +16,10 @@ const Sites = ({ results, loading }: SitesProps) => {
   return (
     <div className='mt-6'>
       {loading ? (
-        <div>
-          {sites.map(site => (
+        <div className='flex flex-col gap-y-1'>
+          {!!sites.length && sites.map(site => (
             <div key={site} className='flex items-center gap-x-4'>
-              <div>Loading...</div>
+              <div className='flex justify-center items-center'><Loader size='6' /></div>
               <div>{site}</div>
             </div>
           ))}

@@ -4,6 +4,7 @@ import AuthForm from '../components/AuthForm'
 import { signIn } from '../API/signIn'
 import { signUp } from '../API/signUp'
 import { useActions } from '../hooks/useActions'
+import Loader from '../UI/Loader'
 
 const AuthPage = () => {
   const navigate = useNavigate()
@@ -37,7 +38,9 @@ const AuthPage = () => {
   }
 
   if (loading) {
-    return <div className='text-4xl text-center'>Loading...</div>
+    return (
+      <div className='flex-1 flex justify-center items-center'><Loader size='20' /></div>
+    )
   }
 
   return (

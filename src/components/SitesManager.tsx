@@ -7,6 +7,7 @@ import { useActions } from '../hooks/useActions'
 import Input from '../UI/Input'
 import Button from '../UI/Button'
 import { removeHttpFromUrl } from '../utils/removeHttpsFromUrl'
+import Loader from '../UI/Loader'
 
 
 const SitesManager = () => {
@@ -29,7 +30,7 @@ const SitesManager = () => {
   }
 
   const onDeleteSite = async (site: string) => {
-    if (!user) {
+    if (!user || sites.length === 1) {
       return;
     }
     const updatedSites = sites.filter(s => s !== site)
@@ -67,25 +68,25 @@ const SitesManager = () => {
     setNewSiteValue(value)
   }
 
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center pt-10'><Loader size='20' /></div>
+    )
+  }
+
   return (
     <div>
       <div className='text-3xl font-medium mb-3'>Your sites:</div>
-      {loading ? (
-        <div>Loading...</div>
-      )
-        : (
-          <div className='flex flex-col gap-y-2 font-medium max-w-xs mb-4'>
-            {!!sites.length && sites.map(site => (
-              <SiteItem
-                site={site}
-                key={site}
-                onDeleteSite={onDeleteSite}
-                onUpdateSite={onUpdateSite}
-              />
-            ))}
-          </div>
-        )
-      }
+      <div className='flex flex-col gap-y-2 font-medium max-w-xs mb-4'>
+        {!!sites.length && sites.map(site => (
+          <SiteItem
+            site={site}
+            key={site}
+            onDeleteSite={onDeleteSite}
+            onUpdateSite={onUpdateSite}
+          />
+        ))}
+      </div>
 
       {isAddNewSite && (
         <div className='mt-4 flex items-start gap-x-4 mb-4'>

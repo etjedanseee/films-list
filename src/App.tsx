@@ -8,6 +8,7 @@ import { useActions } from './hooks/useActions';
 import supabase from './supabaseClient';
 import NotFoundPage from './pages/NotFoundPage';
 import Header from './UI/Header';
+import Loader from './UI/Loader';
 
 function App() {
   const { user } = useTypedSelector(state => state.auth)
@@ -64,7 +65,9 @@ function App() {
 
   if (isCheckingSession) {
     return (
-      <div className='text-5xl'>Loading...</div>
+      <div className='flex-1 flex justify-center items-center bg-mygray'>
+        <Loader size='20' />
+      </div>
     )
   }
 

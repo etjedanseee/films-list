@@ -46,7 +46,6 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
       }
       setResults(results)
     } else {
-      console.log('No found items');
       setResults([])
     }
   } catch (e) {
