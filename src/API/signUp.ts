@@ -16,14 +16,12 @@ export const signUp = async ({ email, password, setLoading }: signUpProps) => {
     })
 
     if (error) {
-      toast.error('Sign up error')
       throw new Error(error.message)
     }
-    toast.info('Please confirm email letter', { autoClose: 5000 })
-    // console.log('signUp data', data)
+    toast.warn('Please confirm email', { autoClose: 5000 })
   } catch (e) {
     console.log('signUpError', e)
-    toast.error('SignUp error ' + e)
+    toast.error('SignUp error:' + e)
   } finally {
     setLoading(false)
   }

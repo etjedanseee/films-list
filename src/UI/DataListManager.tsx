@@ -98,52 +98,51 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
     }
   }, [searchDataItem.dataId, data])
 
-  if (!lists.length || loading) {
-    return (
-      <div className='py-1 bg-mygray3 flex justify-center'>
-        <Loader size='7' />
-      </div>
-    )
-  }
-
   return (
     <>
-      <div className='grid grid-cols-4 text-small tracking-tighter rounded-b-md bg-mygray3'>
-        <DataListManagetItem
-          isDataInList={isDataInList(lists[0].id)}
-          isHideListsTitles={isHideListsTitles}
-          list={lists[0]}
-          onListClick={onListClick}
-        />
-        <DataListManagetItem
-          isDataInList={isDataInList(lists[1].id)}
-          isHideListsTitles={isHideListsTitles}
-          list={lists[1]}
-          onListClick={onListClick}
-        />
-        <DataListManagetItem
-          isDataInList={isDataInList(lists[2].id)}
-          isHideListsTitles={isHideListsTitles}
-          list={lists[2]}
-          onListClick={onListClick}
-        />
-        <div
-          className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
+      {!lists.length || loading ? (
+        <div className='py-1 bg-mygray3 flex justify-center'>
+          <Loader size='7' />
+        </div>
+      )
+        : (
+          <div className='grid grid-cols-4 text-small tracking-tighter rounded-b-md bg-mygray3'>
+            <DataListManagetItem
+              isDataInList={isDataInList(lists[0].id)}
+              isHideListsTitles={isHideListsTitles}
+              list={lists[0]}
+              onListClick={onListClick}
+            />
+            <DataListManagetItem
+              isDataInList={isDataInList(lists[1].id)}
+              isHideListsTitles={isHideListsTitles}
+              list={lists[1]}
+              onListClick={onListClick}
+            />
+            <DataListManagetItem
+              isDataInList={isDataInList(lists[2].id)}
+              isHideListsTitles={isHideListsTitles}
+              list={lists[2]}
+              onListClick={onListClick}
+            />
+            <div
+              className={`flex flex-col gap-y-1 justify-between items-center ${isHideListsTitles ? 'py-1' : 'py-2'} 
               px-1 hover:cursor-pointer rounded-br-md 
               ${isDataInSavedList ? 'bg-yellow-500 text-black' : ''}
             `}
-          onClick={onSaveClick}
-          title={isDataInSavedList ? 'Saved' : 'Save'}
-        >
-          <BookmarkIcon className={`h-7 w-7 ${isDataInSavedList ? 'fill-mygray' : 'fill-white'}`} />
-          {!isHideListsTitles && (
-            <div className={`${isDataInSavedList ? 'text-black font-medium' : 'text-white'} font-medium`}>
-              Save
+              onClick={onSaveClick}
+              title={isDataInSavedList ? 'Saved' : 'Save'}
+            >
+              <BookmarkIcon className={`h-7 w-7 ${isDataInSavedList ? 'fill-mygray' : 'fill-white'}`} />
+              {!isHideListsTitles && (
+                <div className={`${isDataInSavedList ? 'text-black font-medium' : 'text-white'} font-medium`}>
+                  Save
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
-
+          </div>
+        )
+      }
       {isSaveToListsModalVisible && (
         <SavedListsModal
           handleClose={e => handleSaveToListsModalVisible(e)}

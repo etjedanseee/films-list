@@ -22,6 +22,10 @@ const Lists = () => {
       setIsNeedToUpdateData(true)
       setCurrentList(list)
     }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 
   const onSearchByTitleChange = (e: ChangeEvent<HTMLInputElement>) => {

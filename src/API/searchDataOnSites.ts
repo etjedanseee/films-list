@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { ILink, ISearchDataOnSitesResponse } from './../types/search';
 
 interface ISearchDataOnSitesProps {
@@ -33,7 +34,11 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
       if (response.status === 'fulfilled') {
         const data = response.value;
         if ('error' in data) {
-          console.error('Rejected:', data.error);
+          const error = data.error as { code: number }
+          if (error.code === 429) {
+            toast.error("Quota exceeded for: 'Queries per day'", { autoClose: 5000 })
+            break;
+          }
         } else {
           const res = data as ISearchDataOnSitesResponse
           if (res?.items && res.items.length) {
@@ -57,9 +62,6 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
             }
           }
         }
-      } else {
-        const reason = response.reason;
-        console.error('Rejected:', reason);
       }
       index++
     }

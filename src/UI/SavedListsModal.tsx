@@ -64,7 +64,9 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
       >
         <div className='flex justify-between items-center gap-x-10 mb-6'>
           <div className='font-bold text-2xl'>Save to...</div>
-          <div onClick={handleClose}><CloseIcon className='fill-white h-6 w-6' /></div>
+          <div onClick={handleClose}>
+            <CloseIcon className='fill-white h-6 w-6' />
+          </div>
         </div>
         <div className='flex flex-col gap-y-2 mb-6'>
           {!!additionalLists.length && additionalLists.map(list => (

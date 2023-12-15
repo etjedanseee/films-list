@@ -14,7 +14,7 @@ const Sites = ({ results, loading }: SitesProps) => {
   const { sites } = useTypedSelector(state => state.sites)
 
   return (
-    <div className='mt-6'>
+    <div className='mt-6 mb-6'>
       {loading ? (
         <div className='flex flex-col gap-y-1'>
           {!!sites.length && sites.map(site => (
@@ -26,7 +26,7 @@ const Sites = ({ results, loading }: SitesProps) => {
         </div>
       )
         : (
-          <>
+          <div className='flex flex-col gap-y-1'>
             {!!results.length && results.map(item => (
               <div key={item.site} className='flex items-center gap-x-4'>
                 {item.result ? (
@@ -49,7 +49,7 @@ const Sites = ({ results, loading }: SitesProps) => {
                 </div>
               </div>
             ))}
-          </>
+          </div>
         )}
     </div>
   )

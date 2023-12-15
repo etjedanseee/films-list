@@ -32,7 +32,7 @@ const DataItem = () => {
         search: item.title,
         year: item.releaseDate.slice(0, 4),
         // sites,
-        sites: [sites[2]],
+        sites: [sites[1]],
         setSitesResults,
         setLoading: setSitesLoading,
       })
@@ -41,10 +41,9 @@ const DataItem = () => {
 
   const onCopyTitle = () => {
     if (item) {
-      navigator.clipboard.writeText(item.title)
-        .then(() => {
-          toast.success('Title copied!')
-        })
+      navigator.clipboard.writeText(item.title).then(() => {
+        toast.success('Title copied!')
+      })
     }
   }
 

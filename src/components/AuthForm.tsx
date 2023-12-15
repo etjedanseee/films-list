@@ -88,8 +88,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
   }, [emailError, email, setIsAuthFormValid, setUserEmail, passwordError, setUserPassword, password, isEmailDirty, isPasswordDirty])
 
   return (
-    <div className='py-10 w-1/3 m-auto'>
-      <div className='font-medium text-3xl mb-3'>Login or sign up</div>
+    <div className='minw-[260px] max-w-sm w-full'>
       <form onSubmit={onSubmit}>
         <Input
           onInputChange={onEmailChange}

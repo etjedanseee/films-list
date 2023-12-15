@@ -5,6 +5,7 @@ import { signIn } from '../API/signIn'
 import { signUp } from '../API/signUp'
 import { useActions } from '../hooks/useActions'
 import Loader from '../UI/Loader'
+import { ReactComponent as LogoIcon } from '../assets/logo.svg'
 
 const AuthPage = () => {
   const navigate = useNavigate()
@@ -44,7 +45,11 @@ const AuthPage = () => {
   }
 
   return (
-    <>
+    <div className='flex-1 flex flex-col justify-center items-center'>
+      <div className='flex items-center gap-x-4 mb-4'>
+        <LogoIcon className='h-16 w-16' />
+        <div className='font-bold text-4xl'>Films Lists</div>
+      </div>
       <AuthForm
         setIsAuthFormValid={setIsFormValid}
         isFormValid={isFormValid}
@@ -56,7 +61,7 @@ const AuthPage = () => {
         setIsSignIn={setIsSignIn}
         onAuthFormSubmit={onAuthFormSubmit}
       />
-    </>
+    </div>
   )
 }
 
