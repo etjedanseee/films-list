@@ -19,7 +19,7 @@ const Sites = ({ results, loading }: SitesProps) => {
         <div className='flex flex-col gap-y-1'>
           {!!sites.length && sites.map(site => (
             <div key={site} className='flex items-center gap-x-4'>
-              <div className='flex justify-center items-center'><Loader size='6' /></div>
+              <div className='flex justify-center items-center'><Loader size='24' /></div>
               <div>{site}</div>
             </div>
           ))}

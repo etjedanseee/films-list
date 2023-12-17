@@ -101,9 +101,19 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
   return (
     <>
       {!lists.length || loading ? (
-        <div className='py-1 bg-mygray3 flex justify-center'>
-          <Loader size='7' />
-        </div>
+        <>
+          {isHideListsTitles ? (
+            <div className='py-[6px] bg-mygray3 flex justify-center items-center'>
+              <Loader size='28' />
+            </div>
+          )
+            : (
+              <div className='py-2 bg-mygray3 flex justify-center items-center'>
+                <Loader size='48' />
+              </div>
+            )
+          }
+        </>
       )
         : (
           <div className='grid grid-cols-4 text-small tracking-tighter rounded-b-md bg-mygray3'>

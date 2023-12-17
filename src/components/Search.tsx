@@ -87,7 +87,7 @@ const Search = () => {
         py='py-2'
       />
       {loading ? (
-        <div className='flex justify-center items-center -mt-[2px]'><Loader size='9' /></div>
+        <div className='flex justify-center items-center -mt-[2px]'><Loader size='36' /></div>
       )
         : isFocused && (
           <div>

@@ -31,8 +31,8 @@ const DataItem = () => {
       searchDataOnSites({
         search: item.title,
         year: item.releaseDate.slice(0, 4),
-        // sites,
-        sites: [sites[1]],
+        sites,
+        // sites: [sites[1]],
         setSitesResults,
         setLoading: setSitesLoading,
       })

@@ -14,7 +14,7 @@ const SearchResults = () => {
 
   if (loading) {
     return (
-      <div className='flex-1 flex justify-center items-center'><Loader size='20' /></div>
+      <div className='flex-1 flex justify-center items-center'><Loader size='80' /></div>
     )
   }
 

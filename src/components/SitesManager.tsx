@@ -70,7 +70,7 @@ const SitesManager = () => {
 
   if (loading) {
     return (
-      <div className='flex justify-center items-center pt-10'><Loader size='20' /></div>
+      <div className='flex-1 flex justify-center items-center'><Loader size='80' /></div>
     )
   }
 

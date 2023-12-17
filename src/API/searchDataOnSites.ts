@@ -17,7 +17,7 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
     throw new Error('No google apiKey or cx')
   }
   setLoading(true)
-  const numOfResponse = 5
+  const numOfResponse = 10
   console.log(search, sites)
   const promises: Promise<Response>[] = sites.map(site => {
     const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}&num=${numOfResponse}&exactTerms=${search}`;
@@ -29,6 +29,7 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
   const results: ILink[] = sites.map(site => ({ site, result: null }))
   try {
     const responses = await Promise.allSettled(promises);
+    const lowerSearch = search.toLowerCase()
     let index = 0
     for (let response of responses) {
       if (response.status === 'fulfilled') {
@@ -44,14 +45,17 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
           if (res?.items && res.items.length) {
             const items = res.items
             console.log('items for', sites[index], items)
-            const filteredItems = items.filter(i => i.snippet.includes(search))
+            const filteredItems = items.filter(i => i.snippet.toLowerCase().includes(lowerSearch))
               .sort((a, b) => {
-                if (a.snippet.includes(year) && b.snippet.includes(year)) {
+                const aRes = a.title.includes(year) || a.snippet.includes(year)
+                const bRes = b.title.includes(year) || b.snippet.includes(year)
+                if (aRes && bRes) {
                   return 0
-                } else if (a.snippet.includes(year) && !b.snippet.includes(year)) {
+                } else if (aRes && !bRes) {
                   return -1
                 } else return 1
               })
+            console.log('filteredItems for', sites[index], filteredItems)
             if (filteredItems.length) {
               results[index] = {
                 site: sites[index], result: {

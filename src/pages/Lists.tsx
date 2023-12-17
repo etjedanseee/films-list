@@ -21,6 +21,7 @@ const Lists = () => {
     if (currentList && (list.id !== currentList.id)) {
       setIsNeedToUpdateData(true)
       setCurrentList(list)
+      localStorage.setItem('currentList', list.id.toString())
     }
     window.scrollTo({
       top: 0,
@@ -46,10 +47,19 @@ const Lists = () => {
   }, [data, lists])
 
   useEffect(() => {
-    if ((!currentList || !lists.find(list => list.id === currentList.id)) && lists.length) {
-      setCurrentList(lists[0])
+    if (!lists.length) {
+      return;
     }
-  }, [lists, currentList])
+    const localCurrentList = localStorage.getItem('currentList')
+    if (localCurrentList) {
+      const list = lists.find(l => l.id === +localCurrentList)
+      if (list) {
+        setCurrentList(list)
+        return;
+      }
+    }
+    setCurrentList(lists[0])
+  }, [lists])
 
   return (
     <div className='flex-1 py-3 px-4'>

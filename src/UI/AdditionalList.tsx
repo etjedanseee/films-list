@@ -55,7 +55,7 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
 
   if (loading) {
     return (
-      <Loader size='6' />
+      <Loader size='24' />
     )
   }
 
