@@ -18,12 +18,11 @@ export const fetchLists = () => {
       if (error) {
         throw new Error(error.message)
       }
-      // console.log('lists', data)
       const lists = data?.map(item => ({
         id: item.id,
         name: item.name,
-        orderNum: item.order_num,
-        userIdOwner: item.user_id_owner
+        orderNum: item.orderNum,
+        userIdOwner: item.userIdOwner
       })).sort((a, b) => a.orderNum - b.orderNum)
 
       dispatch({

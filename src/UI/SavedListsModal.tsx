@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState, ChangeEvent } from 'react'
+import React, { MouseEvent, useState, ChangeEvent, useEffect } from 'react'
 import { ReactComponent as CloseIcon } from '../assets/cancel.svg'
 import { IList } from '../types/lists'
 import Button from './Button'
@@ -11,13 +11,14 @@ import AdditionalList from './AdditionalList'
 import { toast } from 'react-toastify'
 
 interface SaveToListsModalProps {
+  isVisible: boolean,
   handleClose: (e: MouseEvent<HTMLDivElement>) => void,
   additionalLists: IList[],
   dataInLists: IInLists,
   onListClick: (e: MouseEvent, listId: number) => void,
 }
 
-const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClick }: SaveToListsModalProps) => {
+const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClick, isVisible }: SaveToListsModalProps) => {
   const { user } = useTypedSelector(state => state.auth)
   const { fetchLists } = useActions()
   const [isCreateNewList, setIsCreateNewList] = useState(false)
@@ -53,6 +54,13 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
     setIsCreateNewList(false)
   }
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [])
+
   return (
     <div
       className='fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center'
@@ -68,7 +76,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
             <CloseIcon className='fill-white h-6 w-6' />
           </div>
         </div>
-        <div className='flex flex-col gap-y-2 mb-6'>
+        <div className='flex flex-col gap-y-3 mb-6'>
           {!!additionalLists.length && additionalLists.map(list => (
             <AdditionalList
               isDataInList={!!dataInLists[list.id]}

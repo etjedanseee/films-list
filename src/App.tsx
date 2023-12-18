@@ -66,7 +66,7 @@ function App() {
   if (isCheckingSession) {
     return (
       <div className='flex-1 flex justify-center items-center bg-mygray'>
-        <Loader size='20' />
+        <Loader size='80' />
       </div>
     )
   }

@@ -27,7 +27,7 @@ export const deleteList = async (listId: number, setLoading: (b: boolean) => voi
     if (rowsToUpdate.length) {
       try {
         const { error } = await supabase.from('Data')
-          .upsert([...rowsToUpdate])
+          .upsert(rowsToUpdate)
         if (error) {
           throw new Error(error.message)
         }

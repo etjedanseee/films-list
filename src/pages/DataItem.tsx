@@ -74,23 +74,20 @@ const DataItem = () => {
   }, [item, additionalInfo])
 
   useEffect(() => {
-    if (item && additionalInfo) {
-      localStorage.setItem('additionalInfo' + item.dataId, JSON.stringify(additionalInfo))
-    }
-  }, [additionalInfo, item])
-
-  useEffect(() => {
     const dataItem = data.find(i => i.dataId === (id ? +id : 0))
     if (dataItem) {
       setItem(dataItem)
       setSitesResults(dataItem.links)
+      if (additionalInfo) {
+        localStorage.setItem('additionalInfo' + dataItem.dataId, JSON.stringify(additionalInfo))
+      }
     }
-  }, [data, id])
+  }, [data, id, additionalInfo])
 
   if (!item || infoLoading) {
     return (
       <div className='flex-1 flex justify-center items-center bg-mygray'>
-        <Loader size='20' />
+        <Loader size='80' />
       </div>
     )
   }

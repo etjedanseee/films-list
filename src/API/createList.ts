@@ -3,9 +3,9 @@ import supabase from "../supabaseClient"
 
 export const createList = async (name: string, orderNum: number, userId: string) => {
   const list = {
-    user_id_owner: userId,
+    userIdOwner: userId,
     name,
-    order_num: orderNum,
+    orderNum,
   }
   try {
     const { error } = await supabase.from('Lists').insert(list)

@@ -155,6 +155,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
       }
       {isSaveToListsModalVisible && (
         <SavedListsModal
+          isVisible={isSaveToListsModalVisible}
           handleClose={e => handleSaveToListsModalVisible(e)}
           additionalLists={lists.slice(3)}
           onListClick={onListClick}
