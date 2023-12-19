@@ -106,7 +106,7 @@ const Lists = () => {
         </div>
       </div>
       <div className='flex gap-x-8 min-h-full'>
-        <ul className='sticky top-2 flex flex-col gap-y-2 h-full'>
+        <ul className='sticky top-16 flex flex-col gap-y-2 h-full pt-1'>
           {!!lists.length && currentList && lists.slice(0, 3).map(list => (
             <li
               key={list.id}

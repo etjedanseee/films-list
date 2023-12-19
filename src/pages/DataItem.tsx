@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ILink, ISearchDataItem } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
@@ -25,14 +25,16 @@ const DataItem = () => {
   const [infoLoading, setInfoLoading] = useState(false)
   const [sitesLoading, setSitesLoading] = useState(false)
   const [sitesResults, setSitesResults] = useState<ILink[]>([])
+  const [timeLoading, setTimeLoading] = useState(0)
+  const navigate = useNavigate()
 
   const onSearchOnSitesClick = () => {
     if (item && !sitesResults.length && sites.length) {
       searchDataOnSites({
         search: item.title,
         year: item.releaseDate.slice(0, 4),
-        sites,
-        // sites: [sites[1]],
+        // sites,
+        sites: [sites[1]],
         setSitesResults,
         setLoading: setSitesLoading,
       })
@@ -46,6 +48,21 @@ const DataItem = () => {
       })
     }
   }
+
+  useEffect(() => {
+    const timeLoadingTimeout = setTimeout(() => {
+      setTimeLoading(prev => prev + 1000)
+    }, 1000)
+    if (item) {
+      clearTimeout(timeLoadingTimeout)
+      return;
+    }
+    if (timeLoading >= 5000 && !item) {
+      toast.error('No data found')
+      navigate('/')
+    }
+    return () => clearTimeout(timeLoadingTimeout)
+  }, [timeLoading, item])
 
   useEffect(() => {
     if (!id) {

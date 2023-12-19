@@ -39,7 +39,7 @@ const List = ({ listId, searchByTitle }: IListProps) => {
   }
 
   return (
-    <div className='flex flex-wrap items-stretch gap-x-3 gap-y-4'>
+    <div className='flex flex-wrap items-stretch gap-x-3 gap-y-3'>
       {sortedData.map(item => (
         <PreviewItem
           item={item}

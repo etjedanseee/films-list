@@ -12,7 +12,7 @@ const Header = () => {
   }
 
   return (
-    <div className='flex justify-between gap-x-8 border-b-2 px-3 py-2'>
+    <div className='sticky top-0 bg-bg1 z-30 flex justify-between gap-x-8 border-b-2 px-3 py-2'>
       <div className='flex-1 flex items-start gap-x-4'>
         <div className='mt-1 p-1 border-[1px] border-white rounded-full hover:cursor-pointer'>
           <ArrowBackIcon

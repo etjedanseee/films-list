@@ -1,6 +1,8 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
+import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/bookmark.svg'
+import { ReactComponent as SettingsIcon } from '../assets/settings.svg'
 
 const Navbar = () => {
   const { setLastSearch } = useActions()
@@ -11,19 +13,19 @@ const Navbar = () => {
   }
 
   return (
-    <div className='flex gap-x-6 text-xl px-4 pt-[6px] font-bold tracking-wider'>
+    <div className='flex gap-x-3 items-center font-bold tracking-wider'>
       <NavLink
         to={'/'}
-        className={`px-2 hover:cursor-pointer hover:text-yellow-400 transition-colors duration-300`}
+        className={`px-1 hover:cursor-pointer`}
         onClick={onListsPageClick}
       >
-        Lists
+        <BookmarkIcon className='h-10 w-10 fill-yellow-500' />
       </NavLink>
       <NavLink
         to={'/settings'}
-        className={`px-2 hover:cursor-pointer hover:text-yellow-400 transition-colors duration-300`}
+        className={`px-1 hover:cursor-pointer`}
       >
-        Settings
+        <SettingsIcon className='h-8 w-8 fill-white' />
       </NavLink>
     </div>
   )

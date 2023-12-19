@@ -8,6 +8,7 @@ import Input from '../UI/Input'
 import Button from '../UI/Button'
 import { removeHttpFromUrl } from '../utils/removeHttpsFromUrl'
 import Loader from '../UI/Loader'
+import { maxCountUserSites } from '../utils/consts'
 
 
 const SitesManager = () => {
@@ -110,7 +111,7 @@ const SitesManager = () => {
         </div>
       )}
 
-      {sites.length < 10 && (
+      {sites.length < maxCountUserSites && (
         <div
           className='flex items-center gap-x-3 font-medium'
           onClick={handleIsAddNewSite}>
