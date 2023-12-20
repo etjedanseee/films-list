@@ -34,7 +34,7 @@ const DataItem = () => {
         search: item.title,
         year: item.releaseDate.slice(0, 4),
         // sites,
-        sites: [sites[1]],
+        sites: [sites[0]],
         setSitesResults,
         setLoading: setSitesLoading,
       })
@@ -50,6 +50,13 @@ const DataItem = () => {
   }
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto',
+    });
+  }, [])
+
+  useEffect(() => {
     const timeLoadingTimeout = setTimeout(() => {
       setTimeLoading(prev => prev + 1000)
     }, 1000)
@@ -62,7 +69,7 @@ const DataItem = () => {
       navigate('/')
     }
     return () => clearTimeout(timeLoadingTimeout)
-  }, [timeLoading, item])
+  }, [timeLoading, item, navigate])
 
   useEffect(() => {
     if (!id) {
@@ -110,73 +117,94 @@ const DataItem = () => {
   }
 
   return (
-    <div className='mt-3 px-2 flex gap-x-10'>
-      <div className='bg-mygray2 rounded-md p-4'>
-        <div className='w-[342px] m-auto'>
-          <div className='relative'>
-            <img
-              src={changeImageSizePath(item.fullPosterUrl) || noPicture}
-              className='w-[342px] h-[513px]'
-              alt="poster"
-            />
-            <div className={`absolute top-0 left-0 px-3 py-2 
-            ${item.mediaType === 'movie' ? 'bg-myblue' : 'bg-pink-700'} text-sm select-none
-          `}>
-              {item.mediaType === 'tv' ? 'series' : item.mediaType}
+    <>
+      <div className='mt-3 px-2 flex flex-wrap justify-center md:justify-normal sm:flex-nowrap gap-x-4 md:gap-x-6 lg:gap-x-10'>
+        <div className='self-start bg-mygray2 rounded-md p-3 lg:p-4 max-w-full mb-2 sm:mb-0'>
+          <div className='m-auto'>
+            <div className='relative'>
+              <div className='relative min-w-[280px] pb-[150%]'>
+                <img
+                  src={changeImageSizePath(item.fullPosterUrl) || noPicture}
+                  className='absolute top-0 left-0 bg-cover w-full h-full'
+                  alt="poster"
+                />
+              </div>
+              <div className={`absolute top-0 left-0 px-3 py-2 
+                ${item.mediaType === 'movie' ? 'bg-myblue' : 'bg-pink-700'} text-sm select-none
+              `}>
+                {item.mediaType === 'tv' ? 'series' : item.mediaType}
+              </div>
             </div>
+            <DataListManager
+              searchDataItem={item}
+              sitesResults={sitesResults}
+            />
           </div>
-          <DataListManager
-            searchDataItem={item}
-            sitesResults={sitesResults}
-          />
+        </div>
+        <div className='overflow-hidden'>
+          <div
+            className='inline-block text-3xl font-medium mb-3 select-none hover:cursor-pointer'
+            onClick={onCopyTitle}
+          >
+            {item.title}
+          </div>
+          {additionalInfo && !!additionalInfo.genres.length && (
+            <div className='font-medium'>
+              <span className='text-zinc-400'>Genres: </span>{additionalInfo.genres.join(', ')}
+            </div>
+          )}
+          <div className='font-medium'>
+            <span className='text-zinc-400'>Vote: </span>
+            {formatVote(item.vote)}
+          </div>
+          {additionalInfo && !!additionalInfo.runtime && (
+            <div className='font-medium'>
+              <span className='text-zinc-400'>Runtime: </span>{formatMinToHours(additionalInfo.runtime)}
+            </div>
+          )}
+          <div className='font-medium'>
+            <span className='text-zinc-400'>Release date:</span> {item.releaseDate}
+          </div>
+          {additionalInfo && additionalInfo.overview && (
+            <div className='font-medium leading-tight sm:leading-normal'>
+              <span className='text-zinc-400'>Overview: </span>{additionalInfo.overview}
+            </div>
+          )}
+          <div className='hidden md:block'>
+            {!!sitesResults.length || sitesLoading ?
+              <Sites
+                loading={sitesLoading}
+                results={sitesResults}
+              />
+              : (
+                <div>
+                  <Button
+                    onClick={onSearchOnSitesClick}
+                    title='Search on sites'
+                    className='mt-6'
+                  />
+                </div>
+              )
+            }
+          </div>
         </div>
       </div>
-      <div>
-        <div
-          className='inline-block text-3xl font-medium mb-3 select-none hover:cursor-pointer'
-          onClick={onCopyTitle}
-        >
-          {item.title}
-        </div>
-        {additionalInfo && !!additionalInfo.genres.length && (
-          <div className='font-medium'>
-            <span className='text-zinc-400'>Genres: </span>{additionalInfo.genres.join(', ')}
-          </div>
-        )}
-        <div className='font-medium'>
-          <span className='text-zinc-400'>Vote: </span>
-          {formatVote(item.vote)}
-        </div>
-        {additionalInfo && !!additionalInfo.runtime && (
-          <div className='font-medium'>
-            <span className='text-zinc-400'>Runtime: </span>{formatMinToHours(additionalInfo.runtime)}
-          </div>
-        )}
-        <div className='font-medium'>
-          <span className='text-zinc-400'>Release date:</span> {item.releaseDate}
-        </div>
-        {additionalInfo && additionalInfo.overview && (
-          <div className='font-medium'>
-            <span className='text-zinc-400'>Overview: </span>{additionalInfo.overview}
-          </div>
-        )}
+      <div className='block md:hidden px-2 mb-3'>
         {!!sitesResults.length || sitesLoading ?
           <Sites
             loading={sitesLoading}
             results={sitesResults}
           />
           : (
-            <div>
-              <Button
-                onClick={onSearchOnSitesClick}
-                title='Search on sites'
-                className='mt-6'
-              />
-            </div>
+            <Button
+              onClick={onSearchOnSitesClick}
+              title='Search on sites'
+              className='mt-6'
+            />
           )
         }
       </div>
-    </div>
+    </>
   )
 }
 
