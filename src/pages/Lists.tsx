@@ -9,6 +9,7 @@ import { useActions } from '../hooks/useActions'
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
 import { updateLists } from '../API/updateLists'
 import Loader from '../UI/Loader'
+import ListsDropdown from '../UI/ListsDropdown'
 
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
@@ -21,6 +22,8 @@ const Lists = () => {
   const debouncedSearchByTitle = useDebounce(searchByTitle, 500)
   const [additionalLists, setAdditionalLists] = useState<IList[]>([])
   const [loading, setLoading] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
 
   const onListClick = (list: IList) => {
     if (currentList && (list.id !== currentList.id)) {
@@ -55,6 +58,11 @@ const Lists = () => {
     setAdditionalLists(newAdditionalLists)
     await updateLists(newAdditionalLists, setLoading)
     fetchLists()
+  }
+
+  const onMobileSelectList = (list: IList) => {
+    onListClick(list)
+    setIsDropdownOpen(false)
   }
 
   useEffect(() => {
@@ -105,8 +113,20 @@ const Lists = () => {
           />
         </div>
       </div>
+      <div className='md:hidden flex-1 flex justify-center'>
+        {!!lists.length && currentList && (
+          <ListsDropdown
+            isDropdownOpen={isDropdownOpen}
+            setIsDropdownOpen={setIsDropdownOpen}
+            options={lists}
+            selectedOption={currentList}
+            setSelectedOption={onMobileSelectList}
+            countDataInLists={countDataInLists}
+          />
+        )}
+      </div>
       <div className='flex gap-x-8 min-h-full'>
-        <ul className='sticky top-16 flex flex-col gap-y-2 h-full pt-1'>
+        <ul className='hidden md:flex sticky top-16 flex-col gap-y-2 h-full pt-1'>
           {!!lists.length && currentList && lists.slice(0, 3).map(list => (
             <li
               key={list.id}
