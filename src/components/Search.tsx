@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect, useRef } from 'react'
 import Input from '../UI/Input'
-import Button from '../UI/Button'
 import { searchDataInfo } from '../API/searchDataInfo'
 import { useNavigate } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
@@ -9,7 +8,6 @@ import Loader from '../UI/Loader'
 
 const Search = () => {
   const [search, setSearch] = useState('')
-  const [searchError, setSearchError] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const lastSearchRef = useRef('')
   const navigate = useNavigate()
@@ -17,16 +15,7 @@ const Search = () => {
   const { setResults, setLoading, setLastSearch } = useActions()
 
   const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const search = value.trim()
-    if (!search.length) {
-      setSearchError('Field is required')
-    } else if (search.length < 3) {
-      setSearchError('Search must be longer than 2 characters')
-    } else {
-      setSearchError('')
-    }
-    setSearch(value)
+    setSearch(e.target.value)
   }
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -51,17 +40,18 @@ const Search = () => {
   }
 
   const onSearchBlur = () => {
-    setTimeout(() => { setIsFocused(false) }, 0)
-    if (!search) {
-      setSearchError('')
-    }
+    setIsFocused(false)
+  }
+
+  const onCleanSearch = () => {
+    setSearch('')
   }
 
   useEffect(() => {
-    const lastSearch = localStorage.getItem('lastSearch')
-    if (lastSearch) {
-      setSearch(lastSearch)
-      lastSearchRef.current = lastSearch
+    const localLastSearch = localStorage.getItem('lastSearch')
+    if (localLastSearch) {
+      setSearch(localLastSearch)
+      lastSearchRef.current = localLastSearch
     }
   }, [])
 
@@ -72,36 +62,25 @@ const Search = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className={`flex-1 flex gap-x-4 ${isFocused ? 'max-w-none' : 'max-w-[250px]'}`}
+      className={`flex-1 flex gap-x-2 xs:gap-x-4 ${isFocused ? 'max-w-none' : 'max-w-[250px]'}`}
     >
       <Input
         onInputChange={onSearchChange}
         placeholder='Enter movie or series title'
         value={search}
-        error={searchError}
+        error={''}
         isFieldDirty={true}
         onBlur={onSearchBlur}
         onFocus={onSearchFocus}
         name='Search*'
         className='flex-1'
         py='py-2'
+        isCanClean
+        onClean={onCleanSearch}
       />
-      {loading ? (
+      {loading && (
         <div className='flex justify-center items-center -mt-[2px]'><Loader size='36' /></div>
-      )
-        : isFocused && (
-          <div>
-            <Button
-              title={'Search'}
-              onClick={() => { }}
-              disabled={!!searchError}
-              type='submit'
-              className='px-6'
-              p='py-[6px]'
-            />
-          </div>
-        )
-      }
+      )}
     </form>
   )
 }

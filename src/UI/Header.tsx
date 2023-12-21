@@ -12,11 +12,11 @@ const Header = () => {
   }
 
   return (
-    <div className='sticky top-0 bg-bg1 z-30 flex justify-between gap-x-8 border-b-2 px-3 py-2'>
-      <div className='flex-1 flex items-start gap-x-4'>
+    <div className='sticky top-0 bg-bg1 z-30 flex justify-between gap-x-3 xs:gap-x-8 border-b-2 px-2 xs:px-3 py-2'>
+      <div className='flex-1 flex items-start gap-x-3 xs:gap-x-4'>
         <div className='mt-1 p-1 border-[1px] border-white rounded-full hover:cursor-pointer'>
           <ArrowBackIcon
-            className='fill-white h-6 w-6'
+            className='fill-white w-5 h-5 xs:h-6 xs:w-6'
             onClick={onGoBackClick}
           />
         </div>

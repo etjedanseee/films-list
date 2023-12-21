@@ -13,7 +13,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className='flex gap-x-3 items-center font-bold tracking-wider'>
+    <div className='flex gap-x-1 xs:gap-x-3 items-center font-bold tracking-wider'>
       <NavLink
         to={'/'}
         className={`px-1 hover:cursor-pointer`}

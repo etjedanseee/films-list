@@ -19,7 +19,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
 
   return (
     <div
-      className='max-w-[185px] w-full cursor-pointer flex flex-col select-none'
+      className='w-full cursor-pointer flex flex-col select-none'
       onClick={() => onItemClick(dataId)}
     >
       <div className='relative'>
@@ -27,6 +27,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
           src={fullPosterUrl || noPicture}
           alt="poster"
           className='w-full h-full bg-cover'
+          loading='lazy'
         />
         {!!vote && (
           <div className={`absolute top-2 left-0 pl-2 pr-3 py-1 rounded-r-full text-sm 

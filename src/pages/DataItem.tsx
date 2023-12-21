@@ -127,6 +127,7 @@ const DataItem = () => {
                   src={changeImageSizePath(item.fullPosterUrl) || noPicture}
                   className='absolute top-0 left-0 bg-cover w-full h-full'
                   alt="poster"
+                  loading='lazy'
                 />
               </div>
               <div className={`absolute top-0 left-0 px-3 py-2 
@@ -143,7 +144,7 @@ const DataItem = () => {
         </div>
         <div className='overflow-hidden'>
           <div
-            className='inline-block text-3xl font-medium mb-3 select-none hover:cursor-pointer'
+            className='inline-block text-2xl xs:text-3xl font-medium mb-1 xs:mb-3 select-none hover:cursor-pointer leading-tight'
             onClick={onCopyTitle}
           >
             {item.title}

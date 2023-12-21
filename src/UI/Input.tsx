@@ -1,5 +1,6 @@
 import React, { ChangeEvent, MouseEvent, useState } from 'react'
 import { ReactComponent as EyeIcon } from '../assets/eye.svg';
+import { ReactComponent as ClearIcon } from '../assets/cancel.svg';
 import { useFocus } from '../hooks/useFocus';
 
 interface InputProps {
@@ -16,9 +17,11 @@ interface InputProps {
   className?: string,
   py?: string,
   titleBg?: string,
+  isCanClean?: boolean,
+  onClean?: () => void,
 }
 
-const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1' }: InputProps) => {
+const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1', isCanClean, onClean = () => { } }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!isPassword)
   const [isFocused, setIsFocused] = useState(false)
   const { inputRef, setInputFocus } = useFocus()
@@ -64,7 +67,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
         onChange={(e) => onInputChange(e)}
         placeholder={isFocused || error ? placeholder : ''}
         autoComplete={autoCompleteValue || 'on'}
-        className={`${error ? 'border-myred' : 'border-white'} bg-transparent text-white  
+        className={`${error ? 'border-myred' : 'border-white'} bg-transparent text-white placeholder:text-xs xs:placeholder:text-sm
           w-full border-2 rounded-[4px] px-3 text-sm ${py} mb-1 outline-none flex items-centers
         `}
         spellCheck={false}
@@ -77,6 +80,12 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
             right-3 h-5 w-5 hover:cursor-pointer fill-slate-300
           `}
           onClick={e => handlePasswordVisible(e)}
+        />
+      )}
+      {!isPassword && isCanClean && !!value.length && (
+        <ClearIcon
+          className={`absolute top-1/2 -translate-y-1/2 right-2 h-5 w-5 hover:cursor-pointer fill-slate-300`}
+          onClick={onClean}
         />
       )}
       {!!error && isFieldDirty && (

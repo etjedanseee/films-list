@@ -24,7 +24,6 @@ const Lists = () => {
   const [loading, setLoading] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-
   const onListClick = (list: IList) => {
     if (currentList && (list.id !== currentList.id)) {
       setIsNeedToUpdateData(true)
@@ -39,6 +38,10 @@ const Lists = () => {
 
   const onSearchByTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchByTitle(e.target.value)
+  }
+
+  const onCleanSearch = () => {
+    setSearchByTitle('')
   }
 
   const onDragEnd = async (result: DropResult) => {
@@ -98,10 +101,10 @@ const Lists = () => {
   }, [lists])
 
   return (
-    <div className='flex-1 py-3 px-4'>
-      <div className='flex items-center justify-between gap-x-8 mb-3'>
-        <div className='text-2xl font-medium'>Saved Lists</div>
-        <div className='max-w-[250px] w-full'>
+    <div className='flex-1 py-3 px-2 xs:px-4'>
+      <div className='flex items-center justify-between gap-x-4 xs:gap-x-8 mb-2 xs:mb-3'>
+        <div className='hidden xs:block text-2xl font-medium'>Saved Lists</div>
+        <div className='max-w-none xs:max-w-[220px] w-full'>
           <Input
             value={searchByTitle}
             onInputChange={onSearchByTitleChange}
@@ -110,6 +113,8 @@ const Lists = () => {
             error=''
             isFieldDirty={false}
             py='py-2'
+            isCanClean
+            onClean={onCleanSearch}
           />
         </div>
       </div>

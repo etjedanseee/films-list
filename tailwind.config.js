@@ -19,7 +19,8 @@ module.exports = {
         small: '0.563rem',
       },
       screens: {
-        xs: '500px'
+        xs: '500px',
+        "3xl": '2000px',
       }
     },
   },
