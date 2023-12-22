@@ -18,7 +18,6 @@ export const fetchSites = () => {
       if (error) {
         throw new Error(error.message)
       }
-      // console.log('sites', data)
 
       dispatch({
         type: SitesActionTypes.SET_SITES,

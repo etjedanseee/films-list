@@ -36,7 +36,7 @@ const ListsDropdown = ({ isDropdownOpen, options, selectedOption, setIsDropdownO
       >
         <div className='text-yellow-500 flex gap-x-1 max-w-full'>
           <div className='truncate text-inherit'>{`${selectedOption.name}`}</div>
-          <div className='text-inherit'>({countDataInLists[selectedOption.id]})</div>
+          <div className='text-inherit'>({countDataInLists[selectedOption.id] || 0})</div>
         </div>
         <ArrowDownIcon className={`h-7 w-7 fill-yellow-500 ${isDropdownOpen ? 'rotate-90' : 'rotate-0'}`} />
       </div>
@@ -49,7 +49,7 @@ const ListsDropdown = ({ isDropdownOpen, options, selectedOption, setIsDropdownO
               key={option.id}
             >
               <div className='truncate text-inherit'>{`${option.name}`}</div>
-              <div className='text-inherit'>({countDataInLists[option.id]})</div>
+              <div className='text-inherit'>({countDataInLists[option.id] || 0})</div>
             </div>
           ))}
         </div>

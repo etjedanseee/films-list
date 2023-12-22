@@ -6,10 +6,9 @@ import { IRoute } from "../types/route"
 import DataItem from "../pages/DataItem"
 import { Navigate } from "react-router-dom"
 
-//userPanel with sites and signOut, lists, listItem, searchItems, searchDataItem
 export const publicRoutes: IRoute[] = [
   { path: '/auth', element: <AuthPage /> },
-  { path: '*', element: <Navigate to={'/auth'} /> }
+  { path: '*', element: <Navigate to={'/auth'} replace={true} /> }
 ]
 
 export const privateRoutes: IRoute[] = [

@@ -27,7 +27,14 @@ function App() {
           throw new Error(error.message)
         }
         if (data.session) {
-          setUser({ email: data.session.user.email || '', id: data.session.user.id })
+          const searchApiSettings = data.session.user.user_metadata?.searchApiSettings || null
+          setUser({
+            email: data.session.user.email || '',
+            id: data.session.user.id,
+            metaData: searchApiSettings ? {
+              searchApiSettings: searchApiSettings,
+            } : null
+          })
         }
       } catch (e) {
         console.error('get session error', e)

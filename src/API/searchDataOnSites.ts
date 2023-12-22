@@ -1,7 +1,9 @@
+import { IUserSearchApiSettings } from './../types/auth';
 import { toast } from 'react-toastify';
 import { ILink, ISearchDataOnSitesResponse } from './../types/search';
 
 interface ISearchDataOnSitesProps {
+  searchApiSettings: IUserSearchApiSettings,
   sites: string[],
   search: string,
   year: string,
@@ -9,10 +11,9 @@ interface ISearchDataOnSitesProps {
   setLoading: (b: boolean) => void,
 }
 
-export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoading, year }: ISearchDataOnSitesProps) => {
+export const searchDataOnSites = async ({ searchApiSettings, search, sites, setSitesResults, setLoading, year }: ISearchDataOnSitesProps) => {
   const endUrl = 'https://www.googleapis.com/customsearch/v1'
-  const apiKey = process.env.REACT_APP_GOOGLE_SEARCH_API_KEY;
-  const cx = process.env.REACT_APP_GOOGLE_SEARCH_ENGINE_ID
+  const { searchApiKey: apiKey, searchEngineId: cx } = searchApiSettings
   if (!apiKey || !cx) {
     throw new Error('No google apiKey or cx')
   }
@@ -77,7 +78,6 @@ export const searchDataOnSites = async ({ search, sites, setSitesResults, setLoa
         return -1
       } else return 1
     })
-    console.log('sorted results', sortedResults)
     setSitesResults(sortedResults)
   } catch (error) {
     console.error('Error during Promise.allSettled:', error);

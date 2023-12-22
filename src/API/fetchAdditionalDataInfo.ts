@@ -31,7 +31,6 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
       runtime?: number,
     } = await response.json()
     const result = data.genres.map(genre => genre.name)
-    // console.log('additionalInfo', data)
     setAdditionalInfo({
       genres: result,
       overview: data.overview,

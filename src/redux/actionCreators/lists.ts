@@ -21,8 +21,8 @@ export const fetchLists = () => {
       const lists = data?.map(item => ({
         id: item.id,
         name: item.name,
-        orderNum: item.orderNum,
-        userIdOwner: item.userIdOwner
+        orderNum: item.order_num,
+        userIdOwner: item.user_id_owner
       })).sort((a, b) => a.orderNum - b.orderNum)
 
       dispatch({

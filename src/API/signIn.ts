@@ -14,24 +14,25 @@ export const signIn = async ({ email, password, setLoading, navigate, setUser }:
   setLoading(true)
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: email?.trim(),
-      password: password?.trim(),
+      email: email.trim(),
+      password: password.trim(),
     })
-    // console.log('singIn data', data)
     if (error) {
       toast.error('Wrong email or password')
       throw new Error(error.message)
     }
 
     if (data && data.user) {
+      const searchApiSettings = data.user.user_metadata?.searchApiSettings || null
       setUser({
         id: data.user.id,
-        email: data.user.email || ''
+        email: data.user.email || '',
+        metaData: { searchApiSettings },
       })
     }
     navigate('/')
   } catch (e) {
-    console.log('singIn error', e)
+    console.error('singIn error', e)
   } finally {
     setLoading(false)
   }

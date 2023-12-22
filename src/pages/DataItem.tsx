@@ -20,6 +20,7 @@ const DataItem = () => {
   const { results } = useTypedSelector(state => state.search)
   const { sites } = useTypedSelector(state => state.sites)
   const { data } = useTypedSelector(state => state.data)
+  const { user } = useTypedSelector(state => state.auth)
   const [item, setItem] = useState<ISearchDataItem | null>(null)
   const [additionalInfo, setAdditionalInfo] = useState<IDataAdditionalInfo | null>(null)
   const [infoLoading, setInfoLoading] = useState(false)
@@ -29,12 +30,13 @@ const DataItem = () => {
   const navigate = useNavigate()
 
   const onSearchOnSitesClick = () => {
-    if (item && !sitesResults.length && sites.length) {
+    if (user && user.metaData && user.metaData?.searchApiSettings && item && !sitesResults.length && sites.length) {
       searchDataOnSites({
+        searchApiSettings: user.metaData.searchApiSettings,
         search: item.title,
         year: item.releaseDate.slice(0, 4),
-        // sites,
-        sites: [sites[0]],
+        sites,
+        // sites: [sites[0]],
         setSitesResults,
         setLoading: setSitesLoading,
       })

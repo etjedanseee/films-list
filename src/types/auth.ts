@@ -2,6 +2,16 @@
 export interface IUser {
   id: string,
   email: string,
+  metaData: IUserMetadata | null,
+}
+
+export interface IUserMetadata {
+  searchApiSettings: IUserSearchApiSettings,
+}
+
+export interface IUserSearchApiSettings {
+  searchApiKey: string,
+  searchEngineId: string,
 }
 
 export interface AuthState {

@@ -147,10 +147,10 @@ const Lists = () => {
               onClick={() => onListClick(list)}
             >
               <div title={list.name} className='truncate max-w-[150px] text-inherit'>{list.name}</div>
-              <div className='text-inherit'>({countDataInLists[list.id]})</div>
+              <div className='text-inherit'>({countDataInLists[list.id] || 0})</div>
             </li>
           ))}
-          {!!additionalLists.length && currentList && !loading ? (
+          {currentList && !loading ? (
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId='lists'>
                 {provided => (
@@ -159,7 +159,7 @@ const Lists = () => {
                     {...provided.droppableProps}
                     className='flex flex-col gap-y-3 font-medium'
                   >
-                    {additionalLists.map((list, index) => (
+                    {!!additionalLists.length && additionalLists.map((list, index) => (
                       <Draggable
                         draggableId={list.id.toString()}
                         index={index}
