@@ -62,34 +62,48 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   return (
     <div key={list.id} className='flex gap-x-4 items-center'>
       <div
-        className={`border-yellow-400 border-2 h-5 w-5 cursor-pointer flex items-center justify-center`}
+        className={`hidden xs:flex border-yellow-400 border-2 h-5 w-5 cursor-pointer items-center justify-center`}
         onClick={(e) => onListClick(e, list.id)}
       >
         <div className={`${isDataInList ? 'bg-yellow-400' : 'bg-transparent'} h-3 w-3`} />
       </div>
       {isEdit ? (
-        <div className='flex gap-x-2 items-center'>
+        <div className='flex-1 flex gap-x-4 items-center'>
           <input
             type="text"
             value={listName}
             onChange={onListNameChange}
-            className='outline-none bg-inherit text-white border-b-[1px] border-white py-1'
+            className='flex-1 outline-none bg-inherit text-white border-b-[1px] border-white py-1'
           />
-          <Button
-            onClick={onUpdateListname}
-            title='Save'
-            p='py-[2px]'
-            className='px-1'
-          />
-          <div
-            className='bg-mygray2 rounded-full p-1 flex justify-center items-center hover:cursor-pointer'
-            onClick={onDeleteList}
-          >
-            <DeleteIcon className='h-6 w-6 fill-myred' />
+          <div className='flex items-center gap-x-2'>
+            <Button
+              onClick={onUpdateListname}
+              title='Save'
+              p='py-[2px]'
+              className='px-1 w-[70px] hidden xs:block'
+            />
+            <div
+              className='block xs:hidden text-sm rounded-lg border-[1px] border-myblue px-2 py-[6px]'
+              onClick={onUpdateListname}
+            >
+              Save
+            </div>
+            <div
+              className='bg-mygray2 rounded-full p-1 flex justify-center items-center hover:cursor-pointer'
+              onClick={onDeleteList}
+            >
+              <DeleteIcon className='h-6 w-6 fill-myred' />
+            </div>
           </div>
         </div>
       ) : (
         <>
+          <div
+            className={`xs:hidden border-yellow-400 border-2 h-5 w-5 cursor-pointer flex items-center justify-center`}
+            onClick={(e) => onListClick(e, list.id)}
+          >
+            <div className={`${isDataInList ? 'bg-yellow-400' : 'bg-transparent'} h-3 w-3`} />
+          </div>
           <div className='flex-1 font-medium'>{listName}</div>
           <EditIcon
             onClick={handleEditVisible}

@@ -45,7 +45,7 @@ const ListsDropdown = ({ isDropdownOpen, options, selectedOption, setIsDropdownO
           {options.map(option => (
             <div
               onClick={() => setSelectedOption(option)}
-              className={`flex gap-x-1 ${option.id === selectedOption.id ? 'text-yellow-500' : 'text-white'}`}
+              className={`flex gap-x-1 select-none ${option.id === selectedOption.id ? 'text-yellow-500' : 'text-white'}`}
               key={option.id}
             >
               <div className='truncate text-inherit'>{`${option.name}`}</div>

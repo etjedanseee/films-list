@@ -18,7 +18,7 @@ interface InputProps {
   py?: string,
   titleBg?: string,
   isCanClean?: boolean,
-  onClean?: () => void,
+  onClean?: (e: MouseEvent) => void,
 }
 
 const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1', isCanClean, onClean = () => { } }: InputProps) => {

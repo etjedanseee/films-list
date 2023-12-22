@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react'
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ICountDataInLists, IList } from '../types/lists'
 import { calcCountDataInLists } from '../utils/calcCountDataInLists'
@@ -10,6 +10,7 @@ import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautif
 import { updateLists } from '../API/updateLists'
 import Loader from '../UI/Loader'
 import ListsDropdown from '../UI/ListsDropdown'
+import { ReactComponent as ArrowDownIcon } from '../assets/arrow-down.svg'
 
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
@@ -30,6 +31,10 @@ const Lists = () => {
       setCurrentList(list)
       localStorage.setItem('currentList', list.id.toString())
     }
+    scrollToTop()
+  }
+
+  const scrollToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
@@ -40,7 +45,8 @@ const Lists = () => {
     setSearchByTitle(e.target.value)
   }
 
-  const onCleanSearch = () => {
+  const onCleanSearch = (e: MouseEvent) => {
+    e.stopPropagation()
     setSearchByTitle('')
   }
 
@@ -101,7 +107,7 @@ const Lists = () => {
   }, [lists])
 
   return (
-    <div className='flex-1 py-3 px-2 xs:px-4'>
+    <div className='flex-1 py-2 xs:py-3 px-2 xs:px-4'>
       <div className='flex items-center justify-between gap-x-4 xs:gap-x-8 mb-2 xs:mb-3'>
         <div className='hidden xs:block text-2xl font-medium'>Saved Lists</div>
         <div className='max-w-none xs:max-w-[220px] w-full'>
@@ -114,7 +120,7 @@ const Lists = () => {
             isFieldDirty={false}
             py='py-2'
             isCanClean
-            onClean={onCleanSearch}
+            onClean={e => onCleanSearch(e)}
           />
         </div>
       </div>
@@ -193,6 +199,12 @@ const Lists = () => {
           />
         )}
       </div>
+      <ArrowDownIcon
+        className={`xs:hidden fixed bottom-3 right-3 rotate-180 pt-[2px] fill-white w-8 h-8 rounded-full border-[1px] 
+          border-gray-300 bg-bg1
+        `}
+        onClick={scrollToTop}
+      />
     </div>
   )
 }

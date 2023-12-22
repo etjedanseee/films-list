@@ -44,50 +44,60 @@ const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
       className='flex items-center justify-between gap-x-4 text-lg'
     >
       {isEdit ? (
-        <div className='flex gap-x-2 items-center'>
+        <div className='flex-1 flex gap-x-3 justify-between items-center'>
           <input
             ref={inputRef}
             type="text"
             value={siteValue}
             onChange={onSiteValueChange}
-            className='outline-none focus:font-medium bg-inherit text-white text-lg font-medium border-b-[1px] border-white py-1'
+            className='flex-1 outline-none focus:font-medium bg-inherit text-white text-base xs:text-lg font-medium border-b-[1px] border-white py-1'
           />
-          <Button
-            onClick={onSaveUpdatedSite}
-            title='Save'
-            p='py-[2px]'
-            className='px-1'
-          />
-          <button
-            className='rounded-md border-2 border-myred px-3 py-[2px]'
-            onClick={onCancelClick}
-          >
-            Cancel
-          </button>
+          <div className='flex gap-x-1 xs:gap-x-2 items-center'>
+            <Button
+              onClick={onSaveUpdatedSite}
+              title='Save'
+              p='py-[2px]'
+              className='px-1 xs:block hidden'
+            />
+            <button
+              className='xs:hidden rounded-md border-2 border-myblue px-[6px] xs:px-3 py-1 text-xs xs:text-lg'
+              onClick={onSaveUpdatedSite}
+              type='button'
+            >
+              Save
+            </button>
+            <button
+              className='rounded-md border-2 border-myred px-1 xs:px-3 py-1 text-xs xs:text-lg'
+              onClick={onCancelClick}
+              type='button'
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )
         : (
-          <>
+          <div className='flex-1 flex items-center justify-between gap-x-4 text-lg'>
             <a
               href={`http://${site}`}
               target='_blank'
               rel="noreferrer"
-              className='max-w-[200px] truncate'
+              className='flex-1 truncate'
               title={site}
             >
               {site}
             </a>
-            <div className='flex items-center gap-x-6'>
+            <div className='flex items-center gap-x-4 xs:gap-x-6'>
               <EditIcon
-                className='h-6 w-6 fill-white'
+                className='h-6 min-w-[24px] w-6 fill-white'
                 onClick={onEditClick}
               />
               <DeleteIcon
-                className='h-6 w-6 fill-myred'
+                className='h-6 min-w-[24px] w-6 fill-myred'
                 onClick={() => onDeleteSite(site)}
               />
             </div>
-          </>
+          </div>
         )
       }
     </div>

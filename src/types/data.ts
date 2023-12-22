@@ -1,5 +1,6 @@
 import { ILink, ISearchDataItem } from "./search";
 
+//[list id]: Date
 export interface IInLists {
   [id: number]: string,
 }

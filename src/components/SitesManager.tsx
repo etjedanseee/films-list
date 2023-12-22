@@ -78,7 +78,7 @@ const SitesManager = () => {
   return (
     <div>
       <div className='text-2xl font-medium mb-3'>Your sites:</div>
-      <div className='flex flex-col gap-y-2 font-medium max-w-xs mb-4'>
+      <div className='flex flex-col gap-y-2 font-medium xs:max-w-xs mb-4'>
         {!!sites.length && sites.map(site => (
           <SiteItem
             site={site}
@@ -90,7 +90,7 @@ const SitesManager = () => {
       </div>
 
       {isAddNewSite && (
-        <div className='mt-4 flex items-start gap-x-4 mb-4'>
+        <div className='my-4 flex items-start gap-x-4'>
           <Input
             error={newSiteValueError}
             name='Site url'
@@ -98,7 +98,7 @@ const SitesManager = () => {
             isFieldDirty={true}
             placeholder='Enter site url'
             value={newSiteValue}
-            className='min-w-[200px]'
+            className='flex-1'
             py='py-2'
           />
           <div>
@@ -115,10 +115,10 @@ const SitesManager = () => {
         <div
           className='flex items-center gap-x-3 font-medium'
           onClick={handleIsAddNewSite}>
-          <CloseIcon className='rotate-45 fill-white h-5 w-5' />
-          <div className='text-lg'>Add new site</div>
-        </div>)
-      }
+          <CloseIcon className={`${isAddNewSite ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
+          <div className='text-lg'>{isAddNewSite ? 'Cancel' : 'Add new site'}</div>
+        </div>
+      )}
     </div >
   )
 }
