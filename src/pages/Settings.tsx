@@ -2,12 +2,20 @@ import React from 'react'
 import SitesManager from '../components/SitesManager'
 import ApiForm from '../components/ApiForm'
 import { useTypedSelector } from '../hooks/useTypedSelector'
+import Button from '../UI/Button'
+import { useActions } from '../hooks/useActions'
 
 const Settings = () => {
   const { user } = useTypedSelector(state => state.auth)
+  const { setUser } = useActions()
 
   if (!user) {
     return null
+  }
+
+  const onSignOutClick = () => {
+    setUser(null)
+    localStorage.clear()
   }
 
   return (
@@ -17,6 +25,14 @@ const Settings = () => {
       )
         : <SitesManager />
       }
+      <div className='mt-auto max-w-none xs:max-w-xs'>
+        <Button
+          onClick={onSignOutClick}
+          title='Sign out'
+          type='button'
+          className='border-myred'
+        />
+      </div>
     </div>
   )
 }

@@ -62,7 +62,7 @@ const Search = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className={`flex-1 flex gap-x-2 xs:gap-x-4 ${isFocused ? 'max-w-none' : 'max-w-[250px]'}`}
+      className={`flex-1 flex gap-x-2 xs:gap-x-4 ${isFocused || search ? 'max-w-none' : 'max-w-[250px]'}`}
     >
       <Input
         onInputChange={onSearchChange}

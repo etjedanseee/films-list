@@ -7,5 +7,10 @@ export const useFocus = () => {
       inputRef.current.focus()
     }
   }
-  return { inputRef, setInputFocus }
+  const setInputBlur = () => {
+    if (inputRef.current) {
+      inputRef.current.blur()
+    }
+  }
+  return { inputRef, setInputFocus, setInputBlur }
 }

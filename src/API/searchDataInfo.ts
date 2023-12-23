@@ -1,3 +1,4 @@
+import { toast } from "react-toastify"
 import { ISearchDataItem } from "../types/search"
 import { baseImageUrl, posterSizes } from "../utils/consts"
 
@@ -50,6 +51,7 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
     }
   } catch (e) {
     console.error('Error fetch dataInfo', e)
+    toast.error(`Error search data: ${e}`)
   } finally {
     setLoading(false)
   }

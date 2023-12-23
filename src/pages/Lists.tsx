@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ICountDataInLists, IList } from '../types/lists'
 import { calcCountDataInLists } from '../utils/calcCountDataInLists'
@@ -45,8 +45,7 @@ const Lists = () => {
     setSearchByTitle(e.target.value)
   }
 
-  const onCleanSearch = (e: MouseEvent) => {
-    e.stopPropagation()
+  const onCleanSearch = () => {
     setSearchByTitle('')
   }
 
@@ -120,7 +119,7 @@ const Lists = () => {
             isFieldDirty={false}
             py='py-2'
             isCanClean
-            onClean={e => onCleanSearch(e)}
+            onClean={onCleanSearch}
           />
         </div>
       </div>
