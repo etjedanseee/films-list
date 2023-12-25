@@ -16,7 +16,7 @@ import { toast } from 'react-toastify'
 import Loader from '../UI/Loader'
 
 const DataItem = () => {
-  const { id } = useParams()
+  const { id, title } = useParams()
   const { results } = useTypedSelector(state => state.search)
   const { sites } = useTypedSelector(state => state.sites)
   const { data } = useTypedSelector(state => state.data)
@@ -85,7 +85,7 @@ const DataItem = () => {
 
   useEffect(() => {
     if (item && !additionalInfo) {
-      const localAdInfo = localStorage.getItem('additionalInfo' + item.dataId)
+      const localAdInfo = localStorage.getItem(`additionalInfo/${item.dataId}/${item.title}`)
       if (localAdInfo) {
         setAdditionalInfo(JSON.parse(localAdInfo))
       } else {
@@ -100,15 +100,18 @@ const DataItem = () => {
   }, [item, additionalInfo])
 
   useEffect(() => {
-    const dataItem = data.find(i => i.dataId === (id ? +id : 0))
+    if (!id || !title) {
+      return
+    }
+    const dataItem = data.find(i => i.dataId === +id && i.title === title)
     if (dataItem) {
       setItem(dataItem)
       setSitesResults(dataItem.links)
       if (additionalInfo) {
-        localStorage.setItem('additionalInfo' + dataItem.dataId, JSON.stringify(additionalInfo))
+        localStorage.setItem(`additionalInfo/${dataItem.dataId}/${dataItem.title}`, JSON.stringify(additionalInfo))
       }
     }
-  }, [data, id, additionalInfo])
+  }, [data, id, additionalInfo, title])
 
   if (!item || infoLoading) {
     return (

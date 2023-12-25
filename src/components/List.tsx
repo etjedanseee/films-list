@@ -20,8 +20,8 @@ const List = ({ listId, searchByTitle }: IListProps) => {
     return [...sortedByTitle].sort((a, b) => +new Date(b.inLists[listId] || 0) - +new Date(a.inLists[listId] || 0))
   }, [data, listId, searchByTitle])
 
-  const onPreviewItemClick = (dataId: number) => {
-    navigate('/data/' + dataId)
+  const onPreviewItemClick = (dataId: number, title: string) => {
+    navigate(`/data/${dataId}/${title}`)
   }
 
   if (!sortedData.length) {

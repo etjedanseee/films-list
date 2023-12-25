@@ -89,14 +89,14 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
 
   useEffect(() => {
     if (isNeedToUpdateData.current) {
-      const currData = data.find(item => item.dataId === searchDataItem.dataId)
+      const currData = data.find(item => item.dataId === searchDataItem.dataId && item.title === searchDataItem.title)
       if (currData) {
         setInLists(currData.inLists)
         setId(currData.id)
         isNeedToUpdateData.current = false
       }
     }
-  }, [searchDataItem.dataId, data])
+  }, [searchDataItem, data])
 
   return (
     <>

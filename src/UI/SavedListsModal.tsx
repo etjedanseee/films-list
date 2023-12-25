@@ -9,6 +9,7 @@ import { useActions } from '../hooks/useActions'
 import { IInLists } from '../types/data'
 import AdditionalList from './AdditionalList'
 import { toast } from 'react-toastify'
+import Loader from './Loader'
 
 interface SaveToListsModalProps {
   handleClose: (e: MouseEvent<HTMLDivElement>) => void,
@@ -23,6 +24,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
   const [isCreateNewList, setIsCreateNewList] = useState(false)
   const [newListName, setNewListName] = useState('')
   const [newListNameError, setNewListNameError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const onNewListNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -49,7 +51,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
     }
     if (user) {
       const orderNum = additionalLists.length ? (additionalLists[additionalLists.length - 1].orderNum + 1) : 3
-      await createList(trimmedNewListName, orderNum, user.id)
+      await createList(trimmedNewListName, orderNum, user.id, setLoading)
       fetchLists()
     }
     setIsCreateNewList(false)
@@ -88,8 +90,9 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
           ))
             : <div className='font-medium'>You don't have additional lists.</div>
           }
+          {loading && <Loader size='24' />}
         </div>
-        {isCreateNewList && (
+        {!loading && isCreateNewList && (
           <div className='flex justify-between items-start gap-x-2 xs:gap-x-4 mb-3'>
             <Input
               error={newListNameError}
@@ -105,16 +108,18 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
             <Button
               onClick={onCreateNewList}
               title='Create'
-              className='py-[6px] w-[120px]'
+              className='py-[6px] max-w-[100px]'
             />
           </div>
         )}
-        <div
-          className='flex items-center gap-x-2'
-          onClick={handleIsCreateNewList}>
-          <CloseIcon className={`${isCreateNewList ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
-          <div className='text-lg'>{isCreateNewList ? 'Cancel' : 'Create new list'}</div>
-        </div>
+        {!loading && (
+          <div
+            className='flex items-center gap-x-2'
+            onClick={handleIsCreateNewList}>
+            <CloseIcon className={`${isCreateNewList ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
+            <div className='text-lg'>{isCreateNewList ? 'Cancel' : 'Create new list'}</div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -4,13 +4,13 @@ import noPicture from '../assets/noPicture.jpg'
 import DataListManager from '../UI/DataListManager'
 import { getVoteBgColor } from '../utils/getVoteBgColor'
 import { formatVote } from '../utils/formatVote'
-interface SearchItemProps {
+interface PreviewItemProps {
   item: ISearchDataItem,
-  onItemClick: (dataId: number) => void,
+  onItemClick: (dataId: number, title: string) => void,
   sitesResults?: ILink[],
 }
 
-const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
+const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
   const { fullPosterUrl, dataId, mediaType, releaseDate, title, vote } = item
 
   const mediaTypeBgColor = mediaType === 'movie'
@@ -20,7 +20,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: SearchItemProps) => {
   return (
     <div
       className='w-full cursor-pointer flex flex-col select-none'
-      onClick={() => onItemClick(dataId)}
+      onClick={() => onItemClick(dataId, title)}
     >
       <div className='relative'>
         <img

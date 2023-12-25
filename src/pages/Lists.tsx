@@ -109,7 +109,7 @@ const Lists = () => {
     <div className='flex-1 py-2 xs:py-3 px-2 xs:px-4'>
       <div className='flex items-center justify-between gap-x-4 xs:gap-x-8 mb-2 xs:mb-3'>
         <div className='hidden xs:block text-2xl font-medium'>Saved Lists</div>
-        <div className='max-w-none xs:max-w-[220px] w-full'>
+        <div className='max-w-none xs:max-w-[250px] w-full'>
           <Input
             value={searchByTitle}
             onInputChange={onSearchByTitleChange}
@@ -170,7 +170,7 @@ const Lists = () => {
                             ref={provided2.innerRef}
                             {...provided2.draggableProps}
                             {...provided2.dragHandleProps}
-                            className={`font-medium flex gap-x-1 hover:cursor-pointer select-none
+                            className={`font-medium flex gap-x-1 hover:cursor-grab select-none
                                 ${currentList.id === list.id ? 'text-yellow-400' : 'text-white'}
                               `}
                             onClick={() => onListClick(list)}

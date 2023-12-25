@@ -15,5 +15,5 @@ export const privateRoutes: IRoute[] = [
   { path: '/', element: <Lists /> },
   { path: '/settings', element: <Settings /> },
   { path: '/search/:search', element: <SearchResults /> },
-  { path: '/data/:id', element: <DataItem /> },
+  { path: '/data/:id/:title', element: <DataItem /> },
 ]
