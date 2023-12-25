@@ -24,13 +24,18 @@ const ApiForm = () => {
       return;
     }
     if (searchApiKey && searchEngineId) {
-      updateUserMetadata(user, { searchApiSettings: { searchApiKey, searchEngineId } })
+      updateUserMetadata(user, {
+        searchApiSettings: {
+          searchApiKey: searchApiKey.trim(),
+          searchEngineId: searchEngineId.trim(),
+        }
+      })
     }
   }
 
   return (
     <div>
-      <div className='font-medium mb-2'>Enter search API key and Engine id</div>
+      <div className='font-medium mb-2'>Enter google API key and Engine id</div>
       <form
         onSubmit={onSubmit}
         className='flex flex-col gap-y-2'

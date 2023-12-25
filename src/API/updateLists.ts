@@ -1,7 +1,7 @@
 import supabase from "../supabaseClient"
 import { IList } from "../types/lists";
 
-export const updateLists = async (updatedLists: IList[], setLoading: (b: boolean) => void) => {
+export const updateLists = async (updatedLists: IList[], setLoading: (b: boolean) => void, userId: string) => {
   try {
     setLoading(true)
     const { error } = await supabase
@@ -9,7 +9,8 @@ export const updateLists = async (updatedLists: IList[], setLoading: (b: boolean
       .upsert(updatedLists.map(list => ({
         id: list.id,
         name: list.name,
-        order_num: list.orderNum
+        order_num: list.orderNum,
+        user_id_owner: userId,
       })))
     if (error) {
       throw new Error(error.message)

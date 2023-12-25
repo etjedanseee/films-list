@@ -17,11 +17,11 @@ interface AuthFormProps {
 
 const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPassword, userEmail, userPassword, isSignIn, setIsSignIn, onAuthFormSubmit }: AuthFormProps) => {
   const [email, setEmail] = useState(userEmail || '')
-  const [emailError, setEmailError] = useState(userEmail.length ? '' : '')
+  const [emailError, setEmailError] = useState('')
   const [isEmailDirty, setIsEmailDirty] = useState(false)
 
   const [password, setPassword] = useState(userPassword || '')
-  const [passwordError, setPasswordError] = useState(userPassword.length ? '' : '')
+  const [passwordError, setPasswordError] = useState('')
   const [isPasswordDirty, setIsPasswordDirty] = useState(false)
 
   const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +99,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           isFieldDirty={isEmailDirty}
           name='Email*'
           className='mb-4'
+          type='email'
         />
         <Input
           onInputChange={onPasswordChange}

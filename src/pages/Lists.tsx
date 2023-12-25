@@ -15,6 +15,7 @@ import { ReactComponent as ArrowDownIcon } from '../assets/arrow-down.svg'
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
   const { lists } = useTypedSelector(state => state.lists)
+  const { user } = useTypedSelector(state => state.auth)
   const { fetchData, fetchLists } = useActions()
   const [currentList, setCurrentList] = useState<IList | null>(null)
   const [isNeedToUpdateData, setIsNeedToUpdateData] = useState(true)
@@ -56,7 +57,7 @@ const Lists = () => {
       return;
     }
     const currList = additionalLists.find(list => list.id === +draggableId)
-    if (!currList) {
+    if (!currList || !user) {
       return;
     }
     const newAdditionalLists = Array.from(additionalLists)
@@ -64,7 +65,7 @@ const Lists = () => {
     newAdditionalLists.splice(destination.index, 0, deleted)
     newAdditionalLists.forEach((list, i) => list.orderNum = i + 3)
     setAdditionalLists(newAdditionalLists)
-    await updateLists(newAdditionalLists, setLoading)
+    await updateLists(newAdditionalLists, setLoading, user.id)
     fetchLists()
   }
 
@@ -156,7 +157,7 @@ const Lists = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className='flex flex-col gap-y-3 font-medium'
+                    className='flex flex-col gap-y-2 font-medium'
                   >
                     {!!additionalLists.length && additionalLists.map((list, index) => (
                       <Draggable

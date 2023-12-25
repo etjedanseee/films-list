@@ -30,13 +30,16 @@ const DataItem = () => {
   const navigate = useNavigate()
 
   const onSearchOnSitesClick = () => {
-    if (user && user.metaData && user.metaData?.searchApiSettings && item && !sitesResults.length && sites.length) {
+    if (!(user && user.metaData && user.metaData?.searchApiSettings)) {
+      toast.error('No google api key or engineId. Check settings')
+      return;
+    }
+    if (item && !sitesResults.length && sites.length) {
       searchDataOnSites({
         searchApiSettings: user.metaData.searchApiSettings,
         search: item.title,
         year: item.releaseDate.slice(0, 4),
         sites,
-        // sites: [sites[0]],
         setSitesResults,
         setLoading: setSitesLoading,
       })

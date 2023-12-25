@@ -7,7 +7,7 @@ import { useActions } from '../hooks/useActions'
 
 const Settings = () => {
   const { user } = useTypedSelector(state => state.auth)
-  const { setUser } = useActions()
+  const { setUser, setData, setLists, setResults, setSites } = useActions()
 
   if (!user) {
     return null
@@ -15,6 +15,10 @@ const Settings = () => {
 
   const onSignOutClick = () => {
     setUser(null)
+    setData([])
+    setLists([])
+    setResults([])
+    setSites([])
     localStorage.clear()
   }
 
@@ -26,6 +30,7 @@ const Settings = () => {
         : <SitesManager />
       }
       <div className='mt-auto max-w-none xs:max-w-xs'>
+        <div className='text-center text-lg font-medium mb-3 truncate'>{user.email}</div>
         <Button
           onClick={onSignOutClick}
           title='Sign out'

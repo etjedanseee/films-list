@@ -6,7 +6,7 @@ export interface IUser {
 }
 
 export interface IUserMetadata {
-  searchApiSettings: IUserSearchApiSettings,
+  searchApiSettings: IUserSearchApiSettings | null,
 }
 
 export interface IUserSearchApiSettings {

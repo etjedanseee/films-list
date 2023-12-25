@@ -15,7 +15,7 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, setS
   const endUrl = 'https://www.googleapis.com/customsearch/v1'
   const { searchApiKey: apiKey, searchEngineId: cx } = searchApiSettings
   if (!apiKey || !cx) {
-    throw new Error('No google apiKey or cx')
+    throw new Error('No google api key or engineId')
   }
   setLoading(true)
   const numOfResponse = 10

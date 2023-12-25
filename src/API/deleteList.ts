@@ -9,25 +9,25 @@ export const deleteList = async (listId: number, setLoading: (b: boolean) => voi
       throw new Error(error.message)
     }
     const filteredData: IDataItemWithLinks[] = data.filter(item => item.inLists[listId])
-    const rowsToUpdate: IDataItemWithLinks[] = []
-    const rowsToDelete: number[] = []
+    const itemsToUpdate: IDataItemWithLinks[] = []
+    const itemsToDelete: number[] = []
 
-    for (const row of filteredData) {
-      const inListsEntries = Object.entries(row.inLists)
+    for (const item of filteredData) {
+      const inListsEntries = Object.entries(item.inLists)
       if (inListsEntries.length > 1) {
-        rowsToUpdate.push({
-          ...row,
+        itemsToUpdate.push({
+          ...item,
           inLists: Object.fromEntries(inListsEntries.filter(item => +item[0] !== listId)),
         })
       } else {
-        rowsToDelete.push(row.id);
+        itemsToDelete.push(item.id);
       }
     }
 
-    if (rowsToUpdate.length) {
+    if (itemsToUpdate.length) {
       try {
         const { error } = await supabase.from('Data')
-          .upsert(rowsToUpdate)
+          .upsert(itemsToUpdate)
         if (error) {
           throw new Error(error.message)
         }
@@ -36,11 +36,11 @@ export const deleteList = async (listId: number, setLoading: (b: boolean) => voi
       }
     }
 
-    if (rowsToDelete.length) {
+    if (itemsToDelete.length) {
       try {
         const { error } = await supabase.from('Data')
           .delete()
-          .in('id', rowsToDelete);
+          .in('id', itemsToDelete);
         if (error) {
           throw new Error(error.message)
         }

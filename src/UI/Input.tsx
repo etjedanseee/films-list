@@ -19,9 +19,10 @@ interface InputProps {
   titleBg?: string,
   isCanClean?: boolean,
   onClean?: () => void,
+  type?: string,
 }
 
-const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1', isCanClean, onClean = () => { } }: InputProps) => {
+const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1', isCanClean, onClean = () => { }, type }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!isPassword)
   const [isFocused, setIsFocused] = useState(false)
   const { inputRef, setInputFocus, setInputBlur } = useFocus()
@@ -80,7 +81,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
       <input
         value={value}
         ref={inputRef}
-        type={!isPasswordVisible && isPassword ? 'password' : 'text'}
+        type={type ? type : !isPasswordVisible && isPassword ? 'password' : 'text'}
         onChange={(e) => onInputChange(e)}
         placeholder={isFocused || error ? placeholder : ''}
         autoComplete={autoCompleteValue || 'on'}
