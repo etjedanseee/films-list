@@ -9,6 +9,7 @@ import { useActions } from '../hooks/useActions'
 import { deleteList } from '../API/deleteList'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import Loader from './Loader'
+import Confirmation from './Confirmation'
 
 interface AdditionalListProps {
   list: IList,
@@ -21,6 +22,7 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   const [isEdit, setIsEdit] = useState(false)
   const [listName, setListName] = useState(list.name)
   const [loading, setLoading] = useState(false)
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const { user } = useTypedSelector(state => state.auth)
   const { fetchLists } = useActions()
 
@@ -45,12 +47,17 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
     setIsEdit(false)
   }
 
+  const handleConfirmModalVisible = () => {
+    setIsConfirmModalVisible(prev => !prev)
+  }
+
   const onDeleteList = async () => {
     if (user) {
       await deleteList(list.id, setLoading)
       fetchLists()
       setIsEdit(false)
     }
+    setIsConfirmModalVisible(false)
   }
 
   if (loading) {
@@ -90,7 +97,7 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
             </div>
             <div
               className='bg-mygray2 rounded-full p-1 flex justify-center items-center hover:cursor-pointer'
-              onClick={onDeleteList}
+              onClick={handleConfirmModalVisible}
             >
               <DeleteIcon className='h-6 w-6 fill-myred' />
             </div>
@@ -110,6 +117,14 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
             className='h-6 w-6 fill-white hover:cursor-pointer'
           />
         </>
+      )}
+
+      {isConfirmModalVisible && (
+        <Confirmation
+          title='If you delete this list, any unsaved data associated with it will be permanently removed.'
+          onConfirm={onDeleteList}
+          onClose={handleConfirmModalVisible}
+        />
       )}
     </div>
   )
