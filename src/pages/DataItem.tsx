@@ -31,7 +31,7 @@ const DataItem = () => {
 
   const onSearchOnSitesClick = () => {
     if (!(user && user.metaData && user.metaData?.searchApiSettings)) {
-      toast.error('No google api key or engineId. Check settings')
+      toast.error('No google api settings. Check settings')
       return;
     }
     if (item && !sitesResults.length && sites.length) {

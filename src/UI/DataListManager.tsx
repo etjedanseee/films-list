@@ -3,13 +3,13 @@ import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/b
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { IDataItemWithLinks, IInLists } from '../types/data'
 import { ILink, IPreviewDataItem } from '../types/search'
-import { toast } from 'react-toastify'
 import { saveDataToSb } from '../API/saveDataToSb'
 import { updateDataOnSb } from '../API/updateDataOnSb'
 import { deleteDataOnSb } from '../API/deleteDataOnSb'
 import SavedListsModal from './SavedListsModal'
 import DataListManagetItem from './DataListManagetItem'
 import Loader from './Loader'
+import { updateDataLinksOnSb } from '../API/updateDataLinksOnSb'
 
 interface DataListManagerProps {
   previewDataItem: IPreviewDataItem,
@@ -36,10 +36,6 @@ const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = fa
     const listsEntries = Object.entries(inLists)
     const currentList = { [listId]: new Date().toISOString() }
     if (!listsEntries.length) {
-      if (!sitesResults.length) {
-        toast.error('You need to search on sites')
-        return;
-      }
       const itemWithLinks: IDataItemWithLinks = {
         ...previewDataItem,
         links: sitesResults,
@@ -76,11 +72,7 @@ const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = fa
 
   const onSaveClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    if (sitesResults.length) {
-      handleSaveToListsModalVisible(e)
-    } else {
-      toast.error('You need to search on sites')
-    }
+    handleSaveToListsModalVisible(e)
   }
 
   const isDataInList = (listId: number) => {
@@ -97,6 +89,15 @@ const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = fa
       }
     }
   }, [previewDataItem, data])
+
+  useEffect(() => {
+    if (id && previewDataItem && sitesResults.length) {
+      const itemInData = data.find(i => i.id === id)
+      if (!itemInData || (itemInData && !itemInData.links.length)) {
+        updateDataLinksOnSb(id, sitesResults, setLoading)
+      }
+    }
+  }, [previewDataItem, sitesResults, data, id])
 
   return (
     <>
