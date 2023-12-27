@@ -23,7 +23,7 @@ const Settings = () => {
   }
 
   return (
-    <div className='flex-1 flex flex-col px-3 py-3 gap-y-6'>
+    <div className='flex-1 flex flex-col items-center px-3 py-3 gap-y-6'>
       {!(user.metaData && user.metaData?.searchApiSettings) ? (
         <ApiForm />
       )

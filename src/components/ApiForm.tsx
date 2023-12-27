@@ -34,11 +34,11 @@ const ApiForm = () => {
   }
 
   return (
-    <div className='font-medium'>
-      <div className='mb-3 leading-tight text-xl'>This is your google account settings to search movie / series on your sites. Copy and paste it from guide p18, p14.</div>
+    <div className='xs:mt-3 font-medium'>
+      <div className='mb-3 xs:mb-5 leading-tight text-xl xs:max-w-lg m-auto xs:pl-6'>This is your google account settings to search movie / series on your sites. Copy and paste it from guide (<a href='https://docs.google.com/document/d/1UrjssVFoUaaIBy29jNmxIzbs1b3pSWQh6I6ECwx6emA/edit' target='_blank' rel="noreferrer" title='guide' className='underline'>link</a>) p18, p14.</div>
       <form
         onSubmit={onSubmit}
-        className='flex flex-col gap-y-2'
+        className='flex flex-col gap-y-2 max-w-none xs:max-w-sm m-auto'
       >
         <Input
           value={searchApiKey}
@@ -58,12 +58,15 @@ const ApiForm = () => {
           placeholder='Enter search engine id'
           py='py-2'
         />
-        <Button
-          title='Save'
-          onClick={() => { }}
-          type='submit'
-          p='py-1'
-        />
+        <div className='flex justify-center'>
+          <Button
+            title='Save'
+            onClick={() => { }}
+            type='submit'
+            p='py-1'
+            className='max-w-none xs:max-w-[180px]'
+          />
+        </div>
       </form>
     </div>
   )

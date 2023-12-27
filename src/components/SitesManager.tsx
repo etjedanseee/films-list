@@ -75,7 +75,7 @@ const SitesManager = () => {
   }
 
   return (
-    <div>
+    <div className='max-w-full'>
       <div className='text-2xl font-medium mb-3'>Your sites:</div>
       <div className='flex flex-col gap-y-2 font-medium xs:max-w-xs mb-4'>
         {!!sites.length && sites.map(site => (

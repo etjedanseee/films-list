@@ -41,7 +41,7 @@ const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
   return (
     <div
       key={site}
-      className='flex items-center justify-between gap-x-4 text-lg'
+      className='flex items-center justify-between gap-x-4 text-lg max-w-full'
     >
       {isEdit ? (
         <div className='flex-1 flex gap-x-3 justify-between items-center'>
@@ -77,7 +77,7 @@ const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
         </div>
       )
         : (
-          <div className='flex-1 flex items-center justify-between gap-x-4 text-lg'>
+          <div className='flex-1 flex items-center justify-between gap-x-4 xs:gap-x-8 text-lg max-w-full'>
             <a
               href={`http://${site}`}
               target='_blank'
