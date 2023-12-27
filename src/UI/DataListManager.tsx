@@ -2,7 +2,7 @@ import React, { useState, useEffect, MouseEvent, useRef } from 'react'
 import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/bookmark.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { IDataItemWithLinks, IInLists } from '../types/data'
-import { ILink, ISearchDataItem } from '../types/search'
+import { ILink, IPreviewDataItem } from '../types/search'
 import { toast } from 'react-toastify'
 import { saveDataToSb } from '../API/saveDataToSb'
 import { updateDataOnSb } from '../API/updateDataOnSb'
@@ -12,12 +12,12 @@ import DataListManagetItem from './DataListManagetItem'
 import Loader from './Loader'
 
 interface DataListManagerProps {
-  searchDataItem: ISearchDataItem,
+  previewDataItem: IPreviewDataItem,
   sitesResults: ILink[],
   isHideListsTitles?: boolean,
 }
 
-const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = false }: DataListManagerProps) => {
+const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = false }: DataListManagerProps) => {
   const { lists } = useTypedSelector(state => state.lists)
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
@@ -41,7 +41,7 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
         return;
       }
       const itemWithLinks: IDataItemWithLinks = {
-        ...searchDataItem,
+        ...previewDataItem,
         links: sitesResults,
         inLists: currentList,
         id: 999,
@@ -89,14 +89,14 @@ const DataListManager = ({ searchDataItem, sitesResults, isHideListsTitles = fal
 
   useEffect(() => {
     if (isNeedToUpdateData.current) {
-      const currData = data.find(item => item.dataId === searchDataItem.dataId && item.title === searchDataItem.title)
+      const currData = data.find(item => item.dataId === previewDataItem.dataId && item.title === previewDataItem.title)
       if (currData) {
         setInLists(currData.inLists)
         setId(currData.id)
         isNeedToUpdateData.current = false
       }
     }
-  }, [searchDataItem, data])
+  }, [previewDataItem, data])
 
   return (
     <>

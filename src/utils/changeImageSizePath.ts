@@ -2,7 +2,7 @@ import { posterSizes } from "./consts"
 
 
 export const changeImageSizePath = (url: string): string => {
-  const index = url.indexOf('w185')
+  const index = url.indexOf(posterSizes[2])
   if (!~index) {
     return url
   }

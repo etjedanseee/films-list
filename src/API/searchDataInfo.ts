@@ -1,11 +1,11 @@
 import { toast } from "react-toastify"
-import { ISearchDataItem } from "../types/search"
+import { IPreviewDataItem } from "../types/search"
 import { baseImageUrl, posterSizes } from "../utils/consts"
 
 interface ISearchDataInfo {
   title: string,
   setLoading: (b: boolean) => void,
-  setResults: (arr: ISearchDataItem[]) => void
+  setResults: (arr: IPreviewDataItem[]) => void
 }
 
 export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchDataInfo) => {
@@ -23,7 +23,7 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
       Authorization: `Bearer ${ACCESS_TOKEN || API_KEY}`
     }
   }
-  const results: ISearchDataItem[] = []
+  const results: IPreviewDataItem[] = []
   try {
     const response = await fetch(`${url}?query=${title}`, options)
     const data = await response.json()
@@ -35,7 +35,7 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
           continue;
         }
         const posterPath = item?.poster_path || item?.backdrop_path || '';
-        const obj: ISearchDataItem = {
+        const obj: IPreviewDataItem = {
           dataId: item?.id,
           title: item?.title || item?.original_title || item?.original_name || '',
           fullPosterUrl: posterPath ? baseImageUrl + imageSize + posterPath : '',

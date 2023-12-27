@@ -8,7 +8,6 @@ import Input from '../UI/Input'
 import Button from '../UI/Button'
 import { removeHttpFromUrl } from '../utils/removeHttpsFromUrl'
 import Loader from '../UI/Loader'
-import { maxCountUserSites } from '../utils/consts'
 
 
 const SitesManager = () => {
@@ -111,14 +110,12 @@ const SitesManager = () => {
         </div>
       )}
 
-      {sites.length < maxCountUserSites && (
-        <div
-          className='flex items-center gap-x-3 font-medium'
-          onClick={handleIsAddNewSite}>
-          <CloseIcon className={`${isAddNewSite ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
-          <div className='text-lg'>{isAddNewSite ? 'Cancel' : 'Add new site'}</div>
-        </div>
-      )}
+      <div
+        className='flex items-center gap-x-3 font-medium'
+        onClick={handleIsAddNewSite}>
+        <CloseIcon className={`${isAddNewSite ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
+        <div className='text-lg'>{isAddNewSite ? 'Cancel' : 'Add new site'}</div>
+      </div>
     </div >
   )
 }

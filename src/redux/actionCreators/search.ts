@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { ISearchDataItem, SearchAction, SearchActionTypes } from "../../types/search"
+import { IPreviewDataItem, SearchAction, SearchActionTypes } from "../../types/search"
 
 
 export const setLoading = (b: boolean) => {
@@ -20,7 +20,7 @@ export const setLastSearch = (search: string) => {
   }
 }
 
-export const setResults = (results: ISearchDataItem[]) => {
+export const setResults = (results: IPreviewDataItem[]) => {
   return (dispatch: Dispatch<SearchAction>) => {
     dispatch({
       type: SearchActionTypes.SET_RESULTS,

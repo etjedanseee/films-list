@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
-import { ILink, ISearchDataItem } from '../types/search'
+import { ILink, IPreviewDataItem } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import { changeImageSizePath } from '../utils/changeImageSizePath'
 import DataListManager from '../UI/DataListManager'
@@ -21,7 +21,7 @@ const DataItem = () => {
   const { sites } = useTypedSelector(state => state.sites)
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
-  const [item, setItem] = useState<ISearchDataItem | null>(null)
+  const [item, setItem] = useState<IPreviewDataItem | null>(null)
   const [additionalInfo, setAdditionalInfo] = useState<IDataAdditionalInfo | null>(null)
   const [infoLoading, setInfoLoading] = useState(false)
   const [sitesLoading, setSitesLoading] = useState(false)
@@ -145,7 +145,7 @@ const DataItem = () => {
               </div>
             </div>
             <DataListManager
-              searchDataItem={item}
+              previewDataItem={item}
               sitesResults={sitesResults}
             />
           </div>

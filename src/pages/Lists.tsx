@@ -52,12 +52,9 @@ const Lists = () => {
 
   const onDragEnd = async (result: DropResult) => {
     const { destination, draggableId, source } = result
-    if (!destination || (destination.droppableId === source.droppableId &&
-      destination.index === source.index)) {
-      return;
-    }
     const currList = additionalLists.find(list => list.id === +draggableId)
-    if (!currList || !user) {
+    const destinationCondition = !destination || (destination.droppableId === source.droppableId && destination.index === source.index)
+    if (destinationCondition || !currList || !user) {
       return;
     }
     const newAdditionalLists = Array.from(additionalLists)

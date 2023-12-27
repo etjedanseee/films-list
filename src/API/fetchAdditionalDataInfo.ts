@@ -8,6 +8,12 @@ interface ISearchDataInfo {
   setAdditionalInfo: (info: IDataAdditionalInfo | null) => void
 }
 
+interface IAdditionalInfoResponse {
+  genres: { name: string }[],
+  overview: string,
+  runtime?: number,
+}
+
 export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, setAdditionalInfo }: ISearchDataInfo) => {
   const url = 'https://api.themoviedb.org/3'
   const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY
@@ -25,11 +31,7 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
   }
   try {
     const response = await fetch(`${url}/${mediaType}/${dataId}`, options)
-    const data: {
-      genres: { name: string }[],
-      overview: string,
-      runtime?: number,
-    } = await response.json()
+    const data: IAdditionalInfoResponse = await response.json()
     const result = data.genres.map(genre => genre.name)
     setAdditionalInfo({
       genres: result,

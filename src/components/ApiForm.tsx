@@ -34,8 +34,8 @@ const ApiForm = () => {
   }
 
   return (
-    <div>
-      <div className='font-medium mb-2'>Enter google API key and Engine id</div>
+    <div className='font-medium'>
+      <div className='mb-3 leading-tight text-xl'>This is your google account settings to search movie / series on your sites. Copy and paste it from guide p18, p14.</div>
       <form
         onSubmit={onSubmit}
         className='flex flex-col gap-y-2'

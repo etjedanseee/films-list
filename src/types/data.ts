@@ -1,11 +1,11 @@
-import { ILink, ISearchDataItem } from "./search";
+import { ILink, IPreviewDataItem } from "./search";
 
 //[list id]: Date
 export interface IInLists {
   [id: number]: string,
 }
 
-export interface IDataItemWithLinks extends ISearchDataItem {
+export interface IDataItemWithLinks extends IPreviewDataItem {
   id: number,
   inLists: IInLists,
   links: ILink[],

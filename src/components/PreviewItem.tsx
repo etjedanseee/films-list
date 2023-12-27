@@ -1,11 +1,11 @@
 import React, { } from 'react'
-import { ILink, ISearchDataItem } from '../types/search'
+import { ILink, IPreviewDataItem } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import DataListManager from '../UI/DataListManager'
 import { getVoteBgColor } from '../utils/getVoteBgColor'
 import { formatVote } from '../utils/formatVote'
 interface PreviewItemProps {
-  item: ISearchDataItem,
+  item: IPreviewDataItem,
   onItemClick: (dataId: number, title: string) => void,
   sitesResults?: ILink[],
 }
@@ -46,7 +46,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
       </div>
       {sitesResults && !!sitesResults.length && (
         <DataListManager
-          searchDataItem={item}
+          previewDataItem={item}
           sitesResults={sitesResults}
           isHideListsTitles={true}
         />

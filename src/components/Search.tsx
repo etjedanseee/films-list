@@ -72,7 +72,7 @@ const Search = () => {
         isFieldDirty={true}
         onBlur={onSearchBlur}
         onFocus={onSearchFocus}
-        name='Search*'
+        name='Search'
         className='flex-1'
         py='py-2'
         isCanClean

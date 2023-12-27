@@ -23,7 +23,7 @@ export interface ILink {
 
 export type MediaType = 'movie' | 'tv'
 
-export interface ISearchDataItem {
+export interface IPreviewDataItem {
   dataId: number,
   title: string,
   fullPosterUrl: string,
@@ -33,7 +33,7 @@ export interface ISearchDataItem {
 }
 
 export interface SearchState {
-  results: ISearchDataItem[],
+  results: IPreviewDataItem[],
   loading: boolean,
   lastSearch: string,
 }
@@ -55,7 +55,7 @@ export enum SearchActionTypes {
 
 interface setResults {
   type: SearchActionTypes.SET_RESULTS,
-  payload: ISearchDataItem[],
+  payload: IPreviewDataItem[],
 }
 
 interface setLoading {

@@ -6,7 +6,6 @@ import { privateRoutes, publicRoutes } from './utils/routes';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { useActions } from './hooks/useActions';
 import supabase from './supabaseClient';
-import NotFoundPage from './pages/NotFoundPage';
 import Header from './UI/Header';
 import Loader from './UI/Loader';
 
@@ -101,7 +100,6 @@ function App() {
               }
             </>
           )}
-        <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <ToastContainer
         position="top-right"

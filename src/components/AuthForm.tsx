@@ -56,12 +56,6 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!isFormValid) {
-      setEmailError('Field is required')
-      setPasswordError('Field is required')
-      setIsEmailDirty(true)
-      setIsPasswordDirty(true)
-    }
     onAuthFormSubmit()
   }
 
@@ -97,7 +91,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           autoCompleteValue='email'
           error={emailError}
           isFieldDirty={isEmailDirty}
-          name='Email*'
+          name='Email'
           className='mb-4'
           type='email'
         />
@@ -108,7 +102,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           autoCompleteValue={isSignIn ? 'current-password' : 'new-password'}
           error={passwordError}
           isFieldDirty={isPasswordDirty}
-          name='Password*'
+          name='Password'
           isPassword={true}
           className='mb-4'
         />

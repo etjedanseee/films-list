@@ -2,12 +2,13 @@ import { Dispatch } from "redux";
 import supabase from "../supabaseClient";
 import { AuthAction, IUser } from "../types/auth";
 import { toast } from 'react-toastify'
+import { NavigateOptions } from "react-router-dom";
 interface signInProps {
   email: string,
   password: string,
   setLoading: (b: boolean) => void,
   setUser: (user: IUser | null) => (dispatch: Dispatch<AuthAction>) => void,
-  navigate: (s: string) => void
+  navigate: (s: string, options?: NavigateOptions) => void
 }
 
 export const signIn = async ({ email, password, setLoading, navigate, setUser }: signInProps) => {
@@ -18,7 +19,6 @@ export const signIn = async ({ email, password, setLoading, navigate, setUser }:
       password: password.trim(),
     })
     if (error) {
-      toast.error('Wrong email or password')
       throw new Error(error.message)
     }
 
@@ -30,9 +30,10 @@ export const signIn = async ({ email, password, setLoading, navigate, setUser }:
         metaData: { searchApiSettings },
       })
     }
-    navigate('/')
+    navigate('/', { replace: true })
   } catch (e) {
     console.error('singIn error', e)
+    toast.error('Sign in error: ' + e)
   } finally {
     setLoading(false)
   }
