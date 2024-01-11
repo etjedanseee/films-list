@@ -94,6 +94,8 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           name='Email'
           className='mb-4'
           type='email'
+          id='email'
+          autoFocus
         />
         <Input
           onInputChange={onPasswordChange}
@@ -105,6 +107,7 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
           name='Password'
           isPassword={true}
           className='mb-4'
+          id='password'
         />
         <Button
           title={isSignIn ? 'Sign in' : 'Sign up'}

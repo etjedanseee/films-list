@@ -20,9 +20,11 @@ interface InputProps {
   isCanClean?: boolean,
   onClean?: () => void,
   type?: string,
+  id?: string,
+  autoFocus?: boolean,
 }
 
-const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1', isCanClean, onClean = () => { }, type }: InputProps) => {
+const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onFocus = () => { }, isPassword, autoCompleteValue, error, isFieldDirty, name, className = '', py = 'py-4', titleBg = 'bg-bg1', isCanClean, onClean = () => { }, type, id, autoFocus }: InputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(!isPassword)
   const [isFocused, setIsFocused] = useState(false)
   const { inputRef, setInputFocus, setInputBlur } = useFocus()
@@ -91,6 +93,8 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
         spellCheck={false}
         onBlur={onInputBlur}
         onFocus={onInputFocus}
+        id={id || ''}
+        autoFocus={autoFocus}
       />
       {isPassword && (
         <EyeIcon
