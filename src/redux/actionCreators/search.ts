@@ -20,11 +20,32 @@ export const setLastSearch = (search: string) => {
   }
 }
 
-export const setResults = (results: IPreviewDataItem[]) => {
+export const setResults = (results: IPreviewDataItem[], page: number) => {
   return (dispatch: Dispatch<SearchAction>) => {
     dispatch({
       type: SearchActionTypes.SET_RESULTS,
-      payload: results
+      payload: {
+        results,
+        page,
+      }
+    })
+  }
+}
+
+export const setSearchPage = (page: number) => {
+  return (dispatch: Dispatch<SearchAction>) => {
+    dispatch({
+      type: SearchActionTypes.SET_PAGE,
+      payload: page
+    })
+  }
+}
+
+export const setSearchTotalPages = (totalPages: number) => {
+  return (dispatch: Dispatch<SearchAction>) => {
+    dispatch({
+      type: SearchActionTypes.SET_TOTAL_PAGES,
+      payload: totalPages
     })
   }
 }

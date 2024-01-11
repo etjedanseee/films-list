@@ -16,7 +16,7 @@ import { toast } from 'react-toastify'
 import Loader from '../UI/Loader'
 
 const DataItem = () => {
-  const { id, title } = useParams()
+  const { id, mediaType } = useParams()
   const { results } = useTypedSelector(state => state.search)
   const { sites } = useTypedSelector(state => state.sites)
   const { data } = useTypedSelector(state => state.data)
@@ -103,18 +103,18 @@ const DataItem = () => {
   }, [item, additionalInfo])
 
   useEffect(() => {
-    if (!id || !title) {
+    if (!id || !mediaType) {
       return
     }
-    const dataItem = data.find(i => i.dataId === +id && i.title === title)
+    const dataItem = data.find(i => i.dataId === +id && i.mediaType === mediaType)
     if (dataItem) {
       setItem(dataItem)
       setSitesResults(dataItem.links)
       if (additionalInfo) {
-        localStorage.setItem(`additionalInfo/${dataItem.dataId}/${dataItem.title}`, JSON.stringify(additionalInfo))
+        localStorage.setItem(`additionalInfo/${dataItem.mediaType}/${dataItem.dataId}`, JSON.stringify(additionalInfo))
       }
     }
-  }, [data, id, additionalInfo, title])
+  }, [data, id, additionalInfo, mediaType])
 
   if (!item || infoLoading) {
     return (

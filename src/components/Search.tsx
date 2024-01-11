@@ -12,7 +12,7 @@ const Search = () => {
   const lastSearchRef = useRef('')
   const navigate = useNavigate()
   const { loading, lastSearch } = useTypedSelector(state => state.search)
-  const { setResults, setLoading, setLastSearch } = useActions()
+  const { setResults, setLoading, setLastSearch, setSearchTotalPages, setSearchPage } = useActions()
 
   const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
@@ -23,13 +23,16 @@ const Search = () => {
     const trimmedSearch = search.trim()
     if (trimmedSearch.length >= 3) {
       if (trimmedSearch !== lastSearchRef.current) {
-        searchDataInfo({
-          title: trimmedSearch,
-          setLoading,
-          setResults
-        })
+        setSearchPage(1)
         setLastSearch(trimmedSearch)
         lastSearchRef.current = trimmedSearch
+        searchDataInfo({
+          title: trimmedSearch,
+          page: 1,
+          setLoading,
+          setResults,
+          setSearchTotalPages,
+        })
       }
       navigate('/search/' + encodeURIComponent(trimmedSearch))
     }

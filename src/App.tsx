@@ -14,7 +14,7 @@ function App() {
   const { lists } = useTypedSelector(state => state.lists)
   const { sites } = useTypedSelector(state => state.sites)
   const { data } = useTypedSelector(state => state.data)
-  const { fetchLists, fetchSites, setUser, setResults, fetchData } = useActions()
+  const { fetchLists, fetchSites, setUser, setResults, fetchData, setLastSearch, setSearchPage, setSearchTotalPages } = useActions()
   const [isCheckingSession, setIsCheckingSession] = useState(true)
   const location = useLocation()
 
@@ -64,8 +64,20 @@ function App() {
 
   useEffect(() => {
     const lastResults = localStorage.getItem('searchResults')
+    const lastSearch = localStorage.getItem('lastSearch')
+    const page = localStorage.getItem('page')
+    const totalPages = localStorage.getItem('totalPages')
     if (lastResults) {
-      setResults(JSON.parse(lastResults))
+      setResults(JSON.parse(lastResults), 1)
+    }
+    if (page) {
+      setSearchPage(+page)
+    }
+    if (totalPages) {
+      setSearchTotalPages(+totalPages)
+    }
+    if (lastSearch) {
+      setLastSearch(lastSearch)
     }
   }, [])
 

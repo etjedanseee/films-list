@@ -4,11 +4,19 @@ import { baseImageUrl, posterSizes } from "../utils/consts"
 
 interface ISearchDataInfo {
   title: string,
+  page: number,
   setLoading: (b: boolean) => void,
-  setResults: (arr: IPreviewDataItem[]) => void
+  setResults: (arr: IPreviewDataItem[], page: number) => void,
+  setSearchTotalPages: (totalPages: number) => void,
 }
 
-export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchDataInfo) => {
+interface ISearchDataInfoResponse {
+  page: number,
+  results: any[],
+  total_pages: number,
+}
+
+export const searchDataInfo = async ({ title, page, setLoading, setResults, setSearchTotalPages }: ISearchDataInfo) => {
   const url = 'https://api.themoviedb.org/3/search/multi'
   const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY
   const ACCESS_TOKEN = process.env.REACT_APP_MOVIE_DB_ACCESS_TOKEN
@@ -25,8 +33,8 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
   }
   const results: IPreviewDataItem[] = []
   try {
-    const response = await fetch(`${url}?query=${title}`, options)
-    const data = await response.json()
+    const response = await fetch(`${url}?query=${title}&page=${page}`, options)
+    const data: ISearchDataInfoResponse = await response.json()
     const items = data?.results
     if (items && Array.isArray(items) && items.length > 0) {
       const imageSize = posterSizes[2]
@@ -45,9 +53,11 @@ export const searchDataInfo = async ({ title, setLoading, setResults }: ISearchD
         };
         results.push(obj)
       }
-      setResults(results)
+      setSearchTotalPages(data.total_pages)
+      setResults(results, data.page)
     } else {
-      setResults([])
+      setResults([], 1)
+      setSearchTotalPages(0)
     }
   } catch (e) {
     console.error('Error fetch dataInfo', e)

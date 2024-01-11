@@ -1,18 +1,58 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import Loader from '../UI/Loader'
 import PreviewItem from '../components/PreviewItem'
+import { useActions } from '../hooks/useActions'
+import { searchDataInfo } from '../API/searchDataInfo'
+import { MediaType } from '../types/search'
 
 const SearchResults = () => {
-  const { loading, results } = useTypedSelector(state => state.search)
+  const { loading, results, page, totalPages, lastSearch } = useTypedSelector(state => state.search)
   const navigate = useNavigate()
+  const { setSearchPage, setLoading, setResults, setSearchTotalPages } = useActions()
 
-  const onPreviewItemClick = (dataId: number, title: string) => {
-    navigate(`/data/${dataId}/${title}`)
+  const onPreviewItemClick = (mediaType: MediaType, dataId: number) => {
+    navigate(`/data/${mediaType}/${dataId}`)
   }
 
-  if (loading) {
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowHeight = window.innerHeight
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.clientHeight,
+        html.scrollHeight,
+        html.offsetHeight
+      );
+      const windowBottom = windowHeight + window.scrollY;
+      if (windowBottom >= (docHeight - 100) && !loading) {
+        if ((page < totalPages) && (page < 5) && lastSearch) {
+          searchDataInfo({
+            title: lastSearch,
+            page: page + 1,
+            setLoading,
+            setResults,
+            setSearchTotalPages,
+          })
+          setSearchPage(page + 1);
+        }
+      }
+    };
+    window.removeEventListener('scroll', handleScroll);
+    if (page === 5 || page === totalPages) {
+      return;
+    }
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [loading, lastSearch, page, totalPages])
+
+  if (loading && page === 1) {
     return (
       <div className='flex-1 flex justify-center items-center'><Loader size='80' /></div>
     )
@@ -33,10 +73,13 @@ const SearchResults = () => {
           <PreviewItem
             item={res}
             onItemClick={onPreviewItemClick}
-            key={res.dataId}
+            key={res.dataId + res.title + res.fullPosterUrl + res.releaseDate + res.mediaType}
           />
         ))}
       </div>
+      {loading && page > 1 && (
+        <div className='mt-4 flex-1 flex justify-center items-center'><Loader size='64' /></div>
+      )}
     </div>
   )
 }

@@ -17,7 +17,7 @@ const Settings = () => {
     setUser(null)
     setData([])
     setLists([])
-    setResults([])
+    setResults([], 1)
     setSites([])
     localStorage.clear()
   }

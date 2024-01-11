@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import PreviewItem from './PreviewItem'
 import { useNavigate } from 'react-router-dom'
+import { MediaType } from '../types/search'
 
 interface IListProps {
   listId: number,
@@ -20,8 +21,8 @@ const List = ({ listId, searchByTitle }: IListProps) => {
     return [...sortedByTitle].sort((a, b) => +new Date(b.inLists[listId] || 0) - +new Date(a.inLists[listId] || 0))
   }, [data, listId, searchByTitle])
 
-  const onPreviewItemClick = (dataId: number, title: string) => {
-    navigate(`/data/${dataId}/${title}`)
+  const onPreviewItemClick = (mediaType: MediaType, dataId: number) => {
+    navigate(`/data/${mediaType}/${dataId}`)
   }
 
   if (!sortedData.length) {

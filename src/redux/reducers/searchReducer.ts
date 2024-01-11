@@ -4,6 +4,8 @@ const initialState: SearchState = {
   loading: false,
   results: [],
   lastSearch: '',
+  page: 1,
+  totalPages: 0,
 }
 
 export const searchReducer = (state = initialState, action: SearchAction): SearchState => {
@@ -15,10 +17,17 @@ export const searchReducer = (state = initialState, action: SearchAction): Searc
       }
     }
     case SearchActionTypes.SET_RESULTS: {
-      localStorage.setItem('searchResults', JSON.stringify(action.payload))
+      const results = action.payload.results
+      const filteredResults = action.payload.page === 1
+        ? results
+        : [
+          ...state.results,
+          ...results.filter(res => !state.results.find(prevRes => prevRes.dataId === res.dataId && prevRes.fullPosterUrl === res.fullPosterUrl))
+        ]
+      localStorage.setItem('searchResults', JSON.stringify(filteredResults))
       return {
         ...state,
-        results: action.payload
+        results: filteredResults,
       }
     }
     case SearchActionTypes.SET_LAST_SEARCH: {
@@ -26,6 +35,20 @@ export const searchReducer = (state = initialState, action: SearchAction): Searc
       return {
         ...state,
         lastSearch: action.payload
+      }
+    }
+    case SearchActionTypes.SET_PAGE: {
+      localStorage.setItem('page', action.payload.toString())
+      return {
+        ...state,
+        page: action.payload
+      }
+    }
+    case SearchActionTypes.SET_TOTAL_PAGES: {
+      localStorage.setItem('totalPages', action.payload.toString())
+      return {
+        ...state,
+        totalPages: action.payload
       }
     }
     default: return state

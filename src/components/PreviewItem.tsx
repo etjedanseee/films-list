@@ -1,12 +1,12 @@
 import React, { } from 'react'
-import { ILink, IPreviewDataItem } from '../types/search'
+import { ILink, IPreviewDataItem, MediaType } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import DataListManager from '../UI/DataListManager'
 import { getVoteBgColor } from '../utils/getVoteBgColor'
 import { formatVote } from '../utils/formatVote'
 interface PreviewItemProps {
   item: IPreviewDataItem,
-  onItemClick: (dataId: number, title: string) => void,
+  onItemClick: (mediaType: MediaType, dataId: number) => void,
   sitesResults?: ILink[],
 }
 
@@ -20,7 +20,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
   return (
     <div
       className='w-full cursor-pointer flex flex-col select-none'
-      onClick={() => onItemClick(dataId, title)}
+      onClick={() => onItemClick(mediaType, dataId)}
     >
       <div className='relative'>
         <img
