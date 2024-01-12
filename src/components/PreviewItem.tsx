@@ -22,7 +22,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
       className='w-full cursor-pointer flex flex-col select-none'
       onClick={() => onItemClick(mediaType, dataId)}
     >
-      <div className='relative'>
+      <div className='relative flex-1'>
         <img
           src={fullPosterUrl || noPicture}
           alt="poster"
@@ -40,7 +40,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
           {mediaType === 'tv' ? 'series' : mediaType}
         </div>
       </div>
-      <div className='flex-1 bg-mygray flex flex-col py-3'>
+      <div className='bg-mygray flex flex-col py-3'>
         <div className='px-3 text-sm leading-tight font-bold mb-1'>{title}</div>
         <div className='text-xs px-3'>{releaseDate.slice(0, 4)}</div>
       </div>

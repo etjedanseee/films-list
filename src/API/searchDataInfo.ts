@@ -33,7 +33,7 @@ export const searchDataInfo = async ({ title, page, setLoading, setResults, setS
   }
   const results: IPreviewDataItem[] = []
   try {
-    const response = await fetch(`${url}?query=${title}&page=${page}`, options)
+    const response = await fetch(`${url}?query=${title}&page=${page}?language=en-US`, options)
     const data: ISearchDataInfoResponse = await response.json()
     const items = data?.results
     if (items && Array.isArray(items) && items.length > 0) {
@@ -45,7 +45,7 @@ export const searchDataInfo = async ({ title, page, setLoading, setResults, setS
         const posterPath = item?.poster_path || item?.backdrop_path || '';
         const obj: IPreviewDataItem = {
           dataId: item?.id,
-          title: item?.title || item?.original_title || item?.original_name || '',
+          title: item?.name || item?.title || item?.original_title || item?.original_name || '',
           fullPosterUrl: posterPath ? baseImageUrl + imageSize + posterPath : '',
           mediaType: item?.media_type || 'movie',
           releaseDate: item?.release_date || item?.first_air_date || '',
