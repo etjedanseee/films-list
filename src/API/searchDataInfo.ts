@@ -33,7 +33,7 @@ export const searchDataInfo = async ({ title, page, setLoading, setResults, setS
   }
   const results: IPreviewDataItem[] = []
   try {
-    const response = await fetch(`${url}?query=${title}&page=${page}?language=en-US`, options)
+    const response = await fetch(`${url}?query=${title}&page=${page}&language=en-US`, options)
     const data: ISearchDataInfoResponse = await response.json()
     const items = data?.results
     if (items && Array.isArray(items) && items.length > 0) {

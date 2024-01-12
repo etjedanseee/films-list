@@ -26,7 +26,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
         <img
           src={fullPosterUrl || noPicture}
           alt="poster"
-          className='w-full h-full bg-cover'
+          className='flex-1 w-full h-full bg-cover'
           loading='lazy'
         />
         {!!vote && (
