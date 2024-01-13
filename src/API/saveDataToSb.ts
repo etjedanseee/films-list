@@ -13,6 +13,7 @@ export const saveDataToSb = async (item: IDataItemWithLinks, userId: string, set
     inLists: item.inLists,
     links: item.links,
     user_id_owner: userId,
+    notes: item.notes,
   }
   try {
     const { data, error } = await supabase.from('Data')

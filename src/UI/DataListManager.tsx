@@ -4,7 +4,7 @@ import { useTypedSelector } from '../hooks/useTypedSelector'
 import { IDataItemWithLinks, IInLists } from '../types/data'
 import { ILink, IPreviewDataItem } from '../types/search'
 import { saveDataToSb } from '../API/saveDataToSb'
-import { updateDataOnSb } from '../API/updateDataOnSb'
+import { updateDataInListsOnSb } from '../API/updateDataInListsOnSb'
 import { deleteDataOnSb } from '../API/deleteDataOnSb'
 import SavedListsModal from './SavedListsModal'
 import DataListManagetItem from './DataListManagetItem'
@@ -13,16 +13,18 @@ import { updateDataLinksOnSb } from '../API/updateDataLinksOnSb'
 
 interface DataListManagerProps {
   previewDataItem: IPreviewDataItem,
+  id: number | null,
+  setId: (id: number | null) => void,
   sitesResults: ILink[],
   isHideListsTitles?: boolean,
+  inLists: IInLists,
+  setInLists: (newInLists: IInLists) => void,
 }
 
-const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = false }: DataListManagerProps) => {
+const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, sitesResults, isHideListsTitles = false }: DataListManagerProps) => {
   const { lists } = useTypedSelector(state => state.lists)
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
-  const [inLists, setInLists] = useState<IInLists>({})
-  const [id, setId] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [isSaveToListsModalVisible, setIsSaveToListsModalVisible] = useState(false)
   const isNeedToUpdateData = useRef(true)
@@ -41,6 +43,7 @@ const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = fa
         links: sitesResults,
         inLists: currentList,
         id: 999,
+        notes: "",
       }
       setInLists(currentList)
       await saveDataToSb(itemWithLinks, user.id, setLoading, setId)
@@ -50,7 +53,7 @@ const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = fa
         const filteredLists = Object.fromEntries(filteredEntries)
         if (filteredEntries.length) {
           setInLists(filteredLists)
-          await updateDataOnSb(id, filteredLists, setLoading)
+          await updateDataInListsOnSb(id, filteredLists, setLoading)
         } else {
           const currId = id
           setInLists({})
@@ -60,7 +63,7 @@ const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = fa
       } else {
         const updatedInLists = { ...inLists, ...currentList }
         setInLists(updatedInLists)
-        await updateDataOnSb(id, updatedInLists, setLoading)
+        await updateDataInListsOnSb(id, updatedInLists, setLoading)
       }
     }
   }
@@ -88,7 +91,7 @@ const DataListManager = ({ previewDataItem, sitesResults, isHideListsTitles = fa
         isNeedToUpdateData.current = false
       }
     }
-  }, [previewDataItem, data])
+  }, [previewDataItem, data, setId, setInLists])
 
   useEffect(() => {
     if (id && previewDataItem && sitesResults.length) {

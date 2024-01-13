@@ -29,6 +29,7 @@ export const fetchData = () => {
         releaseDate: item.release_date,
         vote: item.vote,
         links: item.links,
+        notes: item.notes,
       }))
 
       dispatch({

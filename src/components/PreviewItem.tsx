@@ -1,9 +1,10 @@
-import React, { } from 'react'
+import React, { useState } from 'react'
 import { ILink, IPreviewDataItem, MediaType } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import DataListManager from '../UI/DataListManager'
 import { getVoteBgColor } from '../utils/getVoteBgColor'
 import { formatVote } from '../utils/formatVote'
+import { IInLists } from '../types/data'
 interface PreviewItemProps {
   item: IPreviewDataItem,
   onItemClick: (mediaType: MediaType, dataId: number) => void,
@@ -12,6 +13,8 @@ interface PreviewItemProps {
 
 const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
   const { fullPosterUrl, dataId, mediaType, releaseDate, title, vote } = item
+  const [inLists, setInLists] = useState<IInLists>({})
+  const [id, setId] = useState<number | null>(null)
 
   const mediaTypeBgColor = mediaType === 'movie'
     ? 'bg-myblue'
@@ -47,6 +50,10 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
       {sitesResults && (
         <DataListManager
           previewDataItem={item}
+          id={id}
+          setId={setId}
+          inLists={inLists}
+          setInLists={setInLists}
           sitesResults={sitesResults}
           isHideListsTitles={true}
         />

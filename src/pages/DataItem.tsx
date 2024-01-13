@@ -5,7 +5,7 @@ import { ILink, IPreviewDataItem } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import { changeImageSizePath } from '../utils/changeImageSizePath'
 import DataListManager from '../UI/DataListManager'
-import { IDataAdditionalInfo } from '../types/data'
+import { IDataAdditionalInfo, IInLists } from '../types/data'
 import { fetchDataAdditionalInfo } from '../API/fetchAdditionalDataInfo'
 import { formatMinToHours } from '../utils/formatMinToHours'
 import { searchDataOnSites } from '../API/searchDataOnSites'
@@ -14,6 +14,7 @@ import Button from '../UI/Button'
 import { formatVote } from '../utils/formatVote'
 import { toast } from 'react-toastify'
 import Loader from '../UI/Loader'
+import DataNotes from '../components/DataNotes'
 
 const DataItem = () => {
   const { id, mediaType } = useParams()
@@ -22,6 +23,9 @@ const DataItem = () => {
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
   const [item, setItem] = useState<IPreviewDataItem | null>(null)
+  const [itemSbId, setItemSbId] = useState<number | null>(null)
+  const [inLists, setInLists] = useState<IInLists>({})
+  const [notes, setNotes] = useState('')
   const [additionalInfo, setAdditionalInfo] = useState<IDataAdditionalInfo | null>(null)
   const [infoLoading, setInfoLoading] = useState(false)
   const [sitesLoading, setSitesLoading] = useState(false)
@@ -63,8 +67,8 @@ const DataItem = () => {
 
   useEffect(() => {
     const timeLoadingTimeout = setTimeout(() => {
-      setTimeLoading(prev => prev + 1000)
-    }, 1000)
+      setTimeLoading(5000)
+    }, 5000)
     if (item) {
       clearTimeout(timeLoadingTimeout)
       return;
@@ -110,6 +114,8 @@ const DataItem = () => {
     if (dataItem) {
       setItem(dataItem)
       setSitesResults(dataItem.links)
+      setNotes(dataItem.notes)
+      setItemSbId(dataItem.id)
       if (additionalInfo) {
         localStorage.setItem(`additionalInfo/${dataItem.mediaType}/${dataItem.dataId}`, JSON.stringify(additionalInfo))
       }
@@ -145,7 +151,11 @@ const DataItem = () => {
               </div>
             </div>
             <DataListManager
+              id={itemSbId}
+              setId={setItemSbId}
               previewDataItem={item}
+              inLists={inLists}
+              setInLists={setInLists}
               sitesResults={sitesResults}
             />
           </div>
@@ -198,7 +208,7 @@ const DataItem = () => {
           </div>
         </div>
       </div>
-      <div className='block md:hidden px-2 mb-3'>
+      <div className='block md:hidden px-2'>
         {!!sitesResults.length || sitesLoading ?
           <Sites
             loading={sitesLoading}
@@ -213,6 +223,14 @@ const DataItem = () => {
           )
         }
       </div>
+      {!!Object.keys(inLists).length && (
+        <div className='px-2 mb-3 xs:mt-3 mt-1'>
+          <DataNotes
+            id={itemSbId}
+            dataNotes={notes}
+          />
+        </div>
+      )}
     </>
   )
 }

@@ -9,6 +9,7 @@ export interface IDataItemWithLinks extends IPreviewDataItem {
   id: number,
   inLists: IInLists,
   links: ILink[],
+  notes: string,
 }
 
 export interface DataState {
