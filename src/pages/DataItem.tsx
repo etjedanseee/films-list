@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ILink, IPreviewDataItem } from '../types/search'
@@ -31,6 +31,7 @@ const DataItem = () => {
   const [sitesLoading, setSitesLoading] = useState(false)
   const [sitesResults, setSitesResults] = useState<ILink[]>([])
   const [timeLoading, setTimeLoading] = useState(0)
+  const isNeedToUpdateDataLinks = useRef(false)
   const navigate = useNavigate()
 
   const onSearchOnSitesClick = () => {
@@ -38,7 +39,7 @@ const DataItem = () => {
       toast.error('No google api settings. Check settings')
       return;
     }
-    if (item && !sitesResults.length && sites.length) {
+    if (item && sites.length) {
       searchDataOnSites({
         searchApiSettings: user.metaData.searchApiSettings,
         search: item.title,
@@ -47,6 +48,7 @@ const DataItem = () => {
         setSitesResults,
         setLoading: setSitesLoading,
       })
+      isNeedToUpdateDataLinks.current = true
     }
   }
 
@@ -193,7 +195,10 @@ const DataItem = () => {
             {!!sitesResults.length || sitesLoading ?
               <Sites
                 loading={sitesLoading}
+                setLoading={setSitesLoading}
                 results={sitesResults}
+                id={itemSbId}
+                isNeedToUpdateDataLinks={isNeedToUpdateDataLinks}
               />
               : (
                 <div>
@@ -205,6 +210,14 @@ const DataItem = () => {
                 </div>
               )
             }
+            {!!sitesResults.length && (
+              <div className='inline-block'>
+                <Button
+                  onClick={onSearchOnSitesClick}
+                  title='Update results'
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -212,7 +225,10 @@ const DataItem = () => {
         {!!sitesResults.length || sitesLoading ?
           <Sites
             loading={sitesLoading}
+            setLoading={setSitesLoading}
             results={sitesResults}
+            id={itemSbId}
+            isNeedToUpdateDataLinks={isNeedToUpdateDataLinks}
           />
           : (
             <Button
@@ -222,6 +238,15 @@ const DataItem = () => {
             />
           )
         }
+        {!!sitesResults.length && (
+          <div>
+            <Button
+              onClick={onSearchOnSitesClick}
+              title='Update results'
+              p='py-1 mb-1'
+            />
+          </div>
+        )}
       </div>
       {!!Object.keys(inLists).length && (
         <div className='px-2 mb-3 xs:mt-3 mt-1'>

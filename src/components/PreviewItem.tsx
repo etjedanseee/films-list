@@ -45,7 +45,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
       </div>
       <div className='bg-mygray flex flex-col py-3'>
         <div className='px-3 text-sm leading-tight font-bold mb-1'>{title}</div>
-        <div className='text-xs px-3'>{releaseDate.slice(0, 4)}</div>
+        {releaseDate && <div className='text-xs px-3'>{releaseDate.slice(0, 4)}</div>}
       </div>
       {sitesResults && (
         <DataListManager

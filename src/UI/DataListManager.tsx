@@ -1,15 +1,13 @@
-import React, { useState, useEffect, MouseEvent, useRef } from 'react'
+import React, { useState, useEffect, MouseEvent } from 'react'
 import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/bookmark.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { IDataItemWithLinks, IInLists } from '../types/data'
 import { ILink, IPreviewDataItem } from '../types/search'
-import { saveDataToSb } from '../API/saveDataToSb'
-import { updateDataInListsOnSb } from '../API/updateDataInListsOnSb'
-import { deleteDataOnSb } from '../API/deleteDataOnSb'
 import SavedListsModal from './SavedListsModal'
 import DataListManagetItem from './DataListManagetItem'
 import Loader from './Loader'
-import { updateDataLinksOnSb } from '../API/updateDataLinksOnSb'
+import { useActions } from '../hooks/useActions'
+import Confirmation from './Confirmation'
 
 interface DataListManagerProps {
   previewDataItem: IPreviewDataItem,
@@ -25,9 +23,10 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
   const { lists } = useTypedSelector(state => state.lists)
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
+  const { saveDataToSb, updateDataInListsOnSb, deleteDataOnSb } = useActions()
   const [loading, setLoading] = useState(false)
   const [isSaveToListsModalVisible, setIsSaveToListsModalVisible] = useState(false)
-  const isNeedToUpdateData = useRef(true)
+  const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false)
   const isDataInSavedList = Object.keys(inLists).find(key => lists.slice(3).find(a => a.id === +key))
 
   const onListClick = async (e: MouseEvent, listId: number) => {
@@ -46,24 +45,21 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
         notes: "",
       }
       setInLists(currentList)
-      await saveDataToSb(itemWithLinks, user.id, setLoading, setId)
+      saveDataToSb(itemWithLinks, user.id, setLoading, setId, data)
     } else if (id != null) {
       if (inLists[listId]) {
         const filteredEntries = listsEntries.filter(entr => +entr[0] !== listId)
         const filteredLists = Object.fromEntries(filteredEntries)
         if (filteredEntries.length) {
           setInLists(filteredLists)
-          await updateDataInListsOnSb(id, filteredLists, setLoading)
+          updateDataInListsOnSb(id, filteredLists, setLoading, data)
         } else {
-          const currId = id
-          setInLists({})
-          setId(null)
-          await deleteDataOnSb(currId, setLoading)
+          setIsConfirmDeleteVisible(true)
         }
       } else {
         const updatedInLists = { ...inLists, ...currentList }
         setInLists(updatedInLists)
-        await updateDataInListsOnSb(id, updatedInLists, setLoading)
+        updateDataInListsOnSb(id, updatedInLists, setLoading, data)
       }
     }
   }
@@ -82,25 +78,28 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
     return !!inLists[listId]
   }
 
-  useEffect(() => {
-    if (isNeedToUpdateData.current) {
-      const currData = data.find(item => item.dataId === previewDataItem.dataId && item.title === previewDataItem.title)
-      if (currData) {
-        setInLists(currData.inLists)
-        setId(currData.id)
-        isNeedToUpdateData.current = false
-      }
+  const onDeleteData = () => {
+    if (!id) {
+      return;
     }
-  }, [previewDataItem, data, setId, setInLists])
+    const currId = id
+    setInLists({})
+    setId(null)
+    deleteDataOnSb(currId, setLoading, data)
+    onCloseConfirmDeleteData()
+  }
+
+  const onCloseConfirmDeleteData = () => {
+    setIsConfirmDeleteVisible(false)
+  }
 
   useEffect(() => {
-    if (id && previewDataItem && sitesResults.length) {
-      const itemInData = data.find(i => i.id === id)
-      if (!itemInData || (itemInData && !itemInData.links.length)) {
-        updateDataLinksOnSb(id, sitesResults, setLoading)
-      }
+    const currData = data.find(item => item.dataId === previewDataItem.dataId && item.title === previewDataItem.title)
+    if (currData) {
+      setInLists(currData.inLists)
+      setId(currData.id)
     }
-  }, [previewDataItem, sitesResults, data, id])
+  }, [previewDataItem, data, setId, setInLists])
 
   return (
     <>
@@ -163,6 +162,13 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
           additionalLists={lists.slice(3)}
           onListClick={onListClick}
           dataInLists={inLists}
+        />
+      )}
+      {isConfirmDeleteVisible && (
+        <Confirmation
+          title='Confirm delete data'
+          onConfirm={onDeleteData}
+          onClose={onCloseConfirmDeleteData}
         />
       )}
     </>
