@@ -7,7 +7,6 @@ import { useDebounce } from '../hooks/useDebounce'
 import Input from '../UI/Input'
 import { useActions } from '../hooks/useActions'
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
-import { updateLists } from '../API/updateLists'
 import Loader from '../UI/Loader'
 import ListsDropdown from '../UI/ListsDropdown'
 import { ReactComponent as ArrowDownIcon } from '../assets/arrow-down.svg'
@@ -16,9 +15,8 @@ const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
   const { lists } = useTypedSelector(state => state.lists)
   const { user } = useTypedSelector(state => state.auth)
-  const { fetchData, fetchLists } = useActions()
+  const { updateLists } = useActions()
   const [currentList, setCurrentList] = useState<IList | null>(null)
-  const [isNeedToUpdateData, setIsNeedToUpdateData] = useState(true)
   const [countDataInLists, setCountDataInLists] = useState<ICountDataInLists>({})
   const [searchByTitle, setSearchByTitle] = useState('')
   const debouncedSearchByTitle = useDebounce(searchByTitle, 500)
@@ -28,7 +26,6 @@ const Lists = () => {
 
   const onListClick = (list: IList) => {
     if (currentList && (list.id !== currentList.id)) {
-      setIsNeedToUpdateData(true)
       setCurrentList(list)
       localStorage.setItem('currentList', list.id.toString())
     }
@@ -50,7 +47,7 @@ const Lists = () => {
     setSearchByTitle('')
   }
 
-  const onDragEnd = async (result: DropResult) => {
+  const onDragEnd = (result: DropResult) => {
     const { destination, draggableId, source } = result
     const currList = additionalLists.find(list => list.id === +draggableId)
     const destinationCondition = !destination || (destination.droppableId === source.droppableId && destination.index === source.index)
@@ -62,8 +59,7 @@ const Lists = () => {
     newAdditionalLists.splice(destination.index, 0, deleted)
     newAdditionalLists.forEach((list, i) => list.orderNum = i + 3)
     setAdditionalLists(newAdditionalLists)
-    await updateLists(newAdditionalLists, setLoading, user.id)
-    fetchLists()
+    updateLists(newAdditionalLists, setLoading, user.id, lists)
   }
 
   const onMobileSelectList = (list: IList) => {
@@ -74,13 +70,6 @@ const Lists = () => {
   useEffect(() => {
     setAdditionalLists(lists.slice(3))
   }, [lists])
-
-  useEffect(() => {
-    if (isNeedToUpdateData) {
-      fetchData()
-      setIsNeedToUpdateData(false)
-    }
-  }, [isNeedToUpdateData, fetchData])
 
   useEffect(() => {
     if (data.length && lists.length) {

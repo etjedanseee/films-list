@@ -56,6 +56,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
           setInLists={setInLists}
           sitesResults={sitesResults}
           isHideListsTitles={true}
+          notes=''
         />
       )}
     </div>

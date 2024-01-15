@@ -3,7 +3,6 @@ import { ReactComponent as CloseIcon } from '../assets/cancel.svg'
 import { IList } from '../types/lists'
 import Button from './Button'
 import Input from './Input'
-import { createList } from '../API/createList'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { useActions } from '../hooks/useActions'
 import { IInLists } from '../types/data'
@@ -16,11 +15,13 @@ interface SaveToListsModalProps {
   additionalLists: IList[],
   dataInLists: IInLists,
   onListClick: (e: MouseEvent, listId: number) => void,
+  closeModal: () => void,
 }
 
-const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClick }: SaveToListsModalProps) => {
+const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClick, closeModal }: SaveToListsModalProps) => {
   const { user } = useTypedSelector(state => state.auth)
-  const { fetchLists } = useActions()
+  const { lists } = useTypedSelector(state => state.lists)
+  const { createList } = useActions()
   const [isCreateNewList, setIsCreateNewList] = useState(false)
   const [newListName, setNewListName] = useState('')
   const [newListNameError, setNewListNameError] = useState('')
@@ -43,7 +44,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
     setNewListName('')
   }
 
-  const onCreateNewList = async () => {
+  const onCreateNewList = () => {
     const trimmedNewListName = newListName.trim()
     if (!trimmedNewListName.length) {
       toast.error('List must include name')
@@ -51,8 +52,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
     }
     if (user) {
       const orderNum = additionalLists.length ? (additionalLists[additionalLists.length - 1].orderNum + 1) : 3
-      await createList(trimmedNewListName, orderNum, user.id, setLoading)
-      fetchLists()
+      createList(trimmedNewListName, orderNum, user.id, setLoading, lists)
     }
     setIsCreateNewList(false)
   }
@@ -86,6 +86,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
               list={list}
               onListClick={onListClick}
               key={list.id}
+              closeSavedListsModal={closeModal}
             />
           ))
             : <div className='font-medium'>You don't have additional lists.</div>

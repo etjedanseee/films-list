@@ -24,7 +24,31 @@ export const fetchSites = () => {
         payload: data[0].sites || []
       })
     } catch (e) {
-      console.error('Error fetching lists', e)
+      console.error('Error fetching sites', e)
+    }
+  }
+}
+
+export const updateUserSites = (userId: string, updatedSites: string[], setLoading: (b: boolean) => void) => {
+  return async (dispatch: Dispatch<SitesAction>) => {
+    setLoading(true)
+    try {
+      const { error } = await supabase
+        .from('UserSearchSites')
+        .update({ sites: updatedSites })
+        .eq('user_id_owner', userId)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+      dispatch({
+        type: SitesActionTypes.SET_SITES,
+        payload: updatedSites
+      })
+    } catch (e) {
+      console.error('Error update sites', e)
+    } finally {
+      setLoading(false)
     }
   }
 }

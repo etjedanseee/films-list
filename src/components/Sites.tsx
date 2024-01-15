@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import { ILink, IPreviewDataItem } from '../types/search'
+import { ILink } from '../types/search'
 import { ReactComponent as RejectedIcon } from '../assets/cancel.svg'
 import { ReactComponent as SuccessIcon } from '../assets/success.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import Loader from '../UI/Loader'
-import { updateDataLinksOnSb } from '../API/updateDataLinksOnSb'
+import { useActions } from '../hooks/useActions'
 
 interface SitesProps {
   loading: boolean,
@@ -16,13 +16,15 @@ interface SitesProps {
 
 const Sites = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks }: SitesProps) => {
   const { sites } = useTypedSelector(state => state.sites)
+  const { data } = useTypedSelector(state => state.data)
+  const { updateDataLinksOnSb } = useActions()
 
   useEffect(() => {
     if (isNeedToUpdateDataLinks.current && id && results.length) {
       isNeedToUpdateDataLinks.current = false
-      updateDataLinksOnSb(id, results, setLoading)
+      updateDataLinksOnSb(id, results, setLoading, data)
     }
-  }, [results, id, setLoading, isNeedToUpdateDataLinks])
+  }, [results, id, setLoading, isNeedToUpdateDataLinks, data])
 
   return (
     <div className='my-2 sm:my-4'>

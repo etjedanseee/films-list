@@ -20,7 +20,7 @@ export const signUp = async ({ email, password, setLoading }: signUpProps) => {
     }
     toast.warn('Please confirm email', { autoClose: 5000 })
   } catch (e) {
-    console.log('signUpError', e)
+    console.error('signUpError:' + e)
     toast.error('SignUp error:' + e)
   } finally {
     setLoading(false)

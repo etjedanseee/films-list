@@ -2,50 +2,45 @@ import React, { ChangeEvent, useState } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ReactComponent as CloseIcon } from '../assets/cancel.svg'
 import SiteItem from './SiteItem'
-import { updateUserSites } from '../API/updateUserSites'
 import { useActions } from '../hooks/useActions'
 import Input from '../UI/Input'
 import Button from '../UI/Button'
 import { removeHttpFromUrl } from '../utils/removeHttpsFromUrl'
 import Loader from '../UI/Loader'
 
-
 const SitesManager = () => {
   const { sites } = useTypedSelector(state => state.sites)
   const { user } = useTypedSelector(state => state.auth)
   const [loading, setLoading] = useState(false)
-  const { fetchSites } = useActions()
+  const { updateUserSites } = useActions()
   const [isAddNewSite, setIsAddNewSite] = useState(false)
   const [newSiteValue, setNewSiteValue] = useState('')
   const [newSiteValueError, setNewSiteValueError] = useState('')
 
-  const onUpdateSite = async (prevSite: string, updatedSite: string) => {
+  const onUpdateSite = (prevSite: string, updatedSite: string) => {
     if (!user) {
       return;
     }
     const removedUrlUpdatedSite = removeHttpFromUrl(updatedSite)
     const updatedSites = sites.map(s => s === prevSite ? removedUrlUpdatedSite : s)
-    await updateUserSites(user.id, updatedSites, setLoading)
-    fetchSites()
+    updateUserSites(user.id, updatedSites, setLoading)
   }
 
-  const onDeleteSite = async (site: string) => {
+  const onDeleteSite = (site: string) => {
     if (!user || sites.length === 1) {
       return;
     }
     const updatedSites = sites.filter(s => s !== site)
-    await updateUserSites(user.id, updatedSites, setLoading)
-    fetchSites()
+    updateUserSites(user.id, updatedSites, setLoading)
   }
 
-  const onAddNewSite = async (site: string) => {
+  const onAddNewSite = (site: string) => {
     const removedUrlUpdatedSite = removeHttpFromUrl(site)
     if (!user || newSiteValueError || sites.includes(removedUrlUpdatedSite)) {
       return;
     }
     const updatedSites = [...sites, removedUrlUpdatedSite]
-    await updateUserSites(user.id, updatedSites, setLoading)
-    fetchSites()
+    updateUserSites(user.id, updatedSites, setLoading)
     setIsAddNewSite(false)
     setNewSiteValue('')
     setNewSiteValueError('')

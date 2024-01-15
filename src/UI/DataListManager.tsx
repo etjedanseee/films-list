@@ -17,9 +17,10 @@ interface DataListManagerProps {
   isHideListsTitles?: boolean,
   inLists: IInLists,
   setInLists: (newInLists: IInLists) => void,
+  notes: string,
 }
 
-const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, sitesResults, isHideListsTitles = false }: DataListManagerProps) => {
+const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, notes, sitesResults, isHideListsTitles = false }: DataListManagerProps) => {
   const { lists } = useTypedSelector(state => state.lists)
   const { data } = useTypedSelector(state => state.data)
   const { user } = useTypedSelector(state => state.auth)
@@ -29,7 +30,7 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
   const [isConfirmDeleteVisible, setIsConfirmDeleteVisible] = useState(false)
   const isDataInSavedList = Object.keys(inLists).find(key => lists.slice(3).find(a => a.id === +key))
 
-  const onListClick = async (e: MouseEvent, listId: number) => {
+  const onListClick = (e: MouseEvent, listId: number) => {
     e.stopPropagation()
     if (!user) {
       return;
@@ -42,7 +43,7 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
         links: sitesResults,
         inLists: currentList,
         id: 999,
-        notes: "",
+        notes,
       }
       setInLists(currentList)
       saveDataToSb(itemWithLinks, user.id, setLoading, setId, data)
@@ -94,7 +95,7 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
   }
 
   useEffect(() => {
-    const currData = data.find(item => item.dataId === previewDataItem.dataId && item.title === previewDataItem.title)
+    const currData = data.find(item => item.dataId === previewDataItem.dataId && item.mediaType === previewDataItem.mediaType)
     if (currData) {
       setInLists(currData.inLists)
       setId(currData.id)
@@ -162,6 +163,7 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, site
           additionalLists={lists.slice(3)}
           onListClick={onListClick}
           dataInLists={inLists}
+          closeModal={() => setIsSaveToListsModalVisible(false)}
         />
       )}
       {isConfirmDeleteVisible && (

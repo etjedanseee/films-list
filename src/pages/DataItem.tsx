@@ -159,6 +159,7 @@ const DataItem = () => {
               inLists={inLists}
               setInLists={setInLists}
               sitesResults={sitesResults}
+              notes={notes}
             />
           </div>
         </div>
@@ -253,6 +254,7 @@ const DataItem = () => {
           <DataNotes
             id={itemSbId}
             dataNotes={notes}
+            setDataNotes={setNotes}
           />
         </div>
       )}

@@ -4,7 +4,6 @@ import { ReactComponent as DeleteIcon } from '../assets/delete.svg'
 import { ReactComponent as EditIcon } from '../assets/edit.svg'
 import Button from './Button'
 import { toast } from 'react-toastify'
-import { updateListName } from '../API/updateListName'
 import { useActions } from '../hooks/useActions'
 import { deleteList } from '../API/deleteList'
 import { useTypedSelector } from '../hooks/useTypedSelector'
@@ -15,16 +14,18 @@ interface AdditionalListProps {
   list: IList,
   onListClick: (e: MouseEvent, listId: number) => void,
   isDataInList: boolean,
+  closeSavedListsModal: () => void,
 }
 
-const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps) => {
+const AdditionalList = ({ list, onListClick, isDataInList, closeSavedListsModal }: AdditionalListProps) => {
   const prevListName = useRef(list.name)
   const [isEdit, setIsEdit] = useState(false)
   const [listName, setListName] = useState(list.name)
   const [loading, setLoading] = useState(false)
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const { user } = useTypedSelector(state => state.auth)
-  const { fetchLists } = useActions()
+  const { lists } = useTypedSelector(state => state.lists)
+  const { fetchLists, updateListName, fetchData } = useActions()
 
   const handleEditVisible = () => {
     setIsEdit(prev => !prev)
@@ -34,15 +35,14 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
     setListName(e.target.value)
   }
 
-  const onUpdateListname = async () => {
+  const onUpdateListName = () => {
     const trimmedListName = listName.trim()
     if (!trimmedListName.length) {
       toast.error('List name cant be empty')
       return;
     }
     if (trimmedListName !== prevListName.current) {
-      await updateListName(list.id, trimmedListName, setLoading)
-      fetchLists()
+      updateListName(list.id, trimmedListName, setLoading, lists)
     }
     setIsEdit(false)
   }
@@ -55,7 +55,9 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
     if (user) {
       await deleteList(list.id, setLoading)
       fetchLists()
+      fetchData()
       setIsEdit(false)
+      closeSavedListsModal()
     }
     setIsConfirmModalVisible(false)
   }
@@ -84,14 +86,14 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
           />
           <div className='flex items-center gap-x-2'>
             <Button
-              onClick={onUpdateListname}
+              onClick={onUpdateListName}
               title='Save'
               p='py-[2px]'
               className='px-1 w-[70px] hidden xs:block'
             />
             <div
               className='block xs:hidden text-sm rounded-lg border-[1px] border-myblue px-2 py-[6px]'
-              onClick={onUpdateListname}
+              onClick={onUpdateListName}
             >
               Save
             </div>

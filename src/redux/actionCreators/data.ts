@@ -1,6 +1,7 @@
 import { Dispatch } from "react"
 import { DataAction, DataActionTypes, IDataItemWithLinks, IInLists } from "../../types/data"
 import supabase from "../../supabaseClient"
+import { ILink } from "../../types/search"
 
 
 export const setData = (data: IDataItemWithLinks[]) => {
@@ -54,8 +55,8 @@ export const saveDataToSb = (item: IDataItemWithLinks, userId: string, setLoadin
       vote: item.vote,
       inLists: item.inLists,
       links: item.links,
-      user_id_owner: userId,
       notes: item.notes,
+      user_id_owner: userId,
     }
     try {
       const { data, error } = await supabase.from('Data')
@@ -65,11 +66,11 @@ export const saveDataToSb = (item: IDataItemWithLinks, userId: string, setLoadin
         throw new Error(error.message)
       }
       if (data && data.length) {
-        const currItem = data[0]
+        const currItem = data[0] as IDataItemWithLinks
         setId(currItem.id)
         dispatch({
           type: DataActionTypes.SET_DATA,
-          payload: [...prevData, currItem]
+          payload: [...prevData, { ...item, id: currItem.id }]
         })
       }
     } catch (e) {
@@ -93,7 +94,7 @@ export const updateDataInListsOnSb = (id: number, inLists: IInLists, setLoading:
       }
       dispatch({
         type: DataActionTypes.SET_DATA,
-        payload: prevData.map(i => i.id === id ? { ...i, inLists: inLists } : i)
+        payload: prevData.map(i => i.id === id ? { ...i, inLists } : i)
       })
     } catch (e) {
       console.error('Error update data inLists', e)
@@ -120,6 +121,52 @@ export const deleteDataOnSb = (id: number, setLoading: (b: boolean) => void, pre
       })
     } catch (e) {
       console.error('Error delete data', e)
+    } finally {
+      setLoading(false)
+    }
+  }
+}
+
+export const updateDataLinksOnSb = (id: number, links: ILink[], setLoading: (b: boolean) => void, prevData: IDataItemWithLinks[]) => {
+  return async (dispatch: Dispatch<DataAction>) => {
+    setLoading(true)
+    try {
+      const { error } = await supabase.from('Data')
+        .update({ links })
+        .eq('id', id)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+      dispatch({
+        type: DataActionTypes.SET_DATA,
+        payload: prevData.map(i => i.id === id ? { ...i, links } : i)
+      })
+    } catch (e) {
+      console.error('Error update data links', e)
+    } finally {
+      setLoading(false)
+    }
+  }
+}
+
+export const updateDataNotesOnSb = (id: number, notes: string, setLoading: (b: boolean) => void, prevData: IDataItemWithLinks[]) => {
+  return async (dispatch: Dispatch<DataAction>) => {
+    setLoading(true)
+    try {
+      const { error } = await supabase.from('Data')
+        .update({ notes })
+        .eq('id', id)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+      dispatch({
+        type: DataActionTypes.SET_DATA,
+        payload: prevData.map(i => i.id === id ? { ...i, notes } : i)
+      })
+    } catch (e) {
+      console.error('Error update data notes', e)
     } finally {
       setLoading(false)
     }

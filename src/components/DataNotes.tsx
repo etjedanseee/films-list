@@ -1,18 +1,22 @@
 import React, { ChangeEvent, useState } from 'react'
 import Textarea from '../UI/Textarea'
 import Button from '../UI/Button'
-import { updateDataNotesOnSb } from '../API/updateDataNotesOnSb'
 import Loader from '../UI/Loader'
+import { useActions } from '../hooks/useActions'
+import { useTypedSelector } from '../hooks/useTypedSelector'
 
 interface DataNotesProps {
   id: number | null,
   dataNotes: string,
+  setDataNotes: (notes: string) => void,
 }
 
-const DataNotes = ({ id, dataNotes }: DataNotesProps) => {
+const DataNotes = ({ id, dataNotes, setDataNotes }: DataNotesProps) => {
   const [notes, setNotes] = useState(dataNotes)
   const [isButtonsVisible, setIsButtonsVisible] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { data } = useTypedSelector(state => state.data)
+  const { updateDataNotesOnSb } = useActions()
 
   const onNotesChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
@@ -22,7 +26,8 @@ const DataNotes = ({ id, dataNotes }: DataNotesProps) => {
 
   const onSaveNotes = () => {
     if (notes.length < 5000 && id) {
-      updateDataNotesOnSb(id, notes, setLoading)
+      setDataNotes(notes)
+      updateDataNotesOnSb(id, notes, setLoading, data)
       setIsButtonsVisible(false)
     }
   }

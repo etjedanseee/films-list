@@ -32,7 +32,7 @@ export const deleteList = async (listId: number, setLoading: (b: boolean) => voi
           throw new Error(error.message)
         }
       } catch (e) {
-        console.error('Error updating rows after delete list', e)
+        console.error('Error updating data after delete list', e)
       }
     }
 
@@ -45,7 +45,7 @@ export const deleteList = async (listId: number, setLoading: (b: boolean) => voi
           throw new Error(error.message)
         }
       } catch (e) {
-        console.error('Error delete rows after delete list', e)
+        console.error('Error delete data after delete list', e)
       }
     }
     try {

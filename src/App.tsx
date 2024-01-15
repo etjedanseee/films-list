@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { privateRoutes, publicRoutes } from './utils/routes';
@@ -16,7 +16,6 @@ function App() {
   const { data } = useTypedSelector(state => state.data)
   const { fetchLists, fetchSites, setUser, setResults, fetchData, setLastSearch, setSearchPage, setSearchTotalPages } = useActions()
   const [isCheckingSession, setIsCheckingSession] = useState(true)
-  const location = useLocation()
 
   useEffect(() => {
     const checkSession = async () => {
@@ -57,10 +56,10 @@ function App() {
   }, [user, sites.length])
 
   useEffect(() => {
-    if (user && !data.length && location.pathname !== '/') {
+    if (user && !data.length) {
       fetchData()
     }
-  }, [user, data.length, location.pathname])
+  }, [user, data.length])
 
   useEffect(() => {
     const lastResults = localStorage.getItem('searchResults')
