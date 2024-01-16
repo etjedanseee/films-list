@@ -12,6 +12,7 @@ interface IAdditionalInfoResponse {
   genres: { name: string }[],
   overview: string,
   runtime?: number,
+  production_countries?: { name: string }[],
 }
 
 export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, setAdditionalInfo }: ISearchDataInfo) => {
@@ -35,8 +36,9 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
     const result = data.genres.map(genre => genre.name)
     setAdditionalInfo({
       genres: result,
-      overview: data.overview,
+      overview: data?.overview,
       runtime: data?.runtime ?? 0,
+      countries: data?.production_countries?.map(country => country.name) || [],
     })
   } catch (e) {
     console.error('Error fetch dataInfo', e)

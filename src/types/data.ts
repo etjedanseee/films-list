@@ -29,6 +29,7 @@ export interface IDataAdditionalInfo {
   genres: string[],
   overview: string,
   runtime: number,
+  countries: string[],
 }
 
 export type DataAction = setData

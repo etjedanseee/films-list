@@ -5,9 +5,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { privateRoutes, publicRoutes } from './utils/routes';
 import { useTypedSelector } from './hooks/useTypedSelector';
 import { useActions } from './hooks/useActions';
-import supabase from './supabaseClient';
 import Header from './UI/Header';
 import Loader from './UI/Loader';
+import { checkUserSession } from './API/checkUserSession';
 
 function App() {
   const { user } = useTypedSelector(state => state.auth)
@@ -18,29 +18,7 @@ function App() {
   const [isCheckingSession, setIsCheckingSession] = useState(true)
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { data, error } = await supabase.auth.getSession()
-        if (error) {
-          throw new Error(error.message)
-        }
-        if (data.session) {
-          const searchApiSettings = data.session.user.user_metadata?.searchApiSettings || null
-          setUser({
-            email: data.session.user.email || '',
-            id: data.session.user.id,
-            metaData: searchApiSettings ? {
-              searchApiSettings: searchApiSettings,
-            } : null
-          })
-        }
-      } catch (e) {
-        console.error('get session error', e)
-      } finally {
-        setIsCheckingSession(false)
-      }
-    }
-    checkSession()
+    checkUserSession(setUser, setIsCheckingSession)
   }, [])
 
   useEffect(() => {

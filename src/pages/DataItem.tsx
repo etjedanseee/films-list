@@ -175,6 +175,11 @@ const DataItem = () => {
               <span className='text-zinc-400'>Genres: </span>{additionalInfo.genres.join(', ')}
             </div>
           )}
+          {additionalInfo && !!additionalInfo?.countries.length && (
+            <div className='font-medium'>
+              <span className='text-zinc-400'>Countries: </span>{additionalInfo.countries.join(', ')}
+            </div>
+          )}
           <div className='font-medium'>
             <span className='text-zinc-400'>Vote: </span>
             {formatVote(item.vote)}
