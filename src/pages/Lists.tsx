@@ -92,6 +92,28 @@ const Lists = () => {
     setCurrentList(lists[0])
   }, [lists])
 
+  useEffect(() => {
+    if (!currentList) {
+      return
+    }
+    const handleScroll = () => {
+      localStorage.setItem('scrollPosition' + currentList.id, window.scrollY.toString())
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [currentList])
+
+  useEffect(() => {
+    if (currentList) {
+      const localScrollPos = localStorage.getItem('scrollPosition' + currentList.id)
+      if (localScrollPos != null) {
+        window.scrollTo(0, +localScrollPos)
+      }
+    }
+  }, [currentList])
+
   return (
     <div className='flex-1 py-2 xs:py-3 px-2 xs:px-4'>
       <div className='flex items-center justify-between gap-x-4 xs:gap-x-8 mb-2 xs:mb-3'>
