@@ -6,20 +6,20 @@ import { MediaType } from '../types/search'
 
 interface IListProps {
   listId: number,
-  searchByTitle: string,
+  filterByTitle: string,
 }
 
-const List = ({ listId, searchByTitle }: IListProps) => {
+const List = ({ listId, filterByTitle }: IListProps) => {
   const { data } = useTypedSelector(state => state.data)
   const navigate = useNavigate()
   const sortedData = useMemo(() => {
     const sortedByListId = data.filter(item => !!item.inLists[listId])
-    const trimmedSearchByTitle = searchByTitle.trim().toLowerCase()
-    const sortedByTitle = trimmedSearchByTitle
-      ? sortedByListId.filter(item => item.title.toLowerCase().includes(trimmedSearchByTitle))
+    const trimmedFilterByTitle = filterByTitle.trim().toLowerCase()
+    const sortedByTitle = trimmedFilterByTitle
+      ? sortedByListId.filter(item => item.title.toLowerCase().includes(trimmedFilterByTitle))
       : sortedByListId
     return [...sortedByTitle].sort((a, b) => +new Date(b.inLists[listId] || 0) - +new Date(a.inLists[listId] || 0))
-  }, [data, listId, searchByTitle])
+  }, [data, listId, filterByTitle])
 
   const onPreviewItemClick = (mediaType: MediaType, dataId: number) => {
     navigate(`/data/${mediaType}/${dataId}`)
@@ -27,7 +27,7 @@ const List = ({ listId, searchByTitle }: IListProps) => {
 
   if (!sortedData.length) {
     return <div className='flex-1 text-center text-xl font-medium py-6'>
-      {searchByTitle ? 'No found results.' : 'List is empty.'}
+      {filterByTitle ? 'No found results.' : 'List is empty.'}
     </div>
   }
 

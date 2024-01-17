@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { MouseEvent, useEffect } from 'react'
 import Button from './Button'
 
 interface ConfirmationProps {
@@ -8,6 +8,11 @@ interface ConfirmationProps {
 }
 
 const Confirmation = ({ title, onClose, onConfirm }: ConfirmationProps) => {
+  const handleClose = (e: MouseEvent) => {
+    e.stopPropagation()
+    onClose()
+  }
+
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => {
@@ -18,7 +23,7 @@ const Confirmation = ({ title, onClose, onConfirm }: ConfirmationProps) => {
   return (
     <div
       className='z-50 fixed top-0 left-0 h-full w-full bg-black bg-opacity-70 flex justify-center items-center'
-      onClick={onClose}
+      onClick={e => handleClose(e)}
     >
       <div
         className={`max-w-none xs:max-w-md flex flex-col gap-y-2 justify-center border-2 border-myblue rounded-xl 

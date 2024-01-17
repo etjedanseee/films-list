@@ -18,8 +18,8 @@ const Lists = () => {
   const { updateLists } = useActions()
   const [currentList, setCurrentList] = useState<IList | null>(null)
   const [countDataInLists, setCountDataInLists] = useState<ICountDataInLists>({})
-  const [searchByTitle, setSearchByTitle] = useState('')
-  const debouncedSearchByTitle = useDebounce(searchByTitle, 500)
+  const [filterByTitle, setFilterByTitle] = useState('')
+  const debouncedFilterByTitle = useDebounce(filterByTitle, 500)
   const [additionalLists, setAdditionalLists] = useState<IList[]>([])
   const [loading, setLoading] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -39,12 +39,12 @@ const Lists = () => {
     });
   }
 
-  const onSearchByTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchByTitle(e.target.value)
+  const onFilterByTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilterByTitle(e.target.value)
   }
 
-  const onCleanSearch = () => {
-    setSearchByTitle('')
+  const onCleanFilterByTitle = () => {
+    setFilterByTitle('')
   }
 
   const onDragEnd = (result: DropResult) => {
@@ -120,15 +120,15 @@ const Lists = () => {
         <div className='hidden xs:block text-2xl font-medium'>Saved Lists</div>
         <div className='max-w-none xs:max-w-[250px] w-full'>
           <Input
-            value={searchByTitle}
-            onInputChange={onSearchByTitleChange}
+            value={filterByTitle}
+            onInputChange={onFilterByTitleChange}
             placeholder='Filter by title'
             name='Filter'
             error=''
             isFieldDirty={false}
             py='py-2'
             isCanClean
-            onClean={onCleanSearch}
+            onClean={onCleanFilterByTitle}
           />
         </div>
       </div>
@@ -203,7 +203,7 @@ const Lists = () => {
         {currentList && (
           <List
             listId={currentList.id}
-            searchByTitle={debouncedSearchByTitle}
+            filterByTitle={debouncedFilterByTitle}
           />
         )}
       </div>

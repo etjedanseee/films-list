@@ -48,6 +48,7 @@ const Search = () => {
 
   const onCleanSearch = () => {
     setSearch('')
+    setLastSearch('')
   }
 
   useEffect(() => {

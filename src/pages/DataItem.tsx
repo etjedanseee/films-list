@@ -176,13 +176,12 @@ const DataItem = () => {
             </div>
           )}
           {additionalInfo && !!additionalInfo?.countries.length && (
-            <div className='font-medium'>
+            <div className='font-medium leading-tight sm:leading-normal'>
               <span className='text-zinc-400'>Countries: </span>{additionalInfo.countries.join(', ')}
             </div>
           )}
           <div className='font-medium'>
-            <span className='text-zinc-400'>Vote: </span>
-            {formatVote(item.vote)}
+            <span className='text-zinc-400'>Vote: </span>{formatVote(item.vote)}
           </div>
           {additionalInfo && !!additionalInfo.runtime && (
             <div className='font-medium'>
@@ -190,7 +189,7 @@ const DataItem = () => {
             </div>
           )}
           <div className='font-medium'>
-            <span className='text-zinc-400'>Release date:</span> {item.releaseDate}
+            <span className='text-zinc-400'>Release date: </span>{item.releaseDate}
           </div>
           {additionalInfo && additionalInfo.overview && (
             <div className='font-medium leading-tight sm:leading-normal'>

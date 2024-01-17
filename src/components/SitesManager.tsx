@@ -41,9 +41,7 @@ const SitesManager = () => {
     }
     const updatedSites = [...sites, removedUrlUpdatedSite]
     updateUserSites(user.id, updatedSites, setLoading)
-    setIsAddNewSite(false)
-    setNewSiteValue('')
-    setNewSiteValueError('')
+    handleIsAddNewSite()
   }
 
   const handleIsAddNewSite = () => {
