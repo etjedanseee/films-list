@@ -1,4 +1,4 @@
-import { ILink, IPreviewDataItem } from "./search";
+import { ILink, IPreviewDataItem, MediaType } from "./search";
 
 //[list id]: Date
 export interface IInLists {
@@ -33,3 +33,23 @@ export interface IDataAdditionalInfo {
 }
 
 export type DataAction = setData
+
+export interface IAdditionalInfoResponse {
+  genres: { name: string }[],
+  overview: string,
+  runtime?: number,
+  production_countries?: { name: string }[],
+}
+
+export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse {
+  name?: string,
+  title?: string,
+  original_title?: string,
+  original_name?: string,
+  poster_path?: string,
+  backdrop_path?: string,
+  media_type?: MediaType,
+  release_date?: string,
+  first_air_date?: string,
+  vote_average?: number,
+}

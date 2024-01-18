@@ -15,6 +15,7 @@ import { formatVote } from '../utils/formatVote'
 import { toast } from 'react-toastify'
 import Loader from '../UI/Loader'
 import DataNotes from '../components/DataNotes'
+import { fetchDataByDataIdAndMediaType } from '../API/fetchDataByDataIdAndMediaType'
 
 const DataItem = () => {
   const { id, mediaType } = useParams()
@@ -69,8 +70,8 @@ const DataItem = () => {
 
   useEffect(() => {
     const timeLoadingTimeout = setTimeout(() => {
-      setTimeLoading(5000)
-    }, 5000)
+      setTimeLoading(prev => prev + 2500)
+    }, 2500)
     if (item) {
       clearTimeout(timeLoadingTimeout)
       return;
@@ -123,6 +124,20 @@ const DataItem = () => {
       }
     }
   }, [data, id, additionalInfo, mediaType])
+
+  useEffect(() => {
+    if (!id || !mediaType) {
+      return;
+    }
+    if (timeLoading === 2500 && !item) {
+      fetchDataByDataIdAndMediaType({
+        id: +id,
+        mediaType,
+        setItem,
+        setAdditionalInfo
+      })
+    }
+  }, [timeLoading, item, id, mediaType])
 
   if (!item || infoLoading) {
     return (

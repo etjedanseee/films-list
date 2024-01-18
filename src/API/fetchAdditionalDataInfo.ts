@@ -1,4 +1,4 @@
-import { IDataAdditionalInfo } from "../types/data"
+import { IAdditionalInfoResponse, IDataAdditionalInfo } from "../types/data"
 import { MediaType } from "../types/search"
 
 interface ISearchDataInfo {
@@ -6,13 +6,6 @@ interface ISearchDataInfo {
   mediaType: MediaType,
   setLoading: (b: boolean) => void,
   setAdditionalInfo: (info: IDataAdditionalInfo | null) => void
-}
-
-interface IAdditionalInfoResponse {
-  genres: { name: string }[],
-  overview: string,
-  runtime?: number,
-  production_countries?: { name: string }[],
 }
 
 export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, setAdditionalInfo }: ISearchDataInfo) => {
