@@ -163,7 +163,6 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, note
           additionalLists={lists.slice(3)}
           onListClick={onListClick}
           dataInLists={inLists}
-          closeModal={() => setIsSaveToListsModalVisible(false)}
         />
       )}
       {isConfirmDeleteVisible && (

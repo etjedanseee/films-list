@@ -14,10 +14,9 @@ interface AdditionalListProps {
   list: IList,
   onListClick: (e: MouseEvent, listId: number) => void,
   isDataInList: boolean,
-  closeSavedListsModal: () => void,
 }
 
-const AdditionalList = ({ list, onListClick, isDataInList, closeSavedListsModal }: AdditionalListProps) => {
+const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps) => {
   const prevListName = useRef(list.name)
   const [isEdit, setIsEdit] = useState(false)
   const [listName, setListName] = useState(list.name)
@@ -57,7 +56,6 @@ const AdditionalList = ({ list, onListClick, isDataInList, closeSavedListsModal 
       fetchLists()
       fetchData()
       setIsEdit(false)
-      closeSavedListsModal()
     }
     setIsConfirmModalVisible(false)
   }

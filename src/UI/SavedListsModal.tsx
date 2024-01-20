@@ -15,10 +15,9 @@ interface SaveToListsModalProps {
   additionalLists: IList[],
   dataInLists: IInLists,
   onListClick: (e: MouseEvent, listId: number) => void,
-  closeModal: () => void,
 }
 
-const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClick, closeModal }: SaveToListsModalProps) => {
+const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClick }: SaveToListsModalProps) => {
   const { user } = useTypedSelector(state => state.auth)
   const { lists } = useTypedSelector(state => state.lists)
   const { createList } = useActions()
@@ -90,7 +89,6 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
               list={list}
               onListClick={onListClick}
               key={list.id}
-              closeSavedListsModal={closeModal}
             />
           ))
             : <div className='font-medium'>You don't have additional lists.</div>

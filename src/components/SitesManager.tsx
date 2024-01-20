@@ -7,6 +7,7 @@ import Input from '../UI/Input'
 import Button from '../UI/Button'
 import { removeHttpFromUrl } from '../utils/removeHttpsFromUrl'
 import Loader from '../UI/Loader'
+import Confirmation from '../UI/Confirmation'
 
 const SitesManager = () => {
   const { sites } = useTypedSelector(state => state.sites)
@@ -16,6 +17,8 @@ const SitesManager = () => {
   const [isAddNewSite, setIsAddNewSite] = useState(false)
   const [newSiteValue, setNewSiteValue] = useState('')
   const [newSiteValueError, setNewSiteValueError] = useState('')
+  const [isConfirmDeleteSiteVisible, setIsConfirmDeleteSiteVisible] = useState(false)
+  const [siteToDelete, setSiteToDelete] = useState('')
 
   const onUpdateSite = (prevSite: string, updatedSite: string) => {
     if (!user) {
@@ -26,8 +29,22 @@ const SitesManager = () => {
     updateUserSites(user.id, updatedSites, setLoading)
   }
 
+  const onDeleteSiteClick = (site: string) => {
+    if (sites.length === 1) {
+      return
+    }
+    setIsConfirmDeleteSiteVisible(true)
+    setSiteToDelete(site)
+  }
+
+  const handleCloseDeleteSiteConfirmation = () => {
+    setIsConfirmDeleteSiteVisible(false)
+    setSiteToDelete('')
+  }
+
   const onDeleteSite = (site: string) => {
-    if (!user || sites.length === 1) {
+    handleCloseDeleteSiteConfirmation()
+    if (!user) {
       return;
     }
     const updatedSites = sites.filter(s => s !== site)
@@ -75,7 +92,7 @@ const SitesManager = () => {
           <SiteItem
             site={site}
             key={site}
-            onDeleteSite={onDeleteSite}
+            onDeleteSite={onDeleteSiteClick}
             onUpdateSite={onUpdateSite}
           />
         ))}
@@ -109,6 +126,13 @@ const SitesManager = () => {
         <CloseIcon className={`${isAddNewSite ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
         <div className='text-lg'>{isAddNewSite ? 'Cancel' : 'Add new site'}</div>
       </div>
+      {isConfirmDeleteSiteVisible && (
+        <Confirmation
+          title='Confirm delete site'
+          onClose={handleCloseDeleteSiteConfirmation}
+          onConfirm={() => onDeleteSite(siteToDelete)}
+        />
+      )}
     </div >
   )
 }
