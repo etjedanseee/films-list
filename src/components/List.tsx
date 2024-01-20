@@ -32,8 +32,8 @@ const List = ({ listId, filterByTitle }: IListProps) => {
   }
 
   return (
-    <div className={`w-full grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8
-      items-stretch justify-center md:justify-normal gap-x-3 gap-y-3
+    <div className={`w-full grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7
+      3xl:grid-cols-8 items-stretch justify-center md:justify-normal gap-x-3 gap-y-3
     `}>
       {sortedData.map(item => (
         <PreviewItem

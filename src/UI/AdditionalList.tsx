@@ -113,7 +113,7 @@ const AdditionalList = ({ list, onListClick, isDataInList, closeSavedListsModal 
           >
             <div className={`${isDataInList ? 'bg-yellow-400' : 'bg-transparent'} h-3 w-3`} />
           </div>
-          <div className='flex-1 font-medium'>{listName}</div>
+          <div className='flex-1 font-medium truncate'>{listName}</div>
           <EditIcon
             onClick={handleEditVisible}
             className='h-6 w-6 fill-white hover:cursor-pointer'

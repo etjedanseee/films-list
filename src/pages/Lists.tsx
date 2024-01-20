@@ -29,12 +29,13 @@ const Lists = () => {
       setCurrentList(list)
       localStorage.setItem('currentList', list.id.toString())
     }
-    scrollToTop()
+    scrollToCoord(0, 0)
   }
 
-  const scrollToTop = () => {
+  const scrollToCoord = (x: number, y: number) => {
     window.scrollTo({
-      top: 0,
+      top: y,
+      left: x,
       behavior: 'smooth',
     });
   }
@@ -109,7 +110,7 @@ const Lists = () => {
     if (currentList) {
       const localScrollPos = localStorage.getItem('scrollPosition' + currentList.id)
       if (localScrollPos != null) {
-        window.scrollTo(0, +localScrollPos)
+        scrollToCoord(0, +localScrollPos)
       }
     }
   }, [currentList])
@@ -144,8 +145,8 @@ const Lists = () => {
           />
         )}
       </div>
-      <div className='flex gap-x-8 min-h-full'>
-        <ul className='hidden md:flex sticky top-16 flex-col gap-y-2 h-full pt-1'>
+      <div className='flex xl:gap-x-5 gap-x-3 min-h-full'>
+        <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[400px] overflow-y-auto min-w-[170px] pt-1 pr-1`}>
           {!!lists.length && currentList && lists.slice(0, 3).map(list => (
             <li
               key={list.id}
@@ -208,10 +209,10 @@ const Lists = () => {
         )}
       </div>
       <ArrowDownIcon
-        className={`xs:hidden fixed bottom-3 right-3 rotate-180 pt-[2px] fill-white w-8 h-8 rounded-full border-[1px] 
+        className={`md:hidden fixed bottom-3 right-3 rotate-180 pt-[2px] fill-white w-8 h-8 rounded-full border-[1px] 
           border-gray-300 bg-bg1
         `}
-        onClick={scrollToTop}
+        onClick={() => scrollToCoord(0, 0)}
       />
     </div>
   )

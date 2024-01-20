@@ -41,11 +41,15 @@ const ListsDropdown = ({ isDropdownOpen, options, selectedOption, setIsDropdownO
         <ArrowDownIcon className={`h-7 w-7 fill-yellow-500 ${isDropdownOpen ? 'rotate-90' : 'rotate-0'}`} />
       </div>
       {isDropdownOpen && (
-        <div className={`absolute z-30 bg-bg2 top-full flex flex-col gap-y-2 px-3 -mt-1 w-full rounded-md py-2`}>
+        <div className={`absolute z-30 bg-bg2 top-full flex flex-col gap-y-2 px-3 -mt-1 w-full rounded-md py-2
+            overflow-y-auto max-h-[400px]
+          `}>
           {options.map(option => (
             <div
               onClick={() => setSelectedOption(option)}
-              className={`flex gap-x-1 select-none ${option.id === selectedOption.id ? 'text-yellow-500' : 'text-white'}`}
+              className={`flex gap-x-1 cursor-pointer select-none
+                ${option.id === selectedOption.id ? 'text-yellow-500' : 'text-white'}
+              `}
               key={option.id}
             >
               <div className='truncate text-inherit'>{`${option.name}`}</div>
