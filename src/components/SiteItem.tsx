@@ -56,7 +56,7 @@ const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
             <Button
               onClick={onSaveUpdatedSite}
               title='Save'
-              p='py-[2px]'
+              p='py-[3px]'
               className='px-1 xs:block hidden'
             />
             <button
@@ -89,11 +89,11 @@ const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
             </a>
             <div className='flex items-center gap-x-4 xs:gap-x-6'>
               <EditIcon
-                className='h-6 min-w-[24px] w-6 fill-white'
+                className='h-6 min-w-[24px] w-6 fill-white hover:cursor-pointer'
                 onClick={onEditClick}
               />
               <DeleteIcon
-                className='h-6 min-w-[24px] w-6 fill-myred'
+                className='h-6 min-w-[24px] w-6 fill-myred hover:cursor-pointer'
                 onClick={() => onDeleteSite(site)}
               />
             </div>

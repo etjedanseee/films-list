@@ -21,7 +21,7 @@ export interface ILink {
   result: IFoundLink | null,
 }
 
-export type MediaType = 'movie' | 'tv'
+export type MediaType = 'all' | 'movie' | 'tv'
 
 export interface IPreviewDataItem {
   dataId: number,

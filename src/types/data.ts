@@ -53,3 +53,9 @@ export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse
   first_air_date?: string,
   vote_average?: number,
 }
+
+export type MediaTypeFilterTitle = 'All' | 'Movies' | 'Series'
+export interface MediaTypeFilterOptions {
+  title: MediaTypeFilterTitle,
+  type: MediaType
+}

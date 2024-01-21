@@ -121,8 +121,9 @@ const SitesManager = () => {
       )}
 
       <div
-        className='flex items-center gap-x-3 font-medium'
-        onClick={handleIsAddNewSite}>
+        className='flex items-center gap-x-3 font-medium hover:cursor-pointer'
+        onClick={handleIsAddNewSite}
+      >
         <CloseIcon className={`${isAddNewSite ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
         <div className='text-lg'>{isAddNewSite ? 'Cancel' : 'Add new site'}</div>
       </div>

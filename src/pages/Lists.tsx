@@ -10,6 +10,8 @@ import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautif
 import Loader from '../UI/Loader'
 import ListsDropdown from '../UI/ListsDropdown'
 import { ReactComponent as ArrowDownIcon } from '../assets/arrow-down.svg'
+import MediaTypeFilter from '../components/MediaTypeFilter'
+import { MediaTypeFilterOptions } from '../types/data'
 
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
@@ -22,7 +24,8 @@ const Lists = () => {
   const debouncedFilterByTitle = useDebounce(filterByTitle, 500)
   const [additionalLists, setAdditionalLists] = useState<IList[]>([])
   const [loading, setLoading] = useState(false)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [mediaTypeFilter, setMediaTypeFilter] = useState<MediaTypeFilterOptions>({ title: 'All', type: 'all' })
 
   const onListClick = (list: IList) => {
     if (currentList && (list.id !== currentList.id)) {
@@ -66,6 +69,10 @@ const Lists = () => {
   const onMobileSelectList = (list: IList) => {
     onListClick(list)
     setIsDropdownOpen(false)
+  }
+
+  const onMediaTypeFilterClick = (type: MediaTypeFilterOptions) => {
+    setMediaTypeFilter(type)
   }
 
   useEffect(() => {
@@ -117,8 +124,11 @@ const Lists = () => {
 
   return (
     <div className='flex-1 py-2 xs:py-3 px-2 xs:px-4'>
-      <div className='flex items-center justify-between gap-x-4 xs:gap-x-8 mb-2 xs:mb-3'>
-        <div className='hidden xs:block text-2xl font-medium'>Saved Lists</div>
+      <div className='flex items-center justify-between gap-x-3 xs:gap-x-8 mb-2 xs:mb-3'>
+        <MediaTypeFilter
+          mediaTypeFilter={mediaTypeFilter}
+          onMediaTypeFilterClick={onMediaTypeFilterClick}
+        />
         <div className='max-w-none xs:max-w-[250px] w-full'>
           <Input
             value={filterByTitle}
@@ -146,7 +156,9 @@ const Lists = () => {
         )}
       </div>
       <div className='flex xl:gap-x-5 gap-x-3 min-h-full'>
-        <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[400px] overflow-y-auto min-w-[170px] pt-1 pr-1`}>
+        <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[400px] overflow-y-auto min-w-[170px]
+            pt-1 pr-1
+          `}>
           {!!lists.length && currentList && lists.slice(0, 3).map(list => (
             <li
               key={list.id}
@@ -205,6 +217,7 @@ const Lists = () => {
           <List
             listId={currentList.id}
             filterByTitle={debouncedFilterByTitle}
+            mediaTypeFilter={mediaTypeFilter}
           />
         )}
       </div>

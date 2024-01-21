@@ -3,23 +3,28 @@ import { useTypedSelector } from '../hooks/useTypedSelector'
 import PreviewItem from './PreviewItem'
 import { useNavigate } from 'react-router-dom'
 import { MediaType } from '../types/search'
+import { MediaTypeFilterOptions } from '../types/data'
 
 interface IListProps {
   listId: number,
   filterByTitle: string,
+  mediaTypeFilter: MediaTypeFilterOptions,
 }
 
-const List = ({ listId, filterByTitle }: IListProps) => {
+const List = ({ listId, filterByTitle, mediaTypeFilter }: IListProps) => {
   const { data } = useTypedSelector(state => state.data)
   const navigate = useNavigate()
   const sortedData = useMemo(() => {
-    const sortedByListId = data.filter(item => !!item.inLists[listId])
     const trimmedFilterByTitle = filterByTitle.trim().toLowerCase()
+    const sortedByListId = data.filter(item => !!item.inLists[listId])
+    const sortedByMediaType = mediaTypeFilter.type === 'all'
+      ? sortedByListId
+      : sortedByListId.filter(item => item.mediaType === mediaTypeFilter.type)
     const sortedByTitle = trimmedFilterByTitle
-      ? sortedByListId.filter(item => item.title.toLowerCase().includes(trimmedFilterByTitle))
-      : sortedByListId
+      ? sortedByMediaType.filter(item => item.title.toLowerCase().includes(trimmedFilterByTitle))
+      : sortedByMediaType
     return [...sortedByTitle].sort((a, b) => +new Date(b.inLists[listId] || 0) - +new Date(a.inLists[listId] || 0))
-  }, [data, listId, filterByTitle])
+  }, [data, listId, filterByTitle, mediaTypeFilter])
 
   const onPreviewItemClick = (mediaType: MediaType, dataId: number) => {
     navigate(`/data/${mediaType}/${dataId}`)

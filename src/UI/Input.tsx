@@ -74,7 +74,7 @@ const Input = ({ placeholder = '', onInputChange, value, onBlur = () => { }, onF
             ? 'translate-y-4'
             : 'translate-y-3'
         }`} 
-        absolute top-0 left-0 text-xs ${titleBg} select-none transition-transform duration-300 
+        absolute top-0 left-0 text-xs ${titleBg} select-none transition-transform duration-300 hover:cursor-text
         ${error ? 'text-myred' : 'text-white'}
       `}
       >
