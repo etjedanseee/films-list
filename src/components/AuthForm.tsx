@@ -83,12 +83,15 @@ const AuthForm = ({ setIsAuthFormValid, setUserEmail, isFormValid, setUserPasswo
 
   return (
     <div className='minw-[260px] max-w-sm w-full'>
-      <form onSubmit={onSubmit}>
+      <form
+        onSubmit={onSubmit}
+        autoComplete='on'
+      >
         <Input
           onInputChange={onEmailChange}
           placeholder='Enter your email'
           value={email}
-          autoCompleteValue='email'
+          autoCompleteValue='username'
           error={emailError}
           isFieldDirty={isEmailDirty}
           name='Email'

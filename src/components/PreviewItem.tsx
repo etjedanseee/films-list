@@ -22,14 +22,14 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
 
   return (
     <div
-      className='w-full cursor-pointer flex flex-col select-none'
+      className='w-full cursor-pointer flex flex-col select-none overflow-hidden'
       onClick={() => onItemClick(mediaType, dataId)}
     >
       <div className='relative flex-1'>
         <img
           src={fullPosterUrl || noPicture}
           alt="poster"
-          className='flex-1 w-full h-full bg-cover'
+          className='flex-1 w-full h-full bg-cover hover:rotate-3 hover:scale-125 duration-500 transition-transform'
           loading='lazy'
         />
         {!!vote && (
@@ -43,7 +43,7 @@ const PreviewItem = ({ item, onItemClick, sitesResults }: PreviewItemProps) => {
           {mediaType === 'tv' ? 'series' : mediaType}
         </div>
       </div>
-      <div className='bg-mygray flex flex-col py-3'>
+      <div className='bg-mygray flex flex-col py-3 z-10'>
         <div className='px-3 text-sm leading-tight font-bold mb-1'>{title}</div>
         {releaseDate && <div className='text-xs px-3'>{releaseDate.slice(0, 4)}</div>}
       </div>

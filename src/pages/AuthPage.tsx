@@ -13,7 +13,7 @@ const AuthPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isFormValid, setIsFormValid] = useState(false)
-  const [isSignIn, setIsSignIn] = useState(false)
+  const [isSignIn, setIsSignIn] = useState(true)
   const [loading, setLoading] = useState(false)
 
   const onAuthFormSubmit = () => {
