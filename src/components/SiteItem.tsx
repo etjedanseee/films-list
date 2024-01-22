@@ -3,14 +3,18 @@ import { ReactComponent as DeleteIcon } from '../assets/delete.svg'
 import { ReactComponent as EditIcon } from '../assets/edit.svg'
 import Button from '../UI/Button'
 import { useFocus } from '../hooks/useFocus'
+import { DraggableProvidedDragHandleProps, DraggableProvidedDraggableProps } from 'react-beautiful-dnd'
 
 interface SiteItemProps {
   site: string,
   onUpdateSite: (prevSite: string, updatedSite: string) => void,
   onDeleteSite: (site: string) => void,
+  dragRef: (element: HTMLElement | null) => void,
+  draggableProps: DraggableProvidedDraggableProps,
+  dragHandleProps: DraggableProvidedDragHandleProps | null | undefined,
 }
 
-const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
+const SiteItem = ({ site, onDeleteSite, onUpdateSite, dragRef, draggableProps, dragHandleProps }: SiteItemProps) => {
   const [isEdit, setIsEdit] = useState(false)
   const prevSite = useRef(site)
   const { inputRef, setInputFocus } = useFocus()
@@ -42,6 +46,9 @@ const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
     <div
       key={site}
       className='flex items-center justify-between gap-x-4 text-lg max-w-full'
+      ref={dragRef}
+      {...draggableProps}
+      {...dragHandleProps}
     >
       {isEdit ? (
         <div className='flex-1 flex gap-x-3 justify-between items-center'>
@@ -82,7 +89,7 @@ const SiteItem = ({ site, onDeleteSite, onUpdateSite }: SiteItemProps) => {
               href={`http://${site}`}
               target='_blank'
               rel="noreferrer"
-              className='flex-1 truncate'
+              className='flex-1 truncate select-none'
               title={site}
             >
               {site}

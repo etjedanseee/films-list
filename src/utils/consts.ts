@@ -12,7 +12,7 @@ export const posterSizes = [
 
 export const baseImageUrl = 'https://image.tmdb.org/t/p/'
 
-export const mediaTypeFilterOptions: MediaTypeFilterOptions[] = [
+export const mediaTypeFilterArr: MediaTypeFilterOptions[] = [
   {
     title: 'All',
     type: 'all',

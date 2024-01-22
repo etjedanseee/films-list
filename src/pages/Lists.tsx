@@ -12,6 +12,7 @@ import ListsDropdown from '../UI/ListsDropdown'
 import { ReactComponent as ArrowDownIcon } from '../assets/arrow-down.svg'
 import MediaTypeFilter from '../components/MediaTypeFilter'
 import { MediaTypeFilterOptions } from '../types/data'
+import { mediaTypeFilterArr } from '../utils/consts'
 
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
@@ -25,7 +26,7 @@ const Lists = () => {
   const [additionalLists, setAdditionalLists] = useState<IList[]>([])
   const [loading, setLoading] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [mediaTypeFilter, setMediaTypeFilter] = useState<MediaTypeFilterOptions>({ title: 'All', type: 'all' })
+  const [mediaTypeFilter, setMediaTypeFilter] = useState<MediaTypeFilterOptions>(mediaTypeFilterArr[0])
 
   const onListClick = (list: IList) => {
     if (currentList && (list.id !== currentList.id)) {
@@ -62,7 +63,6 @@ const Lists = () => {
     const [deleted] = newAdditionalLists.splice(source.index, 1)
     newAdditionalLists.splice(destination.index, 0, deleted)
     newAdditionalLists.forEach((list, i) => list.orderNum = i + 3)
-    setAdditionalLists(newAdditionalLists)
     updateLists(newAdditionalLists, setLoading, user.id, lists)
   }
 
@@ -121,6 +121,16 @@ const Lists = () => {
       }
     }
   }, [currentList])
+
+  useEffect(() => {
+    const localMediaTypeFilterTitle = localStorage.getItem('mediaTypeFilter')
+    if (localMediaTypeFilterTitle) {
+      const localMediaTypeFilter = mediaTypeFilterArr.find(item => item.title === localMediaTypeFilterTitle)
+      if (localMediaTypeFilter) {
+        setMediaTypeFilter(localMediaTypeFilter)
+      }
+    }
+  }, [])
 
   return (
     <div className='flex-1 py-2 xs:py-3 px-2 xs:px-4'>

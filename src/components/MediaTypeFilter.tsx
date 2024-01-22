@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { MediaTypeFilterOptions } from '../types/data'
-import { mediaTypeFilterOptions } from '../utils/consts'
+import { mediaTypeFilterArr } from '../utils/consts'
 
 interface MediaTypeFilterProps {
   mediaTypeFilter: MediaTypeFilterOptions,
@@ -16,6 +16,7 @@ const MediaTypeFilter = ({ mediaTypeFilter, onMediaTypeFilterClick }: MediaTypeF
 
   const handleOptionClick = (option: MediaTypeFilterOptions) => {
     onMediaTypeFilterClick(option)
+    localStorage.setItem('mediaTypeFilter', option.title)
     handleOptionsListOpen()
   }
 
@@ -31,7 +32,7 @@ const MediaTypeFilter = ({ mediaTypeFilter, onMediaTypeFilterClick }: MediaTypeF
       </div>
       {isOptionsListOpen && (
         <div className='absolute top-full mt-1 z-10 bg-mygray3 w-full text-center rounded-md flex flex-col gap-y-3 py-3'>
-          {mediaTypeFilterOptions.map(option => (
+          {mediaTypeFilterArr.map(option => (
             <div
               key={option.type}
               className={`${option.type === mediaTypeFilter.type ? 'text-yellow-400' : 'text-white'} 

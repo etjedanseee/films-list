@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ReactComponent as CloseIcon } from '../assets/cancel.svg'
 import SiteItem from './SiteItem'
@@ -8,6 +8,7 @@ import Button from '../UI/Button'
 import { removeHttpFromUrl } from '../utils/removeHttpsFromUrl'
 import Loader from '../UI/Loader'
 import Confirmation from '../UI/Confirmation'
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd'
 
 const SitesManager = () => {
   const { sites } = useTypedSelector(state => state.sites)
@@ -19,6 +20,7 @@ const SitesManager = () => {
   const [newSiteValueError, setNewSiteValueError] = useState('')
   const [isConfirmDeleteSiteVisible, setIsConfirmDeleteSiteVisible] = useState(false)
   const [siteToDelete, setSiteToDelete] = useState('')
+  const [userSites, setUserSites] = useState<string[]>([])
 
   const onUpdateSite = (prevSite: string, updatedSite: string) => {
     if (!user) {
@@ -78,7 +80,24 @@ const SitesManager = () => {
     setNewSiteValue(value)
   }
 
-  if (loading) {
+  const onDragEnd = (result: DropResult) => {
+    const { destination, draggableId, source } = result
+    const currSite = sites.find(site => site === draggableId)
+    const destinationCondition = !destination || (destination.droppableId === source.droppableId && destination.index === source.index)
+    if (destinationCondition || !currSite || !user) {
+      return;
+    }
+    const newUserSites = Array.from(userSites)
+    const [deleted] = newUserSites.splice(source.index, 1)
+    newUserSites.splice(destination.index, 0, deleted)
+    updateUserSites(user.id, newUserSites, setLoading)
+  }
+
+  useEffect(() => {
+    setUserSites(sites)
+  }, [sites])
+
+  if (loading || !userSites.length) {
     return (
       <div className='flex-1 flex justify-center items-center'><Loader size='80' /></div>
     )
@@ -88,14 +107,40 @@ const SitesManager = () => {
     <div className='max-w-full'>
       <div className='text-2xl font-medium mb-3'>Your sites:</div>
       <div className='flex flex-col gap-y-2 font-medium xs:max-w-xs mb-4'>
-        {!!sites.length && sites.map(site => (
-          <SiteItem
-            site={site}
-            key={site}
-            onDeleteSite={onDeleteSiteClick}
-            onUpdateSite={onUpdateSite}
-          />
-        ))}
+        {!!userSites.length && (
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId='sites'>
+              {provided => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className='flex flex-col gap-y-2 font-medium'
+                >
+                  {userSites.map((site, index) => (
+                    <Draggable
+                      draggableId={site}
+                      index={index}
+                      key={site}
+                    >
+                      {provided2 => (
+                        <SiteItem
+                          site={site}
+                          key={site}
+                          onDeleteSite={onDeleteSiteClick}
+                          onUpdateSite={onUpdateSite}
+                          dragRef={provided2.innerRef}
+                          draggableProps={provided2.draggableProps}
+                          dragHandleProps={provided2.dragHandleProps}
+                        />
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        )}
       </div>
 
       {isAddNewSite && (
