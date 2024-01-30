@@ -10,6 +10,10 @@ const SearchResults = () => {
   const { setSearchPage, setSearchLoading, setSearchResults, setSearchTotalPages } = useActions()
 
   useEffect(() => {
+    document.title = `Search - Films Lists`
+  }, [])
+
+  useEffect(() => {
     const handleScroll = () => {
       const windowHeight = window.innerHeight
       const body = document.body;
@@ -42,7 +46,7 @@ const SearchResults = () => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
-    };
+    }
   }, [loading, lastSearch, page, totalPages])
 
   if (loading && page === 1) {

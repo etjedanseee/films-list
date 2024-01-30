@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SitesManager from '../components/SitesManager'
 import ApiForm from '../components/ApiForm'
 import { useTypedSelector } from '../hooks/useTypedSelector'
@@ -9,10 +9,6 @@ const Settings = () => {
   const { user } = useTypedSelector(state => state.auth)
   const { setUser, setData, setLists, setSearchResults, setSites } = useActions()
 
-  if (!user) {
-    return null
-  }
-
   const onSignOutClick = () => {
     setUser(null)
     setData([])
@@ -20,6 +16,14 @@ const Settings = () => {
     setSearchResults([], 1)
     setSites([])
     localStorage.clear()
+  }
+
+  useEffect(() => {
+    document.title = `Settings - Films Lists`
+  }, [])
+
+  if (!user) {
+    return null
   }
 
   return (

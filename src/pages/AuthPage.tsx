@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthForm from '../components/AuthForm'
 import { signIn } from '../API/signIn'
@@ -37,6 +37,10 @@ const AuthPage = () => {
       setIsSignIn(true)
     }
   }
+
+  useEffect(() => {
+    document.title = `Auth - Films Lists`
+  }, [])
 
   if (loading) {
     return (

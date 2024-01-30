@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import TrendingData from '../components/TrendingData'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import DiscoverMovies from '../components/DiscoverMovies'
@@ -6,8 +6,12 @@ import DiscoverSeries from '../components/DiscoverSeries'
 import { useActions } from '../hooks/useActions'
 
 const Discover = () => {
-  const { type } = useTypedSelector(state => state.discover)
+  const { type, resultsType } = useTypedSelector(state => state.discover)
   const { setDiscoverType, setDiscoverResultsType } = useActions()
+
+  useEffect(() => {
+    document.title = `${resultsType} - Films Lists`
+  }, [resultsType])
 
   return (
     <div className='font-medium'>

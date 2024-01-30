@@ -123,6 +123,7 @@ const Lists = () => {
   }, [currentList])
 
   useEffect(() => {
+    document.title = `Films Lists`
     const localMediaTypeFilterTitle = localStorage.getItem('mediaTypeFilter')
     if (localMediaTypeFilterTitle) {
       const localMediaTypeFilter = mediaTypeFilterArr.find(item => item.title === localMediaTypeFilterTitle)

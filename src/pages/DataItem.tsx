@@ -65,8 +65,14 @@ const DataItem = () => {
     window.scrollTo({
       top: 0,
       behavior: 'auto',
-    });
+    })
   }, [])
+
+  useEffect(() => {
+    if (item) {
+      document.title = `${item.title} - Films Lists`
+    }
+  }, [item])
 
   useEffect(() => {
     const timeLoadingTimeout = setTimeout(() => {
