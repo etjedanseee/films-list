@@ -7,7 +7,7 @@ import { useActions } from '../hooks/useActions'
 
 const Settings = () => {
   const { user } = useTypedSelector(state => state.auth)
-  const { setUser, setData, setLists, setResults, setSites } = useActions()
+  const { setUser, setData, setLists, setSearchResults, setSites } = useActions()
 
   if (!user) {
     return null
@@ -17,7 +17,7 @@ const Settings = () => {
     setUser(null)
     setData([])
     setLists([])
-    setResults([], 1)
+    setSearchResults([], 1)
     setSites([])
     localStorage.clear()
   }

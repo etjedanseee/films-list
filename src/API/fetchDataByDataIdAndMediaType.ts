@@ -1,10 +1,10 @@
-import { IPreviewDataItem } from "../types/search";
+import { IPreviewDataItem, MediaType } from "../types/search";
 import { IDataAdditionalInfo, IPreviewDataWithAddInfoResponse } from "../types/data";
 import { baseImageUrl, posterSizes } from "../utils/consts";
 
 interface fetchDataByDataIdAndMediaTypeProps {
   id: number,
-  mediaType: string,
+  mediaType: MediaType,
   setItem: (item: IPreviewDataItem | null) => void,
   setAdditionalInfo: (addInfo: IDataAdditionalInfo) => void,
 }
@@ -35,6 +35,7 @@ export const fetchDataByDataIdAndMediaType = async ({ id, mediaType, setAddition
       overview: data?.overview,
       runtime: data?.runtime ?? 0,
       countries: data?.production_countries?.map(country => country.name) || [],
+      tagline: data?.tagline || '',
     })
     const imageSize = posterSizes[2]
     const posterPath = data?.poster_path || data?.backdrop_path || '';
@@ -42,10 +43,10 @@ export const fetchDataByDataIdAndMediaType = async ({ id, mediaType, setAddition
       dataId: id,
       title: data?.name || data?.title || data?.original_title || data?.original_name || '',
       fullPosterUrl: posterPath ? baseImageUrl + imageSize + posterPath : '',
-      mediaType: data?.media_type || 'movie',
+      mediaType,
       releaseDate: data?.release_date || data?.first_air_date || '',
       vote: data?.vote_average || 0,
-    };
+    }
     setItem(obj)
   } catch (e) {
     console.error('Error fetch data by dataId and mediaType', e)

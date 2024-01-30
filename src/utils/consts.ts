@@ -1,3 +1,4 @@
+import { DiscoverMoviesResultsType, DiscoverSeriesResultsType, DiscoverSimilarResultsType, DiscoverTrendingResultsType } from './../types/discover';
 import { MediaTypeFilterOptions } from "../types/data"
 
 export const posterSizes = [
@@ -26,3 +27,8 @@ export const mediaTypeFilterArr: MediaTypeFilterOptions[] = [
     type: 'tv',
   }
 ]
+
+export const trendingResultsTypeArr: DiscoverTrendingResultsType[] = ['Trending']
+export const moviesResultsTypeArr: DiscoverMoviesResultsType[] = ['Popular movies', 'Now playing movies', 'Top rated movies']
+export const seriesResultsTypeArr: DiscoverSeriesResultsType[] = ['Popular series', 'Top rated series']
+export const similarResultsTypeArr: DiscoverSimilarResultsType[] = ['Similar']

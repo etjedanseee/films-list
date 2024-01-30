@@ -6,6 +6,7 @@ import { IRoute } from "../types/route"
 import DataItem from "../pages/DataItem"
 import { Navigate } from "react-router-dom"
 import NotFoundPage from "../pages/NotFoundPage"
+import Discover from "../pages/Discover"
 
 export const publicRoutes: IRoute[] = [
   { path: '/auth', element: <AuthPage /> },
@@ -17,5 +18,6 @@ export const privateRoutes: IRoute[] = [
   { path: '/settings', element: <Settings /> },
   { path: '/search/:search', element: <SearchResults /> },
   { path: '/data/:mediaType/:id', element: <DataItem /> },
+  { path: '/discover', element: <Discover /> },
   { path: '*', element: <NotFoundPage /> },
 ]

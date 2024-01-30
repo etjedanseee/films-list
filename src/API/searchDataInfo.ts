@@ -6,7 +6,7 @@ interface ISearchDataInfo {
   title: string,
   page: number,
   setLoading: (b: boolean) => void,
-  setResults: (arr: IPreviewDataItem[], page: number) => void,
+  setSearchResults: (arr: IPreviewDataItem[], page: number) => void,
   setSearchTotalPages: (totalPages: number) => void,
 }
 
@@ -16,7 +16,7 @@ interface ISearchDataInfoResponse {
   total_pages: number,
 }
 
-export const searchDataInfo = async ({ title, page, setLoading, setResults, setSearchTotalPages }: ISearchDataInfo) => {
+export const searchDataInfo = async ({ title, page, setLoading, setSearchResults, setSearchTotalPages }: ISearchDataInfo) => {
   const url = 'https://api.themoviedb.org/3/search/multi'
   const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY
   const ACCESS_TOKEN = process.env.REACT_APP_MOVIE_DB_ACCESS_TOKEN
@@ -54,9 +54,9 @@ export const searchDataInfo = async ({ title, page, setLoading, setResults, setS
         results.push(obj)
       }
       setSearchTotalPages(data.total_pages)
-      setResults(results, data.page)
+      setSearchResults(results, data.page)
     } else {
-      setResults([], 1)
+      setSearchResults([], 1)
       setSearchTotalPages(0)
     }
   } catch (e) {

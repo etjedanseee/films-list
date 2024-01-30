@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
 import { ReactComponent as BookmarkIcon } from '../assets/DataListManagerIcons/bookmark.svg'
 import { ReactComponent as SettingsIcon } from '../assets/settings.svg'
+import { ReactComponent as DiscoverIcon } from '../assets/discover.svg'
 
 const Navbar = () => {
   const { setLastSearch } = useActions()
@@ -13,13 +14,19 @@ const Navbar = () => {
   }
 
   return (
-    <div className='flex gap-x-1 xs:gap-x-3 items-center font-bold tracking-wider'>
+    <div className='flex gap-x-0 xs:gap-x-2 items-center'>
       <NavLink
         to={'/'}
         className={`px-1 hover:cursor-pointer`}
         onClick={onListsPageClick}
       >
         <BookmarkIcon className='h-10 w-10 fill-yellow-500' />
+      </NavLink>
+      <NavLink
+        to={'/discover'}
+        className={`px-1 hover:cursor-pointer`}
+      >
+        <DiscoverIcon className='h-9 w-9 fill-white' />
       </NavLink>
       <NavLink
         to={'/settings'}

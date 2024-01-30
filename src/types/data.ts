@@ -30,6 +30,7 @@ export interface IDataAdditionalInfo {
   overview: string,
   runtime: number,
   countries: string[],
+  tagline: string,
 }
 
 export type DataAction = setData
@@ -39,6 +40,7 @@ export interface IAdditionalInfoResponse {
   overview: string,
   runtime?: number,
   production_countries?: { name: string }[],
+  tagline?: string,
 }
 
 export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse {
@@ -52,6 +54,7 @@ export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse
   release_date?: string,
   first_air_date?: string,
   vote_average?: number,
+  number_of_seasons?: number,
 }
 
 export type MediaTypeFilterTitle = 'All' | 'Movies' | 'Series'

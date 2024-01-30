@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
-import { ILink, IPreviewDataItem } from '../types/search'
+import { ILink, IPreviewDataItem, MediaType } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import { changeImageSizePath } from '../utils/changeImageSizePath'
 import DataListManager from '../UI/DataListManager'
@@ -70,8 +70,8 @@ const DataItem = () => {
 
   useEffect(() => {
     const timeLoadingTimeout = setTimeout(() => {
-      setTimeLoading(prev => prev + 2500)
-    }, 2500)
+      setTimeLoading(prev => prev + 500)
+    }, 500)
     if (item) {
       clearTimeout(timeLoadingTimeout)
       return;
@@ -80,7 +80,9 @@ const DataItem = () => {
       toast.error('No data found')
       navigate('/')
     }
-    return () => clearTimeout(timeLoadingTimeout)
+    return () => {
+      clearTimeout(timeLoadingTimeout)
+    }
   }, [timeLoading, item, navigate])
 
   useEffect(() => {
@@ -129,10 +131,10 @@ const DataItem = () => {
     if (!id || !mediaType) {
       return;
     }
-    if (timeLoading === 2500 && !item) {
+    if (timeLoading === 500 && !item) {
       fetchDataByDataIdAndMediaType({
         id: +id,
-        mediaType,
+        mediaType: mediaType as MediaType,
         setItem,
         setAdditionalInfo
       })
@@ -180,13 +182,18 @@ const DataItem = () => {
         </div>
         <div className='overflow-hidden'>
           <div
-            className='inline-block text-2xl xs:text-3xl font-medium mb-1 xs:mb-3 select-none hover:cursor-pointer leading-tight'
+            className='inline-block text-2xl xs:text-3xl mb-1 font-bold select-none hover:cursor-pointer leading-tight'
             onClick={onCopyTitle}
           >
             {item.title}
           </div>
+          {additionalInfo && !!additionalInfo.tagline.length && (
+            <div className='font-medium leading-tight sm:leading-normal'>
+              <span className='text-zinc-400'>Slogan: </span>"{additionalInfo.tagline}"
+            </div>
+          )}
           {additionalInfo && !!additionalInfo.genres.length && (
-            <div className='font-medium'>
+            <div className='font-medium leading-tight sm:leading-normal'>
               <span className='text-zinc-400'>Genres: </span>{additionalInfo.genres.join(', ')}
             </div>
           )}
@@ -195,18 +202,22 @@ const DataItem = () => {
               <span className='text-zinc-400'>Countries: </span>{additionalInfo.countries.join(', ')}
             </div>
           )}
-          <div className='font-medium'>
-            <span className='text-zinc-400'>Vote: </span>{formatVote(item.vote)}
-          </div>
+          {item && item.vote !== undefined && (
+            <div className='font-medium'>
+              <span className='text-zinc-400'>Vote: </span>{formatVote(item.vote)}
+            </div>
+          )}
           {additionalInfo && !!additionalInfo.runtime && (
             <div className='font-medium'>
               <span className='text-zinc-400'>Runtime: </span>{formatMinToHours(additionalInfo.runtime)}
             </div>
           )}
-          <div className='font-medium'>
-            <span className='text-zinc-400'>Release date: </span>{item.releaseDate}
-          </div>
-          {additionalInfo && additionalInfo.overview && (
+          {item && !!item.releaseDate.length && (
+            <div className='font-medium'>
+              <span className='text-zinc-400'>Release date: </span>{item.releaseDate}
+            </div>
+          )}
+          {additionalInfo && !!additionalInfo.overview.length && (
             <div className='font-medium leading-tight sm:leading-normal'>
               <span className='text-zinc-400'>Overview: </span>{additionalInfo.overview}
             </div>

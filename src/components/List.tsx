@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import PreviewItem from './PreviewItem'
-import { useNavigate } from 'react-router-dom'
-import { MediaType } from '../types/search'
 import { MediaTypeFilterOptions } from '../types/data'
 
 interface IListProps {
@@ -13,7 +11,6 @@ interface IListProps {
 
 const List = ({ listId, filterByTitle, mediaTypeFilter }: IListProps) => {
   const { data } = useTypedSelector(state => state.data)
-  const navigate = useNavigate()
   const sortedData = useMemo(() => {
     const trimmedFilterByTitle = filterByTitle.trim().toLowerCase()
     const sortedByListId = data.filter(item => !!item.inLists[listId])
@@ -25,10 +22,6 @@ const List = ({ listId, filterByTitle, mediaTypeFilter }: IListProps) => {
       : sortedByMediaType
     return [...sortedByTitle].sort((a, b) => +new Date(b.inLists[listId] || 0) - +new Date(a.inLists[listId] || 0))
   }, [data, listId, filterByTitle, mediaTypeFilter])
-
-  const onPreviewItemClick = (mediaType: MediaType, dataId: number) => {
-    navigate(`/data/${mediaType}/${dataId}`)
-  }
 
   if (!sortedData.length) {
     return <div className='flex-1 text-center text-xl font-medium py-6'>
@@ -43,7 +36,6 @@ const List = ({ listId, filterByTitle, mediaTypeFilter }: IListProps) => {
       {sortedData.map(item => (
         <PreviewItem
           item={item}
-          onItemClick={onPreviewItemClick}
           sitesResults={item.links}
           key={item.id}
         />

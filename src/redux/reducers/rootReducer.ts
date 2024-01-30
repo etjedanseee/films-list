@@ -4,6 +4,7 @@ import { listsReducer } from './listsReducer'
 import { sitesReducer } from './sitesReducer'
 import { searchReducer } from './searchReducer'
 import { dataReducer } from './dataReducer'
+import { discoverReducer } from './discoverReducer'
 
 export const rootReducer = combineReducers({
   auth: authReducer,
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
   sites: sitesReducer,
   search: searchReducer,
   data: dataReducer,
+  discover: discoverReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

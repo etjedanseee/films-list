@@ -1,20 +1,13 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import Loader from '../UI/Loader'
 import PreviewItem from '../components/PreviewItem'
 import { useActions } from '../hooks/useActions'
 import { searchDataInfo } from '../API/searchDataInfo'
-import { MediaType } from '../types/search'
 
 const SearchResults = () => {
   const { loading, results, page, totalPages, lastSearch } = useTypedSelector(state => state.search)
-  const navigate = useNavigate()
-  const { setSearchPage, setLoading, setResults, setSearchTotalPages } = useActions()
-
-  const onPreviewItemClick = (mediaType: MediaType, dataId: number) => {
-    navigate(`/data/${mediaType}/${dataId}`)
-  }
+  const { setSearchPage, setSearchLoading, setSearchResults, setSearchTotalPages } = useActions()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,8 +27,8 @@ const SearchResults = () => {
           searchDataInfo({
             title: lastSearch,
             page: page + 1,
-            setLoading,
-            setResults,
+            setLoading: setSearchLoading,
+            setSearchResults,
             setSearchTotalPages,
           })
           setSearchPage(page + 1);
@@ -67,12 +60,12 @@ const SearchResults = () => {
           <div className='text-xl font-medium mt-3'>No results found. Note: try search in English.</div>
         )
       }
-      <div className='w-full grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8
-      items-stretch justify-center md:justify-normal gap-x-3 gap-y-3'>
+      <div className={`w-full grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6
+          2xl:grid-cols-7 3xl:grid-cols-8 items-stretch justify-center md:justify-normal gap-x-3 gap-y-3
+        `}>
         {!!results.length && results.map(res => (
           <PreviewItem
             item={res}
-            onItemClick={onPreviewItemClick}
             key={res.dataId + res.title + res.fullPosterUrl + res.releaseDate + res.mediaType}
           />
         ))}

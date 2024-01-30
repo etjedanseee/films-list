@@ -32,6 +32,7 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
       overview: data?.overview,
       runtime: data?.runtime ?? 0,
       countries: data?.production_countries?.map(country => country.name) || [],
+      tagline: data?.tagline || '',
     })
   } catch (e) {
     console.error('Error fetch dataInfo', e)

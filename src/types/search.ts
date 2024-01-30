@@ -50,15 +50,15 @@ export interface ISearchDataOnSitesResponse {
 }
 
 export enum SearchActionTypes {
-  SET_RESULTS = 'SET_RESULTS',
-  SET_LOADING = 'SET_LOADING',
+  SET_SEARCH_RESULTS = 'SET_SEARCH_RESULTS',
+  SET_SEARCH_LOADING = 'SET_SEARCH_LOADING',
   SET_LAST_SEARCH = 'SET_LAST_SEARCH',
-  SET_PAGE = 'SET_PAGE',
-  SET_TOTAL_PAGES = 'SET_TOTAL_PAGES',
+  SET_SEARCH_PAGE = 'SET_SEARCH_PAGE',
+  SET_SEARCH_TOTAL_PAGES = 'SET_SEARCH_TOTAL_PAGES',
 }
 
 interface setResults {
-  type: SearchActionTypes.SET_RESULTS,
+  type: SearchActionTypes.SET_SEARCH_RESULTS,
   payload: {
     results: IPreviewDataItem[],
     page: number,
@@ -66,7 +66,7 @@ interface setResults {
 }
 
 interface setLoading {
-  type: SearchActionTypes.SET_LOADING,
+  type: SearchActionTypes.SET_SEARCH_LOADING,
   payload: boolean,
 }
 
@@ -76,12 +76,12 @@ interface setLastSearch {
 }
 
 interface setPage {
-  type: SearchActionTypes.SET_PAGE,
+  type: SearchActionTypes.SET_SEARCH_PAGE,
   payload: number,
 }
 
 interface setTotalPages {
-  type: SearchActionTypes.SET_TOTAL_PAGES,
+  type: SearchActionTypes.SET_SEARCH_TOTAL_PAGES,
   payload: number,
 }
 

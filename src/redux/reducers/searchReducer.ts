@@ -10,13 +10,13 @@ const initialState: SearchState = {
 
 export const searchReducer = (state = initialState, action: SearchAction): SearchState => {
   switch (action.type) {
-    case SearchActionTypes.SET_LOADING: {
+    case SearchActionTypes.SET_SEARCH_LOADING: {
       return {
         ...state,
         loading: action.payload
       }
     }
-    case SearchActionTypes.SET_RESULTS: {
+    case SearchActionTypes.SET_SEARCH_RESULTS: {
       const results = action.payload.results
       const filteredResults = action.payload.page === 1
         ? results
@@ -37,14 +37,14 @@ export const searchReducer = (state = initialState, action: SearchAction): Searc
         lastSearch: action.payload
       }
     }
-    case SearchActionTypes.SET_PAGE: {
+    case SearchActionTypes.SET_SEARCH_PAGE: {
       localStorage.setItem('page', action.payload.toString())
       return {
         ...state,
         page: action.payload
       }
     }
-    case SearchActionTypes.SET_TOTAL_PAGES: {
+    case SearchActionTypes.SET_SEARCH_TOTAL_PAGES: {
       localStorage.setItem('totalPages', action.payload.toString())
       return {
         ...state,

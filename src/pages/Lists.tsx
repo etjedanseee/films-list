@@ -144,7 +144,7 @@ const Lists = () => {
             value={filterByTitle}
             onInputChange={onFilterByTitleChange}
             placeholder='Filter by title'
-            name='Filter'
+            name='Filter by title'
             error=''
             isFieldDirty={false}
             py='py-2'
@@ -166,8 +166,8 @@ const Lists = () => {
         )}
       </div>
       <div className='flex xl:gap-x-5 gap-x-3 min-h-full'>
-        <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[400px] overflow-y-auto min-w-[170px]
-            pt-1 pr-1
+        <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[400px] 
+            overflow-y-auto min-w-[170px] pt-1 pr-1
           `}>
           {!!lists.length && currentList && lists.slice(0, 3).map(list => (
             <li
@@ -219,7 +219,7 @@ const Lists = () => {
               </Droppable>
             </DragDropContext>
           ) : (
-            <Loader size='24' />
+            <Loader size='40' />
           )
           }
         </ul>

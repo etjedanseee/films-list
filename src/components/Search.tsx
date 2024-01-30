@@ -4,15 +4,14 @@ import { searchDataInfo } from '../API/searchDataInfo'
 import { useNavigate } from 'react-router-dom'
 import { useActions } from '../hooks/useActions'
 import { useTypedSelector } from '../hooks/useTypedSelector'
-import Loader from '../UI/Loader'
 
 const Search = () => {
   const [search, setSearch] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const lastSearchRef = useRef('')
   const navigate = useNavigate()
-  const { loading, lastSearch } = useTypedSelector(state => state.search)
-  const { setResults, setLoading, setLastSearch, setSearchTotalPages, setSearchPage } = useActions()
+  const { lastSearch } = useTypedSelector(state => state.search)
+  const { setSearchResults, setSearchLoading, setLastSearch, setSearchTotalPages, setSearchPage } = useActions()
 
   const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value)
@@ -29,8 +28,8 @@ const Search = () => {
         searchDataInfo({
           title: trimmedSearch,
           page: 1,
-          setLoading,
-          setResults,
+          setLoading: setSearchLoading,
+          setSearchResults,
           setSearchTotalPages,
         })
       }
@@ -82,9 +81,6 @@ const Search = () => {
         isCanClean
         onClean={onCleanSearch}
       />
-      {loading && (
-        <div className='flex justify-center items-center -mt-[2px]'><Loader size='36' /></div>
-      )}
     </form>
   )
 }
