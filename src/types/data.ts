@@ -31,6 +31,10 @@ export interface IDataAdditionalInfo {
   runtime: number,
   countries: string[],
   tagline: string,
+  belongsToCollection?: {
+    id: number,
+    name: string,
+  }
 }
 
 export type DataAction = setData
@@ -41,6 +45,10 @@ export interface IAdditionalInfoResponse {
   runtime?: number,
   production_countries?: { name: string }[],
   tagline?: string,
+  belongs_to_collection?: {
+    id: number,
+    name: string,
+  }
 }
 
 export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse {
@@ -61,4 +69,23 @@ export type MediaTypeFilterTitle = 'All' | 'Movies' | 'Series'
 export interface MediaTypeFilterOptions {
   title: MediaTypeFilterTitle,
   type: MediaType
+}
+
+export interface ICollection {
+  id: number,
+  name: string,
+  parts: IPreviewDataItem[],
+}
+
+export interface IFetchCollectionResponse {
+  id: number,
+  name: string,
+  parts: {
+    id: number,
+    title: string,
+    release_date?: string,
+    poster_path?: string,
+    backdrop_path?: string,
+    vote_average: number,
+  }[],
 }

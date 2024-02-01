@@ -16,6 +16,8 @@ import { toast } from 'react-toastify'
 import Loader from '../UI/Loader'
 import DataNotes from '../components/DataNotes'
 import { fetchDataByDataIdAndMediaType } from '../API/fetchDataByDataIdAndMediaType'
+import DataCollection from '../components/DataCollection'
+import { ReactComponent as StarIcon } from '../assets/star.svg'
 
 const DataItem = () => {
   const { id, mediaType } = useParams()
@@ -75,10 +77,19 @@ const DataItem = () => {
   }, [item])
 
   useEffect(() => {
+    setTimeLoading(0)
+    setItem(null)
+    setAdditionalInfo(null)
+    setInLists({})
+    setNotes('')
+    setSitesResults([])
+  }, [id])
+
+  useEffect(() => {
     const timeLoadingTimeout = setTimeout(() => {
       setTimeLoading(prev => prev + 500)
     }, 500)
-    if (item) {
+    if (item && id && item.dataId === +id) {
       clearTimeout(timeLoadingTimeout)
       return;
     }
@@ -89,7 +100,7 @@ const DataItem = () => {
     return () => {
       clearTimeout(timeLoadingTimeout)
     }
-  }, [timeLoading, item, navigate])
+  }, [timeLoading, item, navigate, id])
 
   useEffect(() => {
     if (!id) {
@@ -137,7 +148,7 @@ const DataItem = () => {
     if (!id || !mediaType) {
       return;
     }
-    if (timeLoading === 500 && !item) {
+    if (timeLoading === 500 && (+id !== item?.dataId || !item)) {
       fetchDataByDataIdAndMediaType({
         id: +id,
         mediaType: mediaType as MediaType,
@@ -209,8 +220,10 @@ const DataItem = () => {
             </div>
           )}
           {item && item.vote !== undefined && (
-            <div className='font-medium'>
-              <span className='text-zinc-400'>Vote: </span>{formatVote(item.vote)}
+            <div className='flex gap-x-1 items-center font-medium'>
+              <span className='text-zinc-400'>Vote: </span>
+              <div>{formatVote(item.vote)}</div>
+              <StarIcon className='h-6 w-6 -mt-[1px] fill-yellow-500' />
             </div>
           )}
           {additionalInfo && !!additionalInfo.runtime && (
@@ -294,6 +307,10 @@ const DataItem = () => {
           />
         </div>
       )}
+      <DataCollection
+        additionalInfo={additionalInfo}
+        dataId={item.dataId}
+      />
     </>
   )
 }

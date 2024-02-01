@@ -30,12 +30,18 @@ export const fetchDataByDataIdAndMediaType = async ({ id, mediaType, setAddition
     }
     const data: IPreviewDataWithAddInfoResponse = await response.json()
     const result = data.genres.map(genre => genre.name)
+    const belongsToCollectionId = data?.belongs_to_collection?.id
     setAdditionalInfo({
       genres: result,
       overview: data?.overview,
       runtime: data?.runtime ?? 0,
       countries: data?.production_countries?.map(country => country.name) || [],
       tagline: data?.tagline || '',
+      belongsToCollection: belongsToCollectionId !== undefined ? ({
+        id: belongsToCollectionId,
+        name: data?.belongs_to_collection?.name || '',
+      })
+        : undefined
     })
     const imageSize = posterSizes[2]
     const posterPath = data?.poster_path || data?.backdrop_path || '';
