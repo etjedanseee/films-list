@@ -110,11 +110,13 @@ const SitesManager = () => {
         {!!userSites.length && (
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId='sites'>
-              {provided => (
+              {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className='flex flex-col gap-y-2 font-medium'
+                  className={`flex flex-col gap-y-2 font-medium 
+                      ${snapshot.isDraggingOver ? 'border-myblue px-2 py-1 overflow-x-hidden border-2' : ''}
+                  `}
                 >
                   {userSites.map((site, index) => (
                     <Draggable

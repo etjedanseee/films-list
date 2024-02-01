@@ -134,7 +134,7 @@ const Lists = () => {
   }, [])
 
   return (
-    <div className='flex-1 py-2 xs:py-3 px-2 xs:px-4'>
+    <div className='flex-1 py-2 xs:py-3 px-2 xs:px-3'>
       <div className='flex items-center justify-between gap-x-3 xs:gap-x-8 mb-2 xs:mb-3'>
         <MediaTypeFilter
           mediaTypeFilter={mediaTypeFilter}
@@ -185,11 +185,13 @@ const Lists = () => {
           {currentList && !loading ? (
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId='lists'>
-                {provided => (
+                {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className='flex flex-col gap-y-2 font-medium'
+                    className={`flex flex-col gap-y-2 font-medium 
+                      ${snapshot.isDraggingOver ? 'border-myblue px-2 py-1 overflow-x-hidden border-2' : ''}
+                  `}
                   >
                     {!!additionalLists.length && additionalLists.map((list, index) => (
                       <Draggable
