@@ -35,28 +35,35 @@ const DataCollection = ({ additionalInfo, dataId }: DataCollectionProps) => {
   return (
     <>
       {collection && (
-        <div className='px-2 mt-3 pb-3'>
+        <div className='px-2 pb-3'>
           <div className='font-bold text-xl leading-tight mb-2'>{collection.name}:</div>
-          <div className='flex flex-col gap-y-1 px-3 bg-mygray2 rounded-md py-2'>
+          <div className='flex flex-col gap-y-1 xs:px-3 px-2 bg-mygray2 rounded-md xs:py-2 py-1'>
             {collection.parts.map((item, index) => (
               <NavLink
                 to={`/data/movie/${item.dataId}`}
-                className='flex items-center gap-x-4 font-medium'
+                className='flex items-center sm:gap-x-4 gap-x-2 font-medium'
                 key={`${item.dataId}-${item.fullPosterUrl}`}
               >
-                <div className='text-gray-300 min-w-[20px]'>{collection.parts.length - index}</div>
+                <div className='text-gray-300 xs:min-w-[20px] min-w-[14px] xs:text-base text-xs'>
+                  {collection.parts.length - index}
+                </div>
                 <div
-                  className={`flex-1 text-lg leading-none truncate 
+                  className={`flex-1 sm:text-lg xs:text-base text-xs leading-none truncate 
                     ${item.dataId === dataId && 'text-yellow-500'}
                   `}
                   title={item.title}
                 >
                   {item.title}
                 </div>
-                <div className='min-w-[85px]'>{item.releaseDate}</div>
-                <div className='flex gap-x-1 items-center'>
+                <div className='hidden sm:flex min-w-[100px] text-start'>
+                  {item.releaseDate.length ? item.releaseDate : '?'}
+                </div>
+                <div className='flex sm:hidden min-w-[32px] text-xs text-start'>
+                  {item.releaseDate.length ? item.releaseDate.slice(0, 4) : '?'}
+                </div>
+                <div className='hidden sm:flex gap-x-1 items-center'>
                   <StarIcon className='h-6 w-6 -mt-[1px] fill-yellow-500' />
-                  <div className='min-w-[30px]'>{formatVote(item.vote)}</div>
+                  <div className='min-w-[30px]'>{item.vote ? formatVote(item.vote) : '?'}</div>
                 </div>
               </NavLink>
             ))}

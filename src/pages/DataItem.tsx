@@ -83,6 +83,7 @@ const DataItem = () => {
     setInLists({})
     setNotes('')
     setSitesResults([])
+    setItemSbId(null)
   }, [id])
 
   useEffect(() => {
@@ -168,7 +169,9 @@ const DataItem = () => {
 
   return (
     <>
-      <div className='mt-3 px-2 flex flex-wrap justify-center md:justify-normal sm:flex-nowrap gap-x-4 md:gap-x-6 lg:gap-x-10'>
+      <div className={`mt-3 px-2 mb-2 flex flex-wrap justify-center md:justify-normal sm:flex-nowrap gap-x-4
+        md:gap-x-6 lg:gap-x-10
+      `}>
         <div className='self-start bg-mygray2 rounded-md p-3 lg:p-4 max-w-full mb-2 sm:mb-0'>
           <div className='m-auto'>
             <div className='relative'>
@@ -241,7 +244,7 @@ const DataItem = () => {
               <span className='text-zinc-400'>Overview: </span>{additionalInfo.overview}
             </div>
           )}
-          <div className='hidden md:block'>
+          <div className='hidden md:block mt-2'>
             {!!sitesResults.length || sitesLoading ?
               <Sites
                 loading={sitesLoading}
@@ -251,17 +254,16 @@ const DataItem = () => {
                 isNeedToUpdateDataLinks={isNeedToUpdateDataLinks}
               />
               : (
-                <div>
+                <div className='inline-block mt-3'>
                   <Button
                     onClick={onSearchOnSitesClick}
                     title='Search on sites'
-                    className='mt-6'
                   />
                 </div>
               )
             }
             {!!sitesResults.length && (
-              <div className='inline-block'>
+              <div className='inline-block mt-3'>
                 <Button
                   onClick={onSearchOnSitesClick}
                   title='Update results'
@@ -271,7 +273,7 @@ const DataItem = () => {
           </div>
         </div>
       </div>
-      <div className='block md:hidden px-2'>
+      <div className='block md:hidden px-2 mb-2'>
         {!!sitesResults.length || sitesLoading ?
           <Sites
             loading={sitesLoading}
@@ -284,7 +286,7 @@ const DataItem = () => {
             <Button
               onClick={onSearchOnSitesClick}
               title='Search on sites'
-              className='mt-6'
+              p='py-1 mt-1'
             />
           )
         }
@@ -293,13 +295,13 @@ const DataItem = () => {
             <Button
               onClick={onSearchOnSitesClick}
               title='Update results'
-              p='py-1 mb-1'
+              p='py-1 mt-3'
             />
           </div>
         )}
       </div>
       {!!Object.keys(inLists).length && (
-        <div className='px-2 mb-3 xs:mt-3 mt-1'>
+        <div className='px-2 xs:mb-3 mb-2'>
           <DataNotes
             id={itemSbId}
             dataNotes={notes}

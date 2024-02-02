@@ -18,10 +18,9 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, setS
     throw new Error('No google api key or engineId')
   }
   setLoading(true)
-  const numOfResponse = 10
   console.log(search, sites)
   const promises: Promise<Response>[] = sites.map(site => {
-    const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}&num=${numOfResponse}&exactTerms=${search}`;
+    const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}&num=10&exactTerms=${search}`;
     return fetch(url)
       .then(response => response.json())
       .catch(error => ({ error }))
@@ -46,7 +45,7 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, setS
           if (res?.items && res.items.length) {
             const items = res.items
             console.log('items for', sites[index], items)
-            const filteredItems = items.filter(i => i.snippet.toLowerCase().includes(lowerSearch))
+            const filteredItems = items.filter(i => i?.snippet?.toLowerCase().includes(lowerSearch))
               .sort((a, b) => {
                 const aRes = a.title.includes(year) || a.snippet.includes(year)
                 const bRes = b.title.includes(year) || b.snippet.includes(year)

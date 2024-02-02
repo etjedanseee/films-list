@@ -45,7 +45,15 @@ export const fetchCollection = async ({ collectionId, collectionName, setCollect
       }
       results.push(obj)
     }
-    const sortedResults = results.sort((a, b) => +new Date(b.releaseDate) - +new Date(a.releaseDate))
+    const sortedResults = results.sort((a, b) => {
+      const aDate = a.releaseDate
+      const bDate = b.releaseDate
+      if (!bDate.length) {
+        return 1
+      } else if (!aDate.length) {
+        return -1
+      } else return +new Date(b.releaseDate) - +new Date(a.releaseDate)
+    })
     setCollection({
       id: collectionId,
       name: collectionName,

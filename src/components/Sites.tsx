@@ -27,7 +27,7 @@ const Sites = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks }: Si
   }, [results, id, setLoading, isNeedToUpdateDataLinks, data])
 
   return (
-    <div className='my-2 sm:my-4'>
+    <div>
       {loading ? (
         <div className='flex flex-col gap-y-1'>
           {!!sites.length && sites.map(site => (
@@ -48,7 +48,14 @@ const Sites = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks }: Si
                   <RejectedIcon className='w-5 h-5 min-w-[20px] xs:h-7 xs:w-7 xs:min-w-[28px] fill-myred' />
                 )}
                 <div className='flex flex-col max-w-full overflow-hidden'>
-                  <div className='truncate'>{item.site}</div>
+                  <a
+                    className='truncate'
+                    href={'https://' + item.site}
+                    target='_blank'
+                    rel='noreferrer'
+                  >
+                    {item.site}
+                  </a>
                   {!!item.result && (
                     <a
                       className='underline truncate text-xs xs:text-sm md:text-base'
