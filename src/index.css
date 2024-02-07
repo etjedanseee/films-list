@@ -40,7 +40,7 @@ input:-webkit-autofill:active {
 
 ::-webkit-scrollbar {
   width: 7px;
-  background: white;
+  background: #161616;
 }
 ::-webkit-scrollbar-thumb {
   background: rgb(250, 204, 21);
