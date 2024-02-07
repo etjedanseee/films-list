@@ -1,15 +1,39 @@
 
-export const howSimilarStrings = (str1: string, str2: string) => {
-  const maxLength = Math.max(str1.length, str2.length);
-  const distance = levenshteinDistance(str1, str2);
-  return 1 - distance / maxLength;
+export const howSimilarStrings = (search: string, str: string): number => {
+  //?mb findIndex and check if i+1 !==letter
+  const isIncludes = str.includes(search)
+  if (isIncludes) {
+    return 1
+  }
+  const splittedSearch = search.split(/\s+/)
+  // console.log('s1,s2', splittedSearch[0], splittedSearch[splittedSearch.length - 1])
+
+  if (splittedSearch.length < 2) {
+    return 0
+  }
+  const lastWord = splittedSearch[splittedSearch.length - 1]
+  /*
+    if several 'the' need to find pos that continue phrase (if s[i+splittedSearch[1].length+1]===splittedSearch[1])
+    for loop where changes indexStart
+  */
+  const indexStart = str.indexOf(splittedSearch[0])
+  const indexEnd = str.indexOf(lastWord)
+  if (indexStart !== -1 && indexEnd !== -1 && indexStart < indexEnd) {
+    const searchInStr = str.slice(indexStart, indexEnd + lastWord.length)
+    const maxLength = Math.max(search.length, searchInStr.length);
+    const distance = levenshteinDistance(search, searchInStr);
+    const similarity = 1 - distance / maxLength;
+    console.log(`similarity ${similarity.toFixed(2)} for: ${search} || ${searchInStr}`)
+    return similarity
+  } else {
+    return 0
+  }
 }
 
 const levenshteinDistance = (str1: string, str2: string) => {
   const m = str1.length;
   const n = str2.length;
   const dp: number[][] = [];
-
   // Initialize the matrix
   for (let i = 0; i <= m; i++) {
     dp[i] = [];
@@ -23,7 +47,6 @@ const levenshteinDistance = (str1: string, str2: string) => {
       }
     }
   }
-
   // Fill in the matrix based on Levenshtein distance formula
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {

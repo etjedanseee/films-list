@@ -8,9 +8,6 @@ import { useActions } from './hooks/useActions';
 import Header from './UI/Header';
 import Loader from './UI/Loader';
 import { checkUserSession } from './API/checkUserSession';
-import { howSimilarStrings } from './utils/howSimilarStrings';
-import { findSubString } from './utils/findSubString';
-import { removeSymbolsFromString } from './utils/removeSymbolsFromString';
 
 function App() {
   const { user } = useTypedSelector(state => state.auth)
@@ -60,15 +57,6 @@ function App() {
       setLastSearch(lastSearch)
     }
   }, [])
-
-  //"The Hunger Games: The Ballad of Songbirds and Snakes. 6.9. Фільм 'Голодні ігри: Балада про співочих пташок і змій' постер. Збережено Зберегти. 136. Дякуємо за ..."
-  //"Голодные игры: Баллада о змеях и певчих птицах. The Hunger Games: The Ballad of Songbirds & Snakes. Смотреть Голодные игры: Баллада о змеях и певчих птицах ..."
-  //"Watch The Hunger Games: The Ballad of Songbirds & Snakes 2023 in full HD online, free The Hunger Games: The Ballad of Songbirds & Snakes streaming with ..."
-  //"The Hunger Games: The Ballad of Songbirds & Snakes full movie watch online on 123movies, watch The Hunger Games: The Ballad of Songbirds & Snakes movie ..."
-  // const str1 = 'The Hunger Games: The Ballad of Songbirds & Snakes'
-  // const str2 = "Голодные игры: Баллада о змеях и певчих птицах. The Hunger Games: The Ballad of Songbirds & Snakes. Смотреть Голодные игры: Баллада о змеях и певчих птицах ..."
-
-  // findSubString(removeSymbolsFromString(str1.toLowerCase()), removeSymbolsFromString(str2.toLowerCase()))
 
   if (isCheckingSession) {
     return (

@@ -176,14 +176,19 @@ const DataItem = () => {
         <div className='self-start bg-mygray2 rounded-lg p-3 max-w-full mb-2 sm:mb-0'>
           <div className='m-auto'>
             <div className='relative select-none'>
-              <div className='relative min-w-[280px] pb-[150%]'>
+              <a
+                href={changeImageSizePath(item.fullPosterUrl, 6)}
+                target='_blank'
+                rel="noreferrer"
+                className='relative block min-w-[280px] pb-[150%]'
+              >
                 <img
                   src={changeImageSizePath(item.fullPosterUrl) || noPicture}
                   className='absolute top-0 left-0 bg-cover w-full h-full'
                   alt="poster"
                   loading='lazy'
                 />
-              </div>
+              </a>
               <div className={`absolute top-0 left-0 px-3 py-2 
                 ${item.mediaType === 'movie' ? 'bg-myblue' : 'bg-pink-700'} text-sm select-none
               `}>
@@ -267,7 +272,7 @@ const DataItem = () => {
                 </div>
               )
             }
-            {!!sitesResults.length && (
+            {!!sitesResults.length && !sitesLoading && (
               <div className='inline-block mt-3'>
                 <Button
                   onClick={onSearchOnSitesClick}
@@ -296,7 +301,7 @@ const DataItem = () => {
             />
           )
         }
-        {!!sitesResults.length && (
+        {!!sitesResults.length && !sitesLoading && (
           <div>
             <Button
               onClick={onSearchOnSitesClick}

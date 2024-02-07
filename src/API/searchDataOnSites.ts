@@ -1,8 +1,8 @@
+import { howSimilarStrings } from './../utils/howSimilarStrings';
 import { removeSymbolsFromString } from './../utils/removeSymbolsFromString';
 import { IUserSearchApiSettings } from './../types/auth';
 import { toast } from 'react-toastify';
 import { ILink, ISearchDataOnSitesResponse } from './../types/search';
-import { findSubString } from '../utils/findSubString';
 
 interface ISearchDataOnSitesProps {
   searchApiSettings: IUserSearchApiSettings,
@@ -72,8 +72,8 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, setS
                   return true
                 }
                 const clearTitle = removeSymbolsFromString(lowerTitle)
-                const howSimilarSnippet = findSubString(clearTitle, clearSnippet)
-                const howSimilarResTitle = findSubString(clearTitle, clearResTitle)
+                const howSimilarSnippet = howSimilarStrings(clearTitle, clearSnippet)
+                const howSimilarResTitle = howSimilarStrings(clearTitle, clearResTitle)
                 if (howSimilarSnippet >= 0.9 || howSimilarResTitle >= 0.9) {
                   return true
                 }

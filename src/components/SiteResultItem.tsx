@@ -42,7 +42,7 @@ const SiteResultItem = ({ item, onUpdateSiteResult }: SiteResultItemProps) => {
   return (
     <div key={item.site} className='flex items-center gap-x-2 xs:gap-x-4'>
       {isEdit ? (
-        <div className='flex-1 flex items-start gap-x-2'>
+        <div className='mt-1 flex-1 flex items-start gap-x-2'>
           <Input
             value={editedLink}
             onInputChange={onEditedLinkChange}
