@@ -38,7 +38,8 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
         id: belongsToCollectionId,
         name: data?.belongs_to_collection?.name || '',
       })
-        : undefined
+        : undefined,
+      originalTitle: data?.original_title || data?.original_name || '',
     })
   } catch (e) {
     console.error('Error fetch dataInfo', e)

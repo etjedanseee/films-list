@@ -9,7 +9,7 @@ import { IDataAdditionalInfo, IInLists } from '../types/data'
 import { fetchDataAdditionalInfo } from '../API/fetchAdditionalDataInfo'
 import { formatMinToHours } from '../utils/formatMinToHours'
 import { searchDataOnSites } from '../API/searchDataOnSites'
-import Sites from '../components/Sites'
+import SitesResults from '../components/SitesResults'
 import Button from '../UI/Button'
 import { formatVote } from '../utils/formatVote'
 import { toast } from 'react-toastify'
@@ -50,6 +50,7 @@ const DataItem = () => {
         sites,
         setSitesResults,
         setLoading: setSitesLoading,
+        originalTitle: additionalInfo?.originalTitle || ''
       })
       isNeedToUpdateDataLinks.current = true
     }
@@ -172,9 +173,9 @@ const DataItem = () => {
       <div className={`mt-3 px-2 mb-2 flex flex-wrap justify-center md:justify-normal sm:flex-nowrap gap-x-4
         md:gap-x-6 lg:gap-x-10
       `}>
-        <div className='self-start bg-mygray2 rounded-md p-3 lg:p-4 max-w-full mb-2 sm:mb-0'>
+        <div className='self-start bg-mygray2 rounded-lg p-3 max-w-full mb-2 sm:mb-0'>
           <div className='m-auto'>
-            <div className='relative'>
+            <div className='relative select-none'>
               <div className='relative min-w-[280px] pb-[150%]'>
                 <img
                   src={changeImageSizePath(item.fullPosterUrl) || noPicture}
@@ -206,6 +207,9 @@ const DataItem = () => {
             onClick={onCopyTitle}
           >
             {item.title}
+            {additionalInfo && additionalInfo.originalTitle && additionalInfo.originalTitle !== item.title
+              && ` (${additionalInfo.originalTitle})`
+            }
           </div>
           {additionalInfo && !!additionalInfo.tagline.length && (
             <div className='font-medium leading-tight sm:leading-normal'>
@@ -246,12 +250,13 @@ const DataItem = () => {
           )}
           <div className='hidden md:block mt-2'>
             {!!sitesResults.length || sitesLoading ?
-              <Sites
+              <SitesResults
                 loading={sitesLoading}
                 setLoading={setSitesLoading}
                 results={sitesResults}
                 id={itemSbId}
                 isNeedToUpdateDataLinks={isNeedToUpdateDataLinks}
+                dataTitle={item.title}
               />
               : (
                 <div className='inline-block mt-3'>
@@ -275,12 +280,13 @@ const DataItem = () => {
       </div>
       <div className='block md:hidden px-2 mb-2'>
         {!!sitesResults.length || sitesLoading ?
-          <Sites
+          <SitesResults
             loading={sitesLoading}
             setLoading={setSitesLoading}
             results={sitesResults}
             id={itemSbId}
             isNeedToUpdateDataLinks={isNeedToUpdateDataLinks}
+            dataTitle={item.title}
           />
           : (
             <Button

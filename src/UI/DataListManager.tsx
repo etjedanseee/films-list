@@ -120,7 +120,7 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, note
         </>
       )
         : (
-          <div className='grid grid-cols-4 text-small tracking-tighter rounded-b-md bg-mygray3'>
+          <div className='grid grid-cols-4 text-small tracking-tighter rounded-b-md bg-mygray3 select-none'>
             <DataListManagetItem
               isDataInList={isDataInList(lists[0].id)}
               isHideListsTitles={isHideListsTitles}

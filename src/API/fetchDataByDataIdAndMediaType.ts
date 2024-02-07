@@ -41,7 +41,8 @@ export const fetchDataByDataIdAndMediaType = async ({ id, mediaType, setAddition
         id: belongsToCollectionId,
         name: data?.belongs_to_collection?.name || '',
       })
-        : undefined
+        : undefined,
+      originalTitle: data?.original_title || data?.original_name || '',
     })
     const imageSize = posterSizes[2]
     const posterPath = data?.poster_path || data?.backdrop_path || '';

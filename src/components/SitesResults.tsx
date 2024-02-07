@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { ILink } from '../types/search'
-import { ReactComponent as RejectedIcon } from '../assets/cancel.svg'
-import { ReactComponent as SuccessIcon } from '../assets/success.svg'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import Loader from '../UI/Loader'
 import { useActions } from '../hooks/useActions'
+import SiteResultItem from './SiteResultItem'
 
 interface SitesProps {
+  dataTitle: string,
   loading: boolean,
   setLoading: (b: boolean) => void,
   results: ILink[],
@@ -14,10 +14,27 @@ interface SitesProps {
   isNeedToUpdateDataLinks: React.MutableRefObject<boolean>,
 }
 
-const Sites = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks }: SitesProps) => {
+const SitesResults = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks, dataTitle }: SitesProps) => {
   const { sites } = useTypedSelector(state => state.sites)
   const { data } = useTypedSelector(state => state.data)
   const { updateDataLinksOnSb } = useActions()
+
+  const onSaveEditedResult = (site: string, updatedLink: string) => {
+    if (!id) {
+      return;
+    }
+    const editedResult: ILink = {
+      site,
+      result: {
+        title: dataTitle,
+        link: updatedLink,
+      }
+    }
+    const editedResults = [...results.map(res => res.site === site ? editedResult : res)]
+      .sort((a, b) => ((b?.result && 1) || 0) - ((a?.result && 1) || 0))
+    updateDataLinksOnSb(id, editedResults, setLoading, data)
+  }
+
 
   useEffect(() => {
     if (isNeedToUpdateDataLinks.current && id && results.length) {
@@ -27,7 +44,7 @@ const Sites = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks }: Si
   }, [results, id, setLoading, isNeedToUpdateDataLinks, data])
 
   return (
-    <div>
+    <div className='bg-inherit'>
       {loading ? (
         <div className='flex flex-col gap-y-1'>
           {!!sites.length && sites.map(site => (
@@ -41,33 +58,11 @@ const Sites = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks }: Si
         : (
           <div className='flex flex-col gap-y-1 max-w-full'>
             {!!results.length && results.map(item => (
-              <div key={item.site} className='flex items-center gap-x-2 xs:gap-x-4'>
-                {item.result ? (
-                  <SuccessIcon className='w-5 h-5 min-w-[20px] xs:h-7 xs:w-7 xs:min-w-[28px] fill-green-500' />
-                ) : (
-                  <RejectedIcon className='w-5 h-5 min-w-[20px] xs:h-7 xs:w-7 xs:min-w-[28px] fill-myred' />
-                )}
-                <div className='flex flex-col max-w-full overflow-hidden'>
-                  <a
-                    className='truncate'
-                    href={'https://' + item.site}
-                    target='_blank'
-                    rel='noreferrer'
-                  >
-                    {item.site}
-                  </a>
-                  {!!item.result && (
-                    <a
-                      className='underline truncate text-xs xs:text-sm md:text-base'
-                      href={item.result.link}
-                      target='_blank'
-                      rel='noreferrer'
-                    >
-                      {item.result.title}
-                    </a>
-                  )}
-                </div>
-              </div>
+              <SiteResultItem
+                item={item}
+                onUpdateSiteResult={onSaveEditedResult}
+                key={item.site}
+              />
             ))}
           </div>
         )}
@@ -75,4 +70,4 @@ const Sites = ({ results, loading, id, setLoading, isNeedToUpdateDataLinks }: Si
   )
 }
 
-export default Sites
+export default SitesResults

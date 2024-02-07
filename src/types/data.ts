@@ -34,7 +34,8 @@ export interface IDataAdditionalInfo {
   belongsToCollection?: {
     id: number,
     name: string,
-  }
+  },
+  originalTitle: string,
 }
 
 export type DataAction = setData
@@ -48,14 +49,14 @@ export interface IAdditionalInfoResponse {
   belongs_to_collection?: {
     id: number,
     name: string,
-  }
+  },
+  original_title?: string,
+  original_name?: string,
 }
 
 export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse {
   name?: string,
   title?: string,
-  original_title?: string,
-  original_name?: string,
   poster_path?: string,
   backdrop_path?: string,
   media_type?: MediaType,
