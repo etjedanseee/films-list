@@ -44,4 +44,5 @@ input:-webkit-autofill:active {
 }
 ::-webkit-scrollbar-thumb {
   background: rgb(250, 204, 21);
+  border-radius: 0.3rem;
 }

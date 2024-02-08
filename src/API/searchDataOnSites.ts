@@ -1,3 +1,4 @@
+import { isIncludesEntirely } from './../utils/isIncludesEntirely';
 import { howSimilarStrings } from './../utils/howSimilarStrings';
 import { removeSymbolsFromString } from './../utils/removeSymbolsFromString';
 import { IUserSearchApiSettings } from './../types/auth';
@@ -29,12 +30,11 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, setS
   console.log('titlesToUrl', titlesToUrl)
   setLoading(true)
   console.log(search, search.length, sites)
-  //if <2 words or <n (10) length orTerms
   const orTerms = search.length < 10 ? `&orTerms=${titlesToUrl}` : ''
   const promises: Promise<Response>[] = sites.map(site => {
     // const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}&orTerms=${titlesToUrl}`;
-    const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}${orTerms}`;
-    // const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}`;
+    // const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}${orTerms}`;
+    const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}`;
     return fetch(url)
       .then(response => response.json())
       .catch(error => ({ error }))
@@ -68,7 +68,7 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, setS
               const clearResTitle = removeSymbolsFromString(lowerResTitle)
               for (let title of titles) {
                 const lowerTitle = title.toLowerCase()
-                if (lowerSnippet.includes(lowerTitle) || lowerResTitle.includes(lowerTitle)) {
+                if (isIncludesEntirely(lowerTitle, lowerSnippet) || isIncludesEntirely(lowerTitle, lowerResTitle)) {
                   return true
                 }
                 const clearTitle = removeSymbolsFromString(lowerTitle)
@@ -79,18 +79,15 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, setS
                 }
               }
               return false
+            }).sort((a, b) => {
+              const aIncludesYear = a.title.includes(year) || a.snippet.includes(year) ? 2 : 0
+              const aTitleIncludesSearch = isIncludesEntirely(search.toLowerCase(), a.title.toLowerCase()) ? 1 : 0
+              const bIncludesYear = b.title.includes(year) || b.snippet.includes(year) ? 2 : 0
+              const bTitleIncludesSearch = isIncludesEntirely(search.toLowerCase(), b.title.toLowerCase()) ? 1 : 0
+              const aScore = aIncludesYear + aTitleIncludesSearch
+              const bScore = bIncludesYear + bTitleIncludesSearch
+              return bScore - aScore
             })
-              .sort((a, b) => {
-                const aTitleIncludesYear = a.title.includes(year) ? 1 : 0
-                const aSnippetIncludeslYear = a.snippet.includes(year) ? 1 : 0
-                const aTitleIncludesSearch = a.title.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
-                const bTitleIncludesYear = b.title.includes(year) ? 1 : 0
-                const bSnippetIncludeslYear = b.snippet.includes(year) ? 1 : 0
-                const bTitleIncludesSearch = b.title.toLowerCase().includes(search.toLowerCase()) ? 1 : 0
-                const aScore = aTitleIncludesYear + aSnippetIncludeslYear + aTitleIncludesSearch
-                const bScore = bTitleIncludesYear + bSnippetIncludeslYear + bTitleIncludesSearch
-                return bScore - aScore
-              })
             console.log('filteredItems for', sites[index], filteredItems)
             if (filteredItems.length) {
               results[index] = {

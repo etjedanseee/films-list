@@ -235,7 +235,7 @@ const Lists = () => {
         )}
       </div>
       <ArrowDownIcon
-        className={`md:hidden fixed bottom-3 right-3 rotate-180 pt-[2px] fill-white w-8 h-8 rounded-full border-[1px] 
+        className={`md:hidden z-10 fixed bottom-3 right-3 rotate-180 pt-[2px] fill-white w-8 h-8 rounded-full border-[1px] 
           border-gray-300 bg-bg1
         `}
         onClick={() => scrollToCoord(0, 0)}

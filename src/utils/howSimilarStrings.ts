@@ -1,13 +1,11 @@
+import { isIncludesEntirely } from "./isIncludesEntirely"
 
 export const howSimilarStrings = (search: string, str: string): number => {
-  //?mb findIndex and check if i+1 !==letter
-  const isIncludes = str.includes(search)
-  if (isIncludes) {
+  if (isIncludesEntirely(search, str)) {
     return 1
   }
   const splittedSearch = search.split(/\s+/)
   // console.log('s1,s2', splittedSearch[0], splittedSearch[splittedSearch.length - 1])
-
   if (splittedSearch.length < 2) {
     return 0
   }
