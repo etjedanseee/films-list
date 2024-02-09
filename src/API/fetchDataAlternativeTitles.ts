@@ -1,5 +1,17 @@
 import { MediaType } from "../types/search"
 
+interface fetchDataAlternativeTitlesResponse {
+  id: number,
+  titles?: {
+    iso_3166_1: string,
+    title: string,
+  }[],
+  results?: {
+    iso_3166_1: string,
+    title: string,
+  }[],
+}
+
 interface fetchDataAlternativeTitlesProps {
   mediaType: MediaType,
   dataId: number,
@@ -23,9 +35,18 @@ export const fetchDataAlternativeTitles = async ({ mediaType, dataId, setLoading
   setLoading(true)
   try {
     const response = await fetch(`${url}?language=en-US`, options)
-    console.log('altern titles', response)
+    const data: fetchDataAlternativeTitlesResponse = await response.json()
+    const titles: string[] = []
+    const alternativeTitles = data?.titles || data?.results || []
+    for (const item of alternativeTitles) {
+      if (!titles.includes(item.title)) {
+        titles.push(item.title)
+      }
+    }
+    return titles
   } catch (e) {
     console.error('Error fetch alternative titles:', e)
+    return []
   } finally {
     setLoading(false)
   }

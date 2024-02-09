@@ -3,11 +3,14 @@ import { howSimilarStrings } from './../utils/howSimilarStrings';
 import { removeSymbolsFromString } from './../utils/removeSymbolsFromString';
 import { IUserSearchApiSettings } from './../types/auth';
 import { toast } from 'react-toastify';
-import { ILink, ISearchDataOnSitesResponse } from './../types/search';
+import { ILink, ISearchDataOnSitesResponse, MediaType } from './../types/search';
+import { fetchDataAlternativeTitles } from './fetchDataAlternativeTitles';
 
 interface ISearchDataOnSitesProps {
   searchApiSettings: IUserSearchApiSettings,
   sites: string[],
+  dataId: number,
+  mediaType: MediaType,
   search: string,
   year: string,
   setSitesResults: (results: ILink[]) => void,
@@ -15,24 +18,26 @@ interface ISearchDataOnSitesProps {
   originalTitle: string,
 }
 
-export const searchDataOnSites = async ({ searchApiSettings, search, sites, setSitesResults, setLoading, year, originalTitle }: ISearchDataOnSitesProps) => {
+export const searchDataOnSites = async ({ searchApiSettings, search, sites, dataId, mediaType, setSitesResults, setLoading, year, originalTitle }: ISearchDataOnSitesProps) => {
   const endUrl = 'https://www.googleapis.com/customsearch/v1'
   const { searchApiKey: apiKey, searchEngineId: cx } = searchApiSettings
   if (!apiKey || !cx) {
     throw new Error('No google api key or engineId')
   }
-  //mb add alternative titles
   const titles = [search]
   if (originalTitle && originalTitle !== search) {
     titles.push(originalTitle)
   }
-  const titlesToUrl = titles.map(title => encodeURIComponent(title)).join(',')
-  console.log('titlesToUrl', titlesToUrl)
   setLoading(true)
+  const alternativeTitles = await fetchDataAlternativeTitles({ dataId, mediaType, setLoading: () => { }, })
+  titles.push(...alternativeTitles)
+  console.log('titles', titles)
+  //titles.slice(0,n)
+  const titlesToUrl = titles.map(title => encodeURIComponent(title)).join(',')
+  // console.log('titlesToUrl', titlesToUrl)
   console.log(search, search.length, sites)
   const orTerms = search.length < 10 ? `&orTerms=${titlesToUrl}` : ''
   const promises: Promise<Response>[] = sites.map(site => {
-    // const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}&orTerms=${titlesToUrl}`;
     // const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}${orTerms}`;
     const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}`;
     return fetch(url)

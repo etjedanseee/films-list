@@ -28,7 +28,7 @@ const SiteResultItem = ({ item, onUpdateSiteResult }: SiteResultItemProps) => {
       if (editedLink !== item.result?.link) {
         onUpdateSiteResult('save', item.site, editedLink)
       }
-    } else {
+    } else if (item.result?.link) {
       onUpdateSiteResult('delete', item.site, editedLink)
     }
     handleIsEdit()

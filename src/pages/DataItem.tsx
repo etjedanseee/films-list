@@ -45,6 +45,8 @@ const DataItem = () => {
     if (item && sites.length) {
       searchDataOnSites({
         searchApiSettings: user.metaData.searchApiSettings,
+        dataId: item.dataId,
+        mediaType: item.mediaType,
         search: item.title,
         year: item.releaseDate.slice(0, 4),
         sites,
