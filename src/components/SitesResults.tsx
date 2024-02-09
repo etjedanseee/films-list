@@ -19,16 +19,19 @@ const SitesResults = ({ results, loading, id, setLoading, isNeedToUpdateDataLink
   const { data } = useTypedSelector(state => state.data)
   const { updateDataLinksOnSb } = useActions()
 
-  const onSaveEditedResult = (site: string, updatedLink: string) => {
+  const onSaveEditedResult = (type: 'save' | 'delete', site: string, updatedLink: string) => {
     if (!id) {
       return;
     }
-    const editedResult: ILink = {
+    const editedResult: ILink = type === 'save' ? {
       site,
       result: {
         title: dataTitle,
         link: updatedLink,
       }
+    } : {
+      site,
+      result: null,
     }
     const editedResults = [...results.map(res => res.site === site ? editedResult : res)]
       .sort((a, b) => ((b?.result && 1) || 0) - ((a?.result && 1) || 0))

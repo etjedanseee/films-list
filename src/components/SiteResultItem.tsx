@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { ILink } from '../types/search'
 import { ReactComponent as RejectedIcon } from '../assets/cancel.svg'
 import { ReactComponent as SuccessIcon } from '../assets/success.svg'
@@ -8,12 +8,12 @@ import Button from '../UI/Button'
 
 interface SiteResultItemProps {
   item: ILink,
-  onUpdateSiteResult: (site: string, updatedLink: string) => void,
+  onUpdateSiteResult: (type: 'save' | 'delete', site: string, updatedLink: string) => void,
 }
 
 const SiteResultItem = ({ item, onUpdateSiteResult }: SiteResultItemProps) => {
   const [isEdit, setIsEdit] = useState(false)
-  const [editedLink, setEditedLink] = useState(item.result?.link || '')
+  const [editedLink, setEditedLink] = useState('')
 
   const handleIsEdit = () => {
     setIsEdit(prev => !prev)
@@ -24,20 +24,20 @@ const SiteResultItem = ({ item, onUpdateSiteResult }: SiteResultItemProps) => {
   }
 
   const onSaveEdit = () => {
-    if (editedLink.length && editedLink !== item.result?.link) {
-      onUpdateSiteResult(item.site, editedLink)
+    if (editedLink.length) {
+      if (editedLink !== item.result?.link) {
+        onUpdateSiteResult('save', item.site, editedLink)
+      }
+    } else {
+      onUpdateSiteResult('delete', item.site, editedLink)
     }
     handleIsEdit()
   }
 
   const onCancelEdit = () => {
-    setEditedLink(item.result?.link || '')
+    setEditedLink('')
     handleIsEdit()
   }
-
-  useEffect(() => {
-    setEditedLink(item.result?.link || '')
-  }, [item])
 
   return (
     <div key={item.site} className='flex items-center gap-x-2 xs:gap-x-4'>
@@ -47,7 +47,7 @@ const SiteResultItem = ({ item, onUpdateSiteResult }: SiteResultItemProps) => {
             value={editedLink}
             onInputChange={onEditedLinkChange}
             autoFocus
-            error={editedLink.length ? '' : 'Link is required'}
+            error={''}
             placeholder='Enter link url'
             name='Link'
             isFieldDirty
@@ -59,7 +59,6 @@ const SiteResultItem = ({ item, onUpdateSiteResult }: SiteResultItemProps) => {
               title='Save'
               onClick={onSaveEdit}
               p='py-1'
-              disabled={!editedLink.length}
             />
           </div>
           <div className='inline-flex'>
