@@ -52,7 +52,7 @@ const DataItem = () => {
         sites,
         setSitesResults,
         setLoading: setSitesLoading,
-        originalTitle: additionalInfo?.originalTitle || ''
+        originalTitle: additionalInfo?.originalTitle || '',
       })
       isNeedToUpdateDataLinks.current = true
     }
@@ -107,14 +107,14 @@ const DataItem = () => {
   }, [timeLoading, item, navigate, id])
 
   useEffect(() => {
-    if (!id) {
+    if (!id || !mediaType) {
       return;
     }
-    const findItem = results.find(r => r.dataId === +id)
+    const findItem = results.find(res => res.dataId === +id && res.mediaType === mediaType)
     if (findItem) {
       setItem(findItem)
     }
-  }, [id, results])
+  }, [id, mediaType, results])
 
   useEffect(() => {
     if (item && !additionalInfo) {
@@ -157,7 +157,7 @@ const DataItem = () => {
         id: +id,
         mediaType: mediaType as MediaType,
         setItem,
-        setAdditionalInfo
+        setAdditionalInfo,
       })
     }
   }, [timeLoading, item, id, mediaType])
@@ -213,8 +213,7 @@ const DataItem = () => {
             className='inline-block text-2xl xs:text-3xl mb-1 font-bold select-none hover:cursor-pointer leading-tight'
             onClick={onCopyTitle}
           >
-            {item.title}
-            {additionalInfo && additionalInfo.originalTitle && additionalInfo.originalTitle !== item.title
+            {item.title}{additionalInfo && additionalInfo.originalTitle && additionalInfo.originalTitle !== item.title
               && ` (${additionalInfo.originalTitle})`
             }
           </div>

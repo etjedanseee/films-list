@@ -1,31 +1,37 @@
+import { allStringMatchesIndexes } from "./allStringMatchesIndexes"
 import { isIncludesEntirely } from "./isIncludesEntirely"
 
 export const howSimilarStrings = (search: string, str: string): number => {
+  if (!search || !str) {
+    return 0
+  }
   if (isIncludesEntirely(search, str)) {
     return 1
   }
   const splittedSearch = search.split(/\s+/)
-  // console.log('s1,s2', splittedSearch[0], splittedSearch[splittedSearch.length - 1])
   if (splittedSearch.length < 2) {
     return 0
   }
+  const firstWord = splittedSearch[0]
   const lastWord = splittedSearch[splittedSearch.length - 1]
-  /*
-    if several 'the' need to find pos that continue phrase (if s[i+splittedSearch[1].length+1]===splittedSearch[1])
-    for loop where changes indexStart
-  */
-  const indexStart = str.indexOf(splittedSearch[0])
-  const indexEnd = str.indexOf(lastWord)
-  if (indexStart !== -1 && indexEnd !== -1 && indexStart < indexEnd) {
-    const searchInStr = str.slice(indexStart, indexEnd + lastWord.length)
-    const maxLength = Math.max(search.length, searchInStr.length);
-    const distance = levenshteinDistance(search, searchInStr);
-    const similarity = 1 - distance / maxLength;
-    console.log(`similarity ${similarity.toFixed(2)} for: ${search} || ${searchInStr}`)
-    return similarity
-  } else {
-    return 0
+  const startIndexes = allStringMatchesIndexes(firstWord, str)
+  const endIndexes = allStringMatchesIndexes(lastWord, str)
+  for (const startIndex of startIndexes) {
+    for (const endIndex of endIndexes) {
+      if (endIndex <= startIndex) {
+        continue
+      }
+      const searchInStr = str.slice(startIndex, endIndex + lastWord.length)
+      const maxLength = Math.max(search.length, searchInStr.length);
+      const distance = levenshteinDistance(search, searchInStr);
+      const similarity = 1 - distance / maxLength;
+      // console.log(`similarity ${similarity.toFixed(2)} for: ${search} || ${searchInStr}`)
+      if (similarity >= 0.9) {
+        return similarity
+      }
+    }
   }
+  return 0
 }
 
 const levenshteinDistance = (str1: string, str2: string) => {
