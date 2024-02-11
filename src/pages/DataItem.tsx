@@ -303,11 +303,11 @@ const DataItem = () => {
           )
         }
         {!!sitesResults.length && !sitesLoading && (
-          <div>
+          <div className='mt-3'>
             <Button
               onClick={onSearchOnSitesClick}
               title='Update results'
-              p='py-1 mt-3'
+              p='py-1'
             />
           </div>
         )}

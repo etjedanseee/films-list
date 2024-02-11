@@ -1,8 +1,9 @@
+import { escapeRegExp } from './escapeRegeExp';
 export const allStringMatchesIndexes = (search: string, str: string): number[] => {
   if (!search.length || !str.length) {
     return []
   }
-  const regex = new RegExp(search, 'g');
+  const regex = new RegExp(escapeRegExp(search), 'g');
   let matches: RegExpExecArray | null;
   const indexes: number[] = [];
   while ((matches = regex.exec(str)) !== null) {

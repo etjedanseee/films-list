@@ -55,19 +55,12 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
   const alternativeTitles = await fetchDataAlternativeTitles({ dataId, mediaType, setLoading: () => { }, })
   const titles = Array.from(new Set([...defaultTitles, ...alternativeTitles]))
   console.log('titles', titles)
-  const titlesToUrl = titles.slice(0, 3).map(title => encodeURIComponent(title)).join(',')
-  // console.log('titlesToUrl', titlesToUrl)
-  console.log(search, search.length, sites)
-  const orTerms = search.length < 10 ? `&orTerms=${titlesToUrl}` : ''
   const promises: Promise<Response>[] = sites.map(site => {
-    // const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}&orTerms=${titlesToUrl}`;
-    // const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}${orTerms}`;
     const url = `${endUrl}?key=${apiKey}&cx=${cx}&siteSearch=${site}&q=${search}`;
     return fetch(url)
       .then(response => response.json())
       .catch(error => ({ error }))
   })
-
   const results: ILink[] = sites.map(site => ({ site, result: null }))
   try {
     const responses = await Promise.allSettled(promises);
@@ -89,10 +82,7 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
               const lowerSnippet = item?.snippet?.toLowerCase() || ''
               const lowerResTitle = item?.title?.toLowerCase() || ''
               if (!lowerSnippet.length && !lowerResTitle.length) {
-                return {
-                  ...item,
-                  found: null,
-                }
+                return { ...item, found: null }
               }
               const clearSnippet = removeSymbolsFromString(lowerSnippet)
               const clearResTitle = removeSymbolsFromString(lowerResTitle)
@@ -106,42 +96,22 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
                 const lowerTitle = title.toLowerCase()
                 const includesYear = lowerResTitle.includes(year) ? 'title' : lowerSnippet.includes(year) ? 'snippet' : null
                 if (isIncludesEntirely(lowerTitle, lowerResTitle)) {
-                  foundedResults.push({
-                    place: 'title',
-                    title,
-                    similarity: 1,
-                    includesYear: includesYear,
-                  })
+                  foundedResults.push({ place: 'title', title, similarity: 1, includesYear })
                   continue
                 }
                 if (isIncludesEntirely(lowerTitle, lowerSnippet)) {
-                  foundedResults.push({
-                    place: 'snippet',
-                    title,
-                    similarity: 1,
-                    includesYear: includesYear,
-                  })
+                  foundedResults.push({ place: 'snippet', title, similarity: 1, includesYear })
                   continue
                 }
                 const clearTitle = removeSymbolsFromString(lowerTitle)
                 const howSimilarResTitle = howSimilarStrings(clearTitle, clearResTitle)
                 if (howSimilarResTitle >= 0.9) {
-                  foundedResults.push({
-                    place: 'title',
-                    title,
-                    similarity: howSimilarResTitle,
-                    includesYear: includesYear,
-                  })
+                  foundedResults.push({ place: 'title', title, similarity: howSimilarResTitle, includesYear })
                   continue
                 }
                 const howSimilarSnippet = howSimilarStrings(clearTitle, clearSnippet)
                 if (howSimilarSnippet >= 0.9) {
-                  foundedResults.push({
-                    place: 'snippet',
-                    title,
-                    similarity: howSimilarSnippet,
-                    includesYear: includesYear,
-                  })
+                  foundedResults.push({ place: 'snippet', title, similarity: howSimilarSnippet, includesYear })
                 }
               }
               if (foundedResults.length) {
@@ -154,16 +124,9 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
                   const bSim = b.similarity === 1 ? 1 : 0
                   return (bYear + bPlace + bSim) - (aYear + aPlace + aSim)
                 })
-                console.log('sorted foundResults', foundedResults)
-                return {
-                  ...item,
-                  found: foundedResults[0],
-                }
+                return { ...item, found: foundedResults[0] }
               }
-              return {
-                ...item,
-                found: null,
-              }
+              return { ...item, found: null }
             })
             const filteredItems = items.filter(item => !!item.found) as ISearchOnSitesFoundResults[]
             const sortedItems = filteredItems.sort((a, b) => {
@@ -189,10 +152,14 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
       }
       index++
     }
-    const sortedResults = results.sort((a, b) => ((b?.result && 1) || 0) - ((a?.result && 1) || 0))
-    setSitesResults(sortedResults)
+    if (!results.length) {
+      setSitesResults([])
+      return;
+    }
+    results.sort((a, b) => ((b?.result && 1) || 0) - ((a?.result && 1) || 0))
+    setSitesResults(results)
   } catch (error) {
-    console.error('Error during Promise.allSettled:', error);
+    console.error('Error during search on sites:', error);
   } finally {
     setLoading(false)
   }
