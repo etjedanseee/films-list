@@ -22,7 +22,6 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   const [listName, setListName] = useState(list.name)
   const [loading, setLoading] = useState(false)
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
-  const { user } = useTypedSelector(state => state.auth)
   const { lists } = useTypedSelector(state => state.lists)
   const { fetchLists, updateListName, fetchData } = useActions()
 
@@ -51,12 +50,10 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   }
 
   const onDeleteList = async () => {
-    if (user) {
-      await deleteList(list.id, setLoading)
-      fetchLists()
-      fetchData()
-      setIsEdit(false)
-    }
+    await deleteList(list.id, setLoading)
+    fetchLists()
+    fetchData()
+    setIsEdit(false)
     setIsConfirmModalVisible(false)
   }
 
@@ -111,7 +108,12 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
           >
             <div className={`${isDataInList ? 'bg-yellow-400' : 'bg-transparent'} h-3 w-3`} />
           </div>
-          <div className='flex-1 font-medium truncate'>{listName}</div>
+          <div
+            className='flex-1 font-medium truncate'
+            title={listName}
+          >
+            {listName}
+          </div>
           <EditIcon
             onClick={handleEditVisible}
             className='h-6 w-6 fill-white hover:cursor-pointer'

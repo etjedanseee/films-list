@@ -1,6 +1,7 @@
 import { Dispatch } from "redux";
 import { IList, ListsAction, ListsActionTypes } from "../../types/lists";
 import supabase from "../../supabaseClient";
+import { IDataItemWithLinks } from "../../types/data";
 
 export const setLists = (lists: IList[]) => {
   return (dispatch: Dispatch<ListsAction>) => {

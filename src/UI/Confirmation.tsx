@@ -22,12 +22,12 @@ const Confirmation = ({ title, onClose, onConfirm }: ConfirmationProps) => {
 
   return (
     <div
-      className='z-50 fixed top-0 left-0 h-full w-full bg-black bg-opacity-70 flex justify-center items-center'
+      className='z-50 fixed top-0 left-0 h-full w-full bg-black bg-opacity-70 flex justify-center items-center cursor-pointer'
       onClick={e => handleClose(e)}
     >
       <div
         className={`max-w-none xs:max-w-md flex flex-col gap-y-2 justify-center border-2 border-myblue rounded-xl 
-          py-4 xs:py-6 px-6 xs:px-8 bg-bg1
+          py-4 xs:py-6 px-6 xs:px-8 bg-bg1 cursor-default
         `}
         onClick={e => e.stopPropagation()}
       >

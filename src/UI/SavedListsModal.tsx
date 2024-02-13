@@ -66,20 +66,20 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
   return (
     <div
       className={`fixed z-40 top-0 left-0 w-full bg-black bg-opacity-80 flex items-center justify-center 
-        h-full max-h-full
+        h-full max-h-full cursor-pointer
       `}
       onClick={e => handleClose(e)}
     >
       <div
         className={`bg-mygray3 px-3 xs:px-8 rounded-xl opacity-100 text-base min-w-full xs:min-w-[400px] 
-          max-h-[90%] overflow-y-auto
+          max-h-[90%] overflow-y-auto cursor-default
         `}
         onClick={e => e.stopPropagation()}
       >
         <div className='sticky top-0 bg-inherit py-4 flex justify-between items-center mb-6'>
           <div className='font-bold text-2xl'>Save to...</div>
           <div onClick={handleClose}>
-            <CloseIcon className='fill-white h-6 w-6' />
+            <CloseIcon className='fill-white h-6 w-6 cursor-pointer' />
           </div>
         </div>
         <div className='flex flex-col gap-y-3 mb-6 max-h-full overflow-y-auto'>
@@ -105,6 +105,7 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
                 isFieldDirty={true}
                 placeholder='Enter list name'
                 value={newListName}
+                autoFocus
                 className='w-full'
                 titleBg='bg-bg2'
                 py='py-2'
@@ -118,8 +119,9 @@ const SavedListsModal = ({ handleClose, additionalLists, dataInLists, onListClic
           )}
           {!loading && (
             <div
-              className='flex items-center gap-x-2'
-              onClick={handleIsCreateNewList}>
+              className='flex items-center gap-x-2 cursor-pointer'
+              onClick={handleIsCreateNewList}
+            >
               <CloseIcon className={`${isCreateNewList ? 'rotate-0' : 'rotate-45'} fill-white h-5 w-5`} />
               <div className='text-lg'>{isCreateNewList ? 'Cancel' : 'Create new list'}</div>
             </div>

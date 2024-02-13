@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react'
+import React, { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { ICountDataInLists, IList } from '../types/lists'
 import { calcCountDataInLists } from '../utils/calcCountDataInLists'
@@ -13,6 +13,7 @@ import { ReactComponent as ArrowDownIcon } from '../assets/arrow-down.svg'
 import MediaTypeFilter from '../components/MediaTypeFilter'
 import { MediaTypeFilterOptions } from '../types/data'
 import { mediaTypeFilterArr } from '../utils/consts'
+import ListContextMenu from '../components/ListContextMenu'
 
 const Lists = () => {
   const { data } = useTypedSelector(state => state.data)
@@ -27,6 +28,7 @@ const Lists = () => {
   const [loading, setLoading] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [mediaTypeFilter, setMediaTypeFilter] = useState<MediaTypeFilterOptions>(mediaTypeFilterArr[0])
+  const [listMenuOpen, setListMenuOpen] = useState<{ list: IList, posX: number, posY: number } | null>(null)
 
   const onListClick = (list: IList) => {
     if (currentList && (list.id !== currentList.id)) {
@@ -73,6 +75,11 @@ const Lists = () => {
 
   const onMediaTypeFilterClick = (type: MediaTypeFilterOptions) => {
     setMediaTypeFilter(type)
+  }
+
+  const onListContextMenu = (e: MouseEvent<HTMLLIElement>, list: IList) => {
+    e.preventDefault()
+    setListMenuOpen({ list, posX: e.clientX, posY: e.clientY })
   }
 
   useEffect(() => {
@@ -167,9 +174,10 @@ const Lists = () => {
         )}
       </div>
       <div className='flex xl:gap-x-5 gap-x-3 min-h-full'>
-        <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[400px] 
+        <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[250px] 
             overflow-y-auto min-w-[170px] pt-1 pr-1
-          `}>
+          `}
+        >
           {!!lists.length && currentList && lists.slice(0, 3).map(list => (
             <li
               key={list.id}
@@ -177,6 +185,7 @@ const Lists = () => {
                 ${currentList.id === list.id ? 'text-yellow-400' : 'text-white'}
               `}
               onClick={() => onListClick(list)}
+              onContextMenu={(e) => e.preventDefault()}
             >
               <div title={list.name} className='truncate max-w-[150px] text-inherit'>{list.name}</div>
               <div className='text-inherit'>({countDataInLists[list.id] || 0})</div>
@@ -207,8 +216,9 @@ const Lists = () => {
                             {...provided2.dragHandleProps}
                             className={`font-medium flex gap-x-1 hover:cursor-grab select-none
                                 ${currentList.id === list.id ? 'text-yellow-400' : 'text-white'}
-                              `}
+                            `}
                             onClick={() => onListClick(list)}
+                            onContextMenu={(e) => onListContextMenu(e, list)}
                           >
                             <div title={list.name} className='truncate max-w-[150px] text-inherit'>{list.name}</div>
                             <div className='text-inherit'>({countDataInLists[list.id]})</div>
@@ -240,6 +250,15 @@ const Lists = () => {
         `}
         onClick={() => scrollToCoord(0, 0)}
       />
+      {listMenuOpen !== null && (
+        <ListContextMenu
+          list={listMenuOpen.list}
+          menuPositionX={listMenuOpen.posX}
+          menuPositionY={listMenuOpen.posY}
+          closeContextMenu={() => setListMenuOpen(null)}
+          dataCountInList={countDataInLists[listMenuOpen.list.id]}
+        />
+      )}
     </div>
   )
 }
