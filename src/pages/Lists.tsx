@@ -175,22 +175,9 @@ const Lists = () => {
       </div>
       <div className='flex xl:gap-x-5 gap-x-3 min-h-full'>
         <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[250px] 
-            overflow-y-auto min-w-[170px] pt-1 pr-1
+            min-w-[170px] pt-1 pr-1
           `}
         >
-          {!!lists.length && currentList && lists.slice(0, 3).map(list => (
-            <li
-              key={list.id}
-              className={`font-medium flex gap-x-1 hover:cursor-pointer select-none
-                ${currentList.id === list.id ? 'text-yellow-400' : 'text-white'}
-              `}
-              onClick={() => onListClick(list)}
-              onContextMenu={(e) => e.preventDefault()}
-            >
-              <div title={list.name} className='truncate max-w-[150px] text-inherit'>{list.name}</div>
-              <div className='text-inherit'>({countDataInLists[list.id] || 0})</div>
-            </li>
-          ))}
           {currentList && !loading ? (
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId='lists'>
@@ -198,10 +185,23 @@ const Lists = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className={`flex flex-col gap-y-2 font-medium 
-                      ${snapshot.isDraggingOver ? 'border-myblue px-2 py-1 overflow-x-hidden border-2' : ''}
+                    className={`flex flex-col gap-y-2 font-medium h-full overflow-y-auto
+                      ${snapshot.isDraggingOver && 'border-myblue px-2 py-1 overflow-x-hidden border-2'}
                   `}
                   >
+                    {!!lists.length && currentList && lists.slice(0, 3).map(list => (
+                      <li
+                        key={list.id}
+                        className={`font-medium flex gap-x-1 hover:cursor-pointer select-none
+                          ${currentList.id === list.id ? 'text-yellow-400' : 'text-white'}
+                        `}
+                        onClick={() => onListClick(list)}
+                        onContextMenu={(e) => e.preventDefault()}
+                      >
+                        <div title={list.name} className='truncate max-w-[150px] text-inherit'>{list.name}</div>
+                        <div className='text-inherit'>({countDataInLists[list.id] || 0})</div>
+                      </li>
+                    ))}
                     {!!additionalLists.length && additionalLists.map((list, index) => (
                       <Draggable
                         draggableId={list.id.toString()}

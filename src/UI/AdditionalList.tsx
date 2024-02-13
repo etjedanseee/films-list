@@ -109,7 +109,7 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
             <div className={`${isDataInList ? 'bg-yellow-400' : 'bg-transparent'} h-3 w-3`} />
           </div>
           <div
-            className='flex-1 font-medium truncate'
+            className='flex-1 font-medium truncate cursor-help'
             title={listName}
           >
             {listName}
