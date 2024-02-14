@@ -1,5 +1,5 @@
 import React, { MouseEvent, useEffect, useState } from 'react'
-import { IList } from '../types/lists'
+import { ICountDataInLists, IList } from '../types/lists'
 import { useTypedSelector } from '../hooks/useTypedSelector'
 import { moveDataFromListToList } from '../API/moveDataFromListToList'
 import { useActions } from '../hooks/useActions'
@@ -12,11 +12,13 @@ interface ListContextMenuProps {
   menuPositionX: number,
   menuPositionY: number,
   closeContextMenu: () => void,
-  dataCountInList: number,
+  countDataInLists: ICountDataInLists,
 }
 
-const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu, dataCountInList }: ListContextMenuProps) => {
+const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu, countDataInLists }: ListContextMenuProps) => {
   const { lists } = useTypedSelector(state => state.lists)
+  const { data } = useTypedSelector(state => state.data)
+  const { user } = useTypedSelector(state => state.auth)
   const { fetchData, fetchLists } = useActions()
   const [isMoveListsVisible, setIsMoveListsVisible] = useState(false)
   const [isCopyListsVisible, setIsCopyListsVisible] = useState(false)
@@ -43,11 +45,16 @@ const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu,
   }
 
   const onMoveListData = async (toListId: number) => {
+    if (!user) {
+      return;
+    }
     await moveDataFromListToList({
       method: 'move',
       fromListId: list.id,
       toListId,
       setLoading,
+      data,
+      userId: user.id,
     })
     fetchData()
     fetchLists()
@@ -55,11 +62,16 @@ const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu,
   }
 
   const onCopyListData = async (toListId: number) => {
+    if (!user) {
+      return;
+    }
     await moveDataFromListToList({
       method: 'copy',
       fromListId: list.id,
       toListId,
       setLoading,
+      data,
+      userId: user.id,
     })
     fetchData()
     fetchLists()
@@ -67,7 +79,10 @@ const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu,
   }
 
   const onDeleteList = async () => {
-    await deleteList(list.id, setLoading)
+    if (!user) {
+      return;
+    }
+    await deleteList(list.id, setLoading, data, user.id)
     fetchLists()
     fetchData()
     setIsDeleteListConfirmationVisible(false)
@@ -110,7 +125,7 @@ const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu,
           Menu for "{list.name}"
         </div>
         <div className='flex flex-col gap-y-1 relative'>
-          {dataCountInList > 0 && (
+          {countDataInLists[list.id] > 0 && (
             <>
               <div
                 className='underline cursor-pointer select-none font-medium'
@@ -133,11 +148,12 @@ const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu,
                     {lists.filter(l => l.id !== list.id).map(l => (
                       <div
                         key={l.id}
-                        className='cursor-pointer truncate max-w-[320px]'
-                        title={l.name}
+                        className='cursor-pointer flex gap-x-1'
+                        title={`${l.name} (${countDataInLists[l.id] || 0})`}
                         onClick={() => onMoveListData(l.id)}
                       >
-                        {l.name}
+                        <div className='truncate max-w-[320px]'>{l.name}</div>
+                        <div>({countDataInLists[l.id]})</div>
                       </div>
                     ))}
                   </div>
@@ -152,11 +168,12 @@ const ListContextMenu = ({ list, menuPositionX, menuPositionY, closeContextMenu,
                     {lists.filter(l => l.id !== list.id).map(l => (
                       <div
                         key={l.id}
-                        className='cursor-pointer truncate max-w-[320px]'
-                        title={l.name}
+                        className='cursor-pointer flex gap-x-1'
+                        title={`${l.name} (${countDataInLists[l.id] || 0})`}
                         onClick={() => onCopyListData(l.id)}
                       >
-                        {l.name}
+                        <div className='truncate max-w-[320px]'>{l.name}</div>
+                        <div>({countDataInLists[l.id]})</div>
                       </div>
                     ))}
                   </div>

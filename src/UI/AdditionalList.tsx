@@ -23,6 +23,8 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   const [loading, setLoading] = useState(false)
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false)
   const { lists } = useTypedSelector(state => state.lists)
+  const { data } = useTypedSelector(state => state.data)
+  const { user } = useTypedSelector(state => state.auth)
   const { fetchLists, updateListName, fetchData } = useActions()
 
   const handleEditVisible = () => {
@@ -50,7 +52,10 @@ const AdditionalList = ({ list, onListClick, isDataInList }: AdditionalListProps
   }
 
   const onDeleteList = async () => {
-    await deleteList(list.id, setLoading)
+    if (!user) {
+      return;
+    }
+    await deleteList(list.id, setLoading, data, user.id)
     fetchLists()
     fetchData()
     setIsEdit(false)

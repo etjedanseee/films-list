@@ -175,7 +175,7 @@ const Lists = () => {
       </div>
       <div className='flex xl:gap-x-5 gap-x-3 min-h-full'>
         <ul className={`hidden md:flex sticky top-16 flex-col gap-y-2 h-full max-h-[250px] 
-            min-w-[170px] pt-1 pr-1
+            min-w-[170px] pt-1
           `}
         >
           {currentList && !loading ? (
@@ -185,7 +185,7 @@ const Lists = () => {
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className={`flex flex-col gap-y-2 font-medium h-full overflow-y-auto
+                    className={`flex flex-col gap-y-2 font-medium h-full overflow-y-auto pr-1
                       ${snapshot.isDraggingOver && 'border-myblue px-2 py-1 overflow-x-hidden border-2'}
                   `}
                   >
@@ -197,8 +197,9 @@ const Lists = () => {
                         `}
                         onClick={() => onListClick(list)}
                         onContextMenu={(e) => e.preventDefault()}
+                        title={`${list.name} (${countDataInLists[list.id] || 0})`}
                       >
-                        <div title={list.name} className='truncate max-w-[150px] text-inherit'>{list.name}</div>
+                        <div className='truncate max-w-[150px] text-inherit'>{list.name}</div>
                         <div className='text-inherit'>({countDataInLists[list.id] || 0})</div>
                       </li>
                     ))}
@@ -256,7 +257,7 @@ const Lists = () => {
           menuPositionX={listMenuOpen.posX}
           menuPositionY={listMenuOpen.posY}
           closeContextMenu={() => setListMenuOpen(null)}
-          dataCountInList={countDataInLists[listMenuOpen.list.id]}
+          countDataInLists={countDataInLists}
         />
       )}
     </div>

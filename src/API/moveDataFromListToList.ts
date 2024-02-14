@@ -1,3 +1,4 @@
+import { dataItemsToSbDataItems } from './../utils/dataItemsToSbDataItems';
 import { toast } from "react-toastify";
 import supabase from "../supabaseClient";
 import { IDataItemWithLinks } from "../types/data";
@@ -7,15 +8,13 @@ interface IMoveDataFromListToListProps {
   toListId: number,
   method: 'move' | 'copy',
   setLoading: (b: boolean) => void,
+  data: IDataItemWithLinks[],
+  userId: string,
 }
 
-export const moveDataFromListToList = async ({ fromListId, toListId, method, setLoading }: IMoveDataFromListToListProps) => {
+export const moveDataFromListToList = async ({ fromListId, toListId, method, setLoading, data, userId }: IMoveDataFromListToListProps) => {
   try {
     setLoading(true)
-    const { data, error } = await supabase.from('Data').select('*')
-    if (error) {
-      throw new Error(error.message)
-    }
     const filteredData: IDataItemWithLinks[] = data.filter(item => item.inLists[fromListId])
     const itemsToUpdate: IDataItemWithLinks[] = []
     for (const item of filteredData) {
@@ -48,7 +47,7 @@ export const moveDataFromListToList = async ({ fromListId, toListId, method, set
     if (itemsToUpdate.length) {
       try {
         const { error } = await supabase.from('Data')
-          .upsert(itemsToUpdate)
+          .upsert(dataItemsToSbDataItems(itemsToUpdate, userId))
         if (error) {
           throw new Error(error.message)
         }
