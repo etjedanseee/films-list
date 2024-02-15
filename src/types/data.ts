@@ -90,3 +90,12 @@ export interface IFetchCollectionResponse {
     vote_average: number,
   }[],
 }
+
+export interface IRecommendedItem {
+  dataId: number,
+  mediaType: MediaType,
+  title: string,
+  fullPosterUrl: string,
+  releaseDate: string,
+  vote: number,
+}

@@ -18,6 +18,7 @@ import DataNotes from '../components/DataNotes'
 import { fetchDataByDataIdAndMediaType } from '../API/fetchDataByDataIdAndMediaType'
 import DataCollection from '../components/DataCollection'
 import { ReactComponent as StarIcon } from '../assets/star.svg'
+import RecommendedData from '../components/RecommendedData'
 
 const DataItem = () => {
   const { id, mediaType } = useParams()
@@ -325,6 +326,12 @@ const DataItem = () => {
         additionalInfo={additionalInfo}
         dataId={item.dataId}
       />
+      {id && (mediaType === 'movie' || mediaType === 'tv') && (
+        <RecommendedData
+          dataId={+id}
+          mediaType={mediaType}
+        />
+      )}
     </>
   )
 }
