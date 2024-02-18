@@ -1,6 +1,7 @@
 import { IPreviewDataItem, MediaType } from "../types/search";
 import { IDataAdditionalInfo, IPreviewDataWithAddInfoResponse } from "../types/data";
 import { baseImageUrl, posterSizes } from "../utils/consts";
+import { calcEstimatedSeriesTime } from "../utils/calcEstimatedSeriesTime";
 
 interface fetchDataByDataIdAndMediaTypeProps {
   id: number,
@@ -31,6 +32,11 @@ export const fetchDataByDataIdAndMediaType = async ({ id, mediaType, setAddition
     const data: IPreviewDataWithAddInfoResponse = await response.json()
     const result = data.genres.map(genre => genre.name)
     const belongsToCollectionId = data?.belongs_to_collection?.id
+    const episodeRunTime = data?.episode_run_time
+    const episodesCount = data?.number_of_episodes
+    const estimatedTime = (!!episodeRunTime?.length && episodesCount)
+      ? calcEstimatedSeriesTime(episodesCount, episodeRunTime)
+      : 0
     setAdditionalInfo({
       genres: result,
       overview: data?.overview,
@@ -43,6 +49,8 @@ export const fetchDataByDataIdAndMediaType = async ({ id, mediaType, setAddition
       })
         : undefined,
       originalTitle: data?.original_title || data?.original_name || '',
+      status: data?.status || '?',
+      estimatedTime,
     })
     const imageSize = posterSizes[2]
     const posterPath = data?.poster_path || data?.backdrop_path || '';

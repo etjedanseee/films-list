@@ -47,7 +47,7 @@ const DataNotes = ({ id, dataNotes, setDataNotes }: DataNotesProps) => {
 
   return (
     <div>
-      <div className='font-medium mb-1'>Notes:</div>
+      <div className='font-bold mb-1 text-lg'>Notes:</div>
       <Textarea
         value={notes}
         onChange={onNotesChange}

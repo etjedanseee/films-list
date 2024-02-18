@@ -1,5 +1,6 @@
 import { IAdditionalInfoResponse, IDataAdditionalInfo } from "../types/data"
 import { MediaType } from "../types/search"
+import { calcEstimatedSeriesTime } from "../utils/calcEstimatedSeriesTime"
 
 interface ISearchDataInfo {
   dataId: number,
@@ -28,6 +29,11 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
     const data: IAdditionalInfoResponse = await response.json()
     const genres = data.genres.map(genre => genre.name)
     const belongsToCollectionId = data?.belongs_to_collection?.id
+    const episodeRunTime = data?.episode_run_time
+    const episodesCount = data?.number_of_episodes
+    const estimatedTime = (!!episodeRunTime?.length && episodesCount)
+      ? calcEstimatedSeriesTime(episodesCount, episodeRunTime)
+      : 0
     setAdditionalInfo({
       genres,
       overview: data?.overview,
@@ -40,6 +46,8 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
       })
         : undefined,
       originalTitle: data?.original_title || data?.original_name || '',
+      status: data?.status || '?',
+      estimatedTime,
     })
   } catch (e) {
     console.error('Error fetch dataInfo', e)

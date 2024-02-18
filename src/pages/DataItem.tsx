@@ -5,7 +5,7 @@ import { ILink, IPreviewDataItem, MediaType } from '../types/search'
 import noPicture from '../assets/noPicture.jpg'
 import { changeImageSizePath } from '../utils/changeImageSizePath'
 import DataListManager from '../UI/DataListManager'
-import { IDataAdditionalInfo, IInLists } from '../types/data'
+import { IDataAdditionalInfo, IDataTrailer, IInLists } from '../types/data'
 import { fetchDataAdditionalInfo } from '../API/fetchAdditionalDataInfo'
 import { formatMinToHours } from '../utils/formatMinToHours'
 import { searchDataOnSites } from '../API/searchDataOnSites'
@@ -19,6 +19,8 @@ import { fetchDataByDataIdAndMediaType } from '../API/fetchDataByDataIdAndMediaT
 import DataCollection from '../components/DataCollection'
 import { ReactComponent as StarIcon } from '../assets/star.svg'
 import RecommendedData from '../components/RecommendedData'
+import { fetchDataTrailer } from '../API/fetchDataTrailer'
+import DataTrailer from '../components/DataTrailer'
 
 const DataItem = () => {
   const { id, mediaType } = useParams()
@@ -35,6 +37,7 @@ const DataItem = () => {
   const [sitesLoading, setSitesLoading] = useState(false)
   const [sitesResults, setSitesResults] = useState<ILink[]>([])
   const [timeLoading, setTimeLoading] = useState(0)
+  const [trailer, setTrailer] = useState<IDataTrailer | null>(null)
   const isNeedToUpdateDataLinks = useRef(false)
   const navigate = useNavigate()
 
@@ -163,6 +166,18 @@ const DataItem = () => {
     }
   }, [timeLoading, item, id, mediaType])
 
+  useEffect(() => {
+    if (!id || !mediaType || trailer) {
+      return;
+    }
+    fetchDataTrailer({
+      dataId: +id,
+      mediaType: mediaType as MediaType,
+      setLoading: () => { },
+      setTrailer,
+    })
+  }, [id, mediaType, trailer])
+
   if (!item || infoLoading) {
     return (
       <div className='flex-1 flex justify-center items-center bg-mygray'>
@@ -233,7 +248,7 @@ const DataItem = () => {
               <span className='text-zinc-400'>Countries: </span>{additionalInfo.countries.join(', ')}
             </div>
           )}
-          {item && item.vote !== undefined && (
+          {item && !!item.vote && (
             <div className='flex gap-x-1 items-center font-medium'>
               <span className='text-zinc-400'>Vote: </span>
               <div>{formatVote(item.vote)}</div>
@@ -245,9 +260,19 @@ const DataItem = () => {
               <span className='text-zinc-400'>Runtime: </span>{formatMinToHours(additionalInfo.runtime)}
             </div>
           )}
+          {item && item.mediaType === 'tv' && additionalInfo && !!additionalInfo.estimatedTime && (
+            <div className='font-medium'>
+              <span className='text-zinc-400'>Estimate time: </span>~{formatMinToHours(additionalInfo.estimatedTime)}
+            </div>
+          )}
           {item && !!item.releaseDate.length && (
             <div className='font-medium'>
               <span className='text-zinc-400'>Release date: </span>{item.releaseDate}
+            </div>
+          )}
+          {additionalInfo && additionalInfo.status !== '?' && (
+            <div className='font-medium'>
+              <span className='text-zinc-400'>Status: </span>{additionalInfo.status}
             </div>
           )}
           {additionalInfo && !!additionalInfo.overview.length && (
@@ -321,6 +346,9 @@ const DataItem = () => {
             setDataNotes={setNotes}
           />
         </div>
+      )}
+      {trailer && (
+        <DataTrailer trailer={trailer} />
       )}
       <DataCollection
         additionalInfo={additionalInfo}

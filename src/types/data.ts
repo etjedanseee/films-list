@@ -36,6 +36,8 @@ export interface IDataAdditionalInfo {
     name: string,
   },
   originalTitle: string,
+  status: string,
+  estimatedTime: number,
 }
 
 export type DataAction = setData
@@ -52,6 +54,9 @@ export interface IAdditionalInfoResponse {
   },
   original_title?: string,
   original_name?: string,
+  status?: string,
+  number_of_episodes?: number,
+  episode_run_time?: number[],
 }
 
 export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse {
@@ -98,4 +103,11 @@ export interface IRecommendedItem {
   fullPosterUrl: string,
   releaseDate: string,
   vote: number,
+}
+
+export interface IDataTrailer {
+  name: string,
+  key: string,
+  site: string,
+  publishedAt: string,
 }

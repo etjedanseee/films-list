@@ -162,6 +162,7 @@ const SitesManager = () => {
               onClick={() => onAddNewSite(newSiteValue)}
               title='Add'
               className='py-[6px]'
+              disabled={!newSiteValue.length}
             />
           </div>
         </div>
