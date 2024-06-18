@@ -13,6 +13,7 @@ export const howSimilarStrings = (search: string, str: string): number => {
   if (splittedSearch.length < 2) {
     return 0
   }
+  let maxSimilarity = 0
   const firstWord = splittedSearch[0]
   const lastWord = splittedSearch[splittedSearch.length - 1]
   const startIndexes = allStringMatchesIndexes(firstWord, str)
@@ -22,17 +23,23 @@ export const howSimilarStrings = (search: string, str: string): number => {
       if (endIndex <= startIndex) {
         continue
       }
+      //compare search and 'firstWord...lastWord'
       const searchInStr = str.slice(startIndex, endIndex + lastWord.length)
-      const maxLength = Math.max(search.length, searchInStr.length);
-      const distance = levenshteinDistance(search, searchInStr);
-      const similarity = 1 - distance / maxLength;
-      // console.log(`similarity ${similarity.toFixed(2)} for: ${search} || ${searchInStr}`)
+      const similarity = calcStringsSimilarity(search, searchInStr)
       if (similarity >= MIN_STRINGS_SIMILARITY) {
-        return similarity
+        maxSimilarity = Math.max(maxSimilarity, similarity)
       }
     }
   }
-  return 0
+  return maxSimilarity
+}
+
+export const calcStringsSimilarity = (search: string, str: string): number => {
+  if (!search || !str) return 0
+  const maxLength = Math.max(search.length, str.length);
+  const distance = levenshteinDistance(search, str);
+  const similarity = 1 - distance / maxLength;
+  return similarity
 }
 
 const levenshteinDistance = (str1: string, str2: string) => {

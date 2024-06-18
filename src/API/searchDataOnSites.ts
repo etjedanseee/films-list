@@ -96,14 +96,6 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
               for (let title of titles) {
                 const lowerTitle = title.toLowerCase()
                 const includesYear = lowerResTitle.includes(year) ? 'title' : lowerSnippet.includes(year) ? 'snippet' : null
-                if (isIncludesEntirely(lowerTitle, lowerResTitle)) {
-                  foundedResults.push({ place: 'title', title, similarity: 1, includesYear })
-                  continue
-                }
-                if (isIncludesEntirely(lowerTitle, lowerSnippet)) {
-                  foundedResults.push({ place: 'snippet', title, similarity: 1, includesYear })
-                  continue
-                }
                 const clearTitle = removeSymbolsFromString(lowerTitle)
                 const howSimilarResTitle = howSimilarStrings(clearTitle, clearResTitle)
                 if (howSimilarResTitle >= MIN_STRINGS_SIMILARITY) {
