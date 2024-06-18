@@ -5,6 +5,7 @@ import { IUserSearchApiSettings } from './../types/auth';
 import { toast } from 'react-toastify';
 import { ILink, ISearchDataOnSitesResponse, MediaType } from './../types/search';
 import { fetchDataAlternativeTitles } from './fetchDataAlternativeTitles';
+import { MIN_STRINGS_SIMILARITY } from '../utils/consts';
 
 interface ISearchOnSitesResults {
   displayLink: string,
@@ -105,12 +106,12 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
                 }
                 const clearTitle = removeSymbolsFromString(lowerTitle)
                 const howSimilarResTitle = howSimilarStrings(clearTitle, clearResTitle)
-                if (howSimilarResTitle >= 0.9) {
+                if (howSimilarResTitle >= MIN_STRINGS_SIMILARITY) {
                   foundedResults.push({ place: 'title', title, similarity: howSimilarResTitle, includesYear })
                   continue
                 }
                 const howSimilarSnippet = howSimilarStrings(clearTitle, clearSnippet)
-                if (howSimilarSnippet >= 0.9) {
+                if (howSimilarSnippet >= MIN_STRINGS_SIMILARITY) {
                   foundedResults.push({ place: 'snippet', title, similarity: howSimilarSnippet, includesYear })
                 }
               }
@@ -124,7 +125,8 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
                   const bSim = b.similarity === 1 ? 1 : 0
                   return (bYear + bPlace + bSim) - (aYear + aPlace + aSim)
                 })
-                return { ...item, found: foundedResults[0] }
+                const bestResult = foundedResults[0]
+                return { ...item, found: bestResult }
               }
               return { ...item, found: null }
             })
@@ -138,8 +140,8 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
               const bSim = b.found.similarity === 1 ? 1 : 0
               return (bYear + bPlace + bSim) - (aYear + aPlace + aSim)
             })
-            console.log('sortedItems for', sites[index], sortedItems)
             if (sortedItems.length) {
+              console.log('sortedItems for', sites[index], sortedItems)
               results[index] = {
                 site: sites[index], result: {
                   link: sortedItems[0].link,
@@ -154,6 +156,7 @@ export const searchDataOnSites = async ({ searchApiSettings, search, sites, data
     }
     if (!results.length) {
       setSitesResults([])
+      setLoading(false)
       return;
     }
     results.sort((a, b) => ((b?.result && 1) || 0) - ((a?.result && 1) || 0))

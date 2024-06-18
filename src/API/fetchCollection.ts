@@ -27,7 +27,7 @@ export const fetchCollection = async ({ collectionId, collectionName, setCollect
   try {
     const response = await fetch(`${url}/${collectionId}?language=en-US`, options)
     if (response.status !== 200) {
-      throw new Error('Error:' + response.status)
+      throw new Error('Fetch collection error:' + response.status)
     }
     const data: IFetchCollectionResponse = await response.json()
     const imageSize = posterSizes[2]
@@ -57,10 +57,10 @@ export const fetchCollection = async ({ collectionId, collectionName, setCollect
     setCollection({
       id: collectionId,
       name: collectionName,
-      parts: sortedResults
+      parts: sortedResults,
     })
   } catch (e) {
-    console.error('Error fetch collection', e)
+    console.error('Error fetch collection:', e)
   } finally {
     setLoading(false)
   }

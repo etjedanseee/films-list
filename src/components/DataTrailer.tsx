@@ -23,7 +23,6 @@ const DataTrailer = ({ trailer }: DataTrailerProps) => {
         allowFullScreen
         className='h-[200px] lg:h-[250px] max-w-xs lg:max-w-md w-full'
       ></iframe>
-
     </div>
   )
 }

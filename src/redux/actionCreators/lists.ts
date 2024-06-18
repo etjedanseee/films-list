@@ -1,7 +1,6 @@
 import { Dispatch } from "redux";
 import { IList, ListsAction, ListsActionTypes } from "../../types/lists";
 import supabase from "../../supabaseClient";
-import { IDataItemWithLinks } from "../../types/data";
 
 export const setLists = (lists: IList[]) => {
   return (dispatch: Dispatch<ListsAction>) => {
@@ -19,12 +18,12 @@ export const fetchLists = () => {
       if (error) {
         throw new Error(error.message)
       }
-      const lists = data?.map(item => ({
+      const lists = [...data?.map(item => ({
         id: item.id,
         name: item.name,
         orderNum: item.order_num,
-        userIdOwner: item.user_id_owner
-      })).sort((a, b) => a.orderNum - b.orderNum)
+        userIdOwner: item.user_id_owner,
+      }))].sort((a, b) => a.orderNum - b.orderNum)
 
       dispatch({
         type: ListsActionTypes.SET_LISTS,

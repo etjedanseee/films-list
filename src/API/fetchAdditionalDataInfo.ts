@@ -31,7 +31,7 @@ export const fetchDataAdditionalInfo = async ({ dataId, mediaType, setLoading, s
     const belongsToCollectionId = data?.belongs_to_collection?.id
     const episodeRunTime = data?.episode_run_time
     const episodesCount = data?.number_of_episodes
-    const estimatedTime = (!!episodeRunTime?.length && episodesCount)
+    const estimatedTime = (episodeRunTime?.length && episodesCount)
       ? calcEstimatedSeriesTime(episodesCount, episodeRunTime)
       : 0
     setAdditionalInfo({

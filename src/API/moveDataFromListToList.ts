@@ -13,52 +13,47 @@ interface IMoveDataFromListToListProps {
 }
 
 export const moveDataFromListToList = async ({ fromListId, toListId, method, setLoading, data, userId }: IMoveDataFromListToListProps) => {
-  try {
-    setLoading(true)
-    const filteredData: IDataItemWithLinks[] = data.filter(item => item.inLists[fromListId])
-    const itemsToUpdate: IDataItemWithLinks[] = []
-    for (const item of filteredData) {
-      const inListsEntries = Object.entries(item.inLists)
-      const toListEntr = inListsEntries.find(entr => +entr[0] === toListId)
-      let fromListDate = new Date().toISOString()
-      const updatedEntries = inListsEntries.filter(entr => {
-        if (+entr[0] === fromListId) {
-          fromListDate = entr[1]  // prev date
-          return method === 'move' ? false : true
-        }
-        return true
-      })
-      if (!toListEntr) {
-        updatedEntries.push([toListId.toString(), fromListDate])
-        if (method === 'copy') {
-          itemsToUpdate.push({
-            ...item,
-            inLists: Object.fromEntries(updatedEntries),
-          })
-        }
+  setLoading(true)
+  const filteredData: IDataItemWithLinks[] = data.filter(item => item.inLists[fromListId])
+  const itemsToUpdate: IDataItemWithLinks[] = []
+  for (const item of filteredData) {
+    const inListsEntries = Object.entries(item.inLists)
+    const toListEntr = inListsEntries.find(entr => +entr[0] === toListId)
+    let fromListDate = new Date().toISOString()
+    const updatedEntries = inListsEntries.filter(entr => {
+      if (+entr[0] === fromListId) {
+        fromListDate = entr[1]  // prev date
+        return method === 'move' ? false : true
       }
-      if (method === 'move') {
+      return true
+    })
+    if (!toListEntr) {
+      updatedEntries.push([toListId.toString(), fromListDate])
+      if (method === 'copy') {
         itemsToUpdate.push({
           ...item,
           inLists: Object.fromEntries(updatedEntries),
         })
       }
     }
-    if (itemsToUpdate.length) {
-      try {
-        const { error } = await supabase.from('Data')
-          .upsert(dataItemsToSbDataItems(itemsToUpdate, userId))
-        if (error) {
-          throw new Error(error.message)
-        }
-        toast.success(`Successful ${method} data`)
-      } catch (e) {
-        console.error(`Error ${method} data`, e)
-      }
+    if (method === 'move') {
+      itemsToUpdate.push({
+        ...item,
+        inLists: Object.fromEntries(updatedEntries),
+      })
     }
-  } catch (e) {
-    console.error(`Error ${method} data func:`, e);
-  } finally {
-    setLoading(false)
   }
+  if (itemsToUpdate.length) {
+    try {
+      const { error } = await supabase.from('Data')
+        .upsert(dataItemsToSbDataItems(itemsToUpdate, userId))
+      if (error) {
+        throw new Error(error.message)
+      }
+      toast.success(`Successful ${method} data`)
+    } catch (e) {
+      console.error(`Error ${method} data`, e)
+    }
+  }
+  setLoading(false)
 }

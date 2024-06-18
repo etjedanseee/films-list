@@ -2,6 +2,7 @@ import { Dispatch } from "react"
 import { DataAction, DataActionTypes, IDataItemWithLinks, IInLists } from "../../types/data"
 import supabase from "../../supabaseClient"
 import { ILink } from "../../types/search"
+import { dataItemsToSbDataItems } from "../../utils/dataItemsToSbDataItems"
 
 
 export const setData = (data: IDataItemWithLinks[]) => {
@@ -46,18 +47,7 @@ export const fetchData = () => {
 export const saveDataToSb = (item: IDataItemWithLinks, userId: string, setLoading: (b: boolean) => void, setId: (id: number) => void, prevData: IDataItemWithLinks[]) => {
   return async (dispatch: Dispatch<DataAction>) => {
     setLoading(true)
-    const sbItem = {
-      data_id: item.dataId,
-      title: item.title,
-      full_poster_url: item.fullPosterUrl,
-      media_type: item.mediaType,
-      release_date: item.releaseDate,
-      vote: item.vote,
-      inLists: item.inLists,
-      links: item.links,
-      notes: item.notes,
-      user_id_owner: userId,
-    }
+    const sbItem = dataItemsToSbDataItems([item], userId)[0]
     try {
       const { data, error } = await supabase.from('Data')
         .insert(sbItem)

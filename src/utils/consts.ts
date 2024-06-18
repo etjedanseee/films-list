@@ -32,3 +32,5 @@ export const trendingResultsTypeArr: DiscoverTrendingResultsType[] = ['Trending'
 export const moviesResultsTypeArr: DiscoverMoviesResultsType[] = ['Popular movies', 'Now playing movies', 'Top rated movies']
 export const seriesResultsTypeArr: DiscoverSeriesResultsType[] = ['Popular series', 'Top rated series']
 export const similarResultsTypeArr: DiscoverSimilarResultsType[] = ['Similar']
+//from 0 to 1
+export const MIN_STRINGS_SIMILARITY = 0.9

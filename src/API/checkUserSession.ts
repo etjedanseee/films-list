@@ -12,13 +12,11 @@ export const checkUserSession = async (setUser: (user: IUser | null) => void, se
       setUser({
         email: data.session.user.email || '',
         id: data.session.user.id,
-        metaData: searchApiSettings ? {
-          searchApiSettings: searchApiSettings,
-        } : null
+        metaData: searchApiSettings ? { searchApiSettings } : null
       })
     }
   } catch (e) {
-    console.error('get session error', e)
+    console.error('get user session error', e)
   } finally {
     setIsCheckingSession(false)
   }

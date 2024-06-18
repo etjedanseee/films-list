@@ -1,4 +1,5 @@
 import { allStringMatchesIndexes } from "./allStringMatchesIndexes"
+import { MIN_STRINGS_SIMILARITY } from "./consts"
 import { isIncludesEntirely } from "./isIncludesEntirely"
 
 export const howSimilarStrings = (search: string, str: string): number => {
@@ -26,7 +27,7 @@ export const howSimilarStrings = (search: string, str: string): number => {
       const distance = levenshteinDistance(search, searchInStr);
       const similarity = 1 - distance / maxLength;
       // console.log(`similarity ${similarity.toFixed(2)} for: ${search} || ${searchInStr}`)
-      if (similarity >= 0.9) {
+      if (similarity >= MIN_STRINGS_SIMILARITY) {
         return similarity
       }
     }

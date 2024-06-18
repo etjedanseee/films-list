@@ -5,7 +5,7 @@ import * as SearchActionCreators from './search'
 import * as DataActionCreators from './data'
 import * as DiscoverActionCreators from './discover'
 
-export default {
+const actionCreators = {
   ...AuthActionCreators,
   ...ListsActionCreators,
   ...SitesActionCreators,
@@ -13,3 +13,5 @@ export default {
   ...DataActionCreators,
   ...DiscoverActionCreators,
 }
+
+export default actionCreators
