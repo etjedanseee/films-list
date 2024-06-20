@@ -7,7 +7,7 @@ import { useActions } from '../hooks/useActions'
 
 const Settings = () => {
   const { user } = useTypedSelector(state => state.auth)
-  const { setUser, setData, setLists, setSearchResults, setSites } = useActions()
+  const { setUser, setData, setLists, setSearchResults, setSites, setLastSearch } = useActions()
 
   const onSignOutClick = () => {
     setUser(null)
@@ -15,7 +15,9 @@ const Settings = () => {
     setLists([])
     setSearchResults([], 1)
     setSites([])
+    setLastSearch('')
     localStorage.clear()
+    console.clear()
   }
 
   useEffect(() => {
