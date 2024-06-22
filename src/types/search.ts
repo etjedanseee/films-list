@@ -86,3 +86,26 @@ interface setTotalPages {
 }
 
 export type SearchAction = setResults | setLoading | setLastSearch | setPage | setTotalPages
+
+export interface ISearchOnSitesResults {
+  displayLink: string,
+  link: string,
+  snippet: string,
+  title: string,
+  found: IFoundedSitesResultsDetails | null,
+}
+
+export interface ISearchOnSitesFoundResults {
+  displayLink: string,
+  link: string,
+  snippet: string,
+  title: string,
+  found: IFoundedSitesResultsDetails,
+}
+
+export interface IFoundedSitesResultsDetails {
+  place: 'title' | 'snippet',
+  title: string,
+  similarity: number,
+  includesYear: 'title' | 'snippet' | null,
+}
