@@ -3,6 +3,7 @@ import { DataAction, DataActionTypes, IDataItemWithLinks, IInLists } from "../..
 import supabase from "../../supabaseClient"
 import { ILink } from "../../types/search"
 import { dataItemsToSbDataItems } from "../../utils/dataItemsToSbDataItems"
+import { toast } from "react-toastify"
 
 
 export const setData = (data: IDataItemWithLinks[]) => {
@@ -48,11 +49,13 @@ export const saveDataToSb = (item: IDataItemWithLinks, userId: string, setLoadin
   return async (dispatch: Dispatch<DataAction>) => {
     setLoading(true)
     const sbItem = dataItemsToSbDataItems([item], userId)[0]
+    const { id, ...sbItemWithoutId } = sbItem
     try {
       const { data, error } = await supabase.from('Data')
-        .insert(sbItem)
+        .insert(sbItemWithoutId)
         .select('*')
       if (error) {
+        toast.error(`Error saving ${item.title}`)
         throw new Error(error.message)
       }
       if (data && data.length) {
@@ -80,6 +83,7 @@ export const updateDataInListsOnSb = (id: number, inLists: IInLists, setLoading:
         .eq('id', id)
 
       if (error) {
+        toast.error(`Error updating data inLists`)
         throw new Error(error.message)
       }
       dispatch({
@@ -103,6 +107,7 @@ export const deleteDataOnSb = (id: number, setLoading: (b: boolean) => void, pre
         .eq('id', id)
 
       if (error) {
+        toast.error(`Error deleting data`)
         throw new Error(error.message)
       }
       dispatch({

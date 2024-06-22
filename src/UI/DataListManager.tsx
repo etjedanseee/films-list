@@ -38,11 +38,12 @@ const DataListManager = ({ id, setId, inLists, setInLists, previewDataItem, note
     const listsEntries = Object.entries(inLists)
     const currentList = { [listId]: new Date().toISOString() }
     if (!listsEntries.length) {
+      const stubId = 999999
       const itemWithLinks: IDataItemWithLinks = {
         ...previewDataItem,
         links: sitesResults,
         inLists: currentList,
-        id: 999,
+        id: stubId,
         notes,
       }
       setInLists(currentList)
