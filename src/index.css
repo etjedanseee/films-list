@@ -40,9 +40,17 @@ input:-webkit-autofill:active {
 
 ::-webkit-scrollbar {
   width: 7px;
+  height: 10px;
   background: #161616;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgb(250, 204, 21);
   border-radius: 0.3rem;
+}
+
+@media (max-width: 450px) {
+  ::-webkit-scrollbar-thumb {
+    width: 15%;
+  }
 }

@@ -21,10 +21,10 @@ const MediaTypeFilter = ({ mediaTypeFilter, onMediaTypeFilterClick }: MediaTypeF
   }
 
   return (
-    <div className='relative flex gap-x-2 items-center font-medium text-lg'>
+    <div className='relative flex gap-x-2 items-center font-medium'>
       <div
-        className={`select-none text-white border-white border-2 rounded-md cursor-pointer xs:py-[2px] py-[5px]
-          min-w-[100px] text-center text-base xs:text-lg
+        className={`select-none text-white border-white border-2 rounded-md cursor-pointer xs:py-1 py-[5px]
+          min-w-[100px] text-center
         `}
         onClick={handleOptionsListOpen}
       >
