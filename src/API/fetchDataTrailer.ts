@@ -25,7 +25,6 @@ export const fetchDataTrailer = async ({
 	setLoading,
 	setTrailer,
 }: fetchDataTrailerProps) => {
-	console.log('fetch', dataId, mediaType)
 	const url = 'https://api.themoviedb.org/3/'
 	const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY
 	const ACCESS_TOKEN = process.env.REACT_APP_MOVIE_DB_ACCESS_TOKEN
@@ -51,6 +50,9 @@ export const fetchDataTrailer = async ({
 		const data: fetchDataTrailerResponse = await response.json()
 		if (data?.results && data.results.length) {
 			const trailers = data.results.filter((res) => res.type === 'Trailer')
+			if (!trailers.length) {
+				return
+			}
 			const trailer = trailers[trailers.length - 1]
 			setTrailer({
 				key: trailer.key,

@@ -21,6 +21,7 @@ import { ReactComponent as StarIcon } from '../assets/star.svg'
 import RecommendedData from '../components/RecommendedData'
 import { fetchDataTrailer } from '../API/fetchDataTrailer'
 import DataTrailer from '../components/DataTrailer'
+import { fetchSeriesRuntime } from '../API/fetchSeriesRuntime'
 
 const DataItem = () => {
 	const { id, mediaType } = useParams()
@@ -39,6 +40,7 @@ const DataItem = () => {
 	const [sitesResults, setSitesResults] = useState<ILink[]>([])
 	const [timeLoading, setTimeLoading] = useState(0)
 	const [trailer, setTrailer] = useState<IDataTrailer | null>(null)
+	const [seriesRuntime, setSeriesRuntime] = useState(0)
 	const isNeedToUpdateDataLinks = useRef(false)
 	const navigate = useNavigate()
 
@@ -188,6 +190,21 @@ const DataItem = () => {
 		})
 	}, [id, mediaType])
 
+	useEffect(() => {
+		if (
+			id &&
+			mediaType &&
+			additionalInfo?.numberOfSeasons &&
+			mediaType === 'tv'
+		) {
+			fetchSeriesRuntime({
+				id: +id,
+				numberOfSeasons: additionalInfo.numberOfSeasons,
+				setSeriesRuntime,
+			})
+		}
+	}, [id, mediaType, additionalInfo])
+
 	if (!item || infoLoading) {
 		return (
 			<div className='flex-1 flex justify-center items-center bg-mygray'>
@@ -276,21 +293,13 @@ const DataItem = () => {
 							<StarIcon className='h-6 w-6 -mt-[1px] fill-yellow-500' />
 						</div>
 					)}
-					{additionalInfo && !!additionalInfo.runtime && (
+					{((additionalInfo && !!additionalInfo.runtime) ||
+						!!seriesRuntime) && (
 						<div className='font-medium'>
 							<span className='text-zinc-400'>Runtime: </span>
-							{formatMinToHours(additionalInfo.runtime)}
+							{formatMinToHours(additionalInfo?.runtime || seriesRuntime)}
 						</div>
 					)}
-					{item &&
-						item.mediaType === 'tv' &&
-						additionalInfo &&
-						!!additionalInfo.estimatedTime && (
-							<div className='font-medium'>
-								<span className='text-zinc-400'>Estimate time: </span>~
-								{formatMinToHours(additionalInfo.estimatedTime)}
-							</div>
-						)}
 					{item && !!item.releaseDate.length && (
 						<div className='font-medium'>
 							<span className='text-zinc-400'>Release date: </span>

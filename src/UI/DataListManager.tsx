@@ -144,6 +144,7 @@ const DataListManager = ({
 							list={lists[index]}
 							onListClick={onListClick}
 							dateAddedToList={inLists[lists[index].id]}
+							key={index}
 						/>
 					))}
 					<div

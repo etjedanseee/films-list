@@ -1,113 +1,119 @@
-import { ILink, IPreviewDataItem, MediaType } from "./search";
+import { ILink, IPreviewDataItem, MediaType } from './search'
 
 //[list id]: Date
 export interface IInLists {
-  [id: number]: string,
+	[id: number]: string
 }
 
 export interface IDataItemWithLinks extends IPreviewDataItem {
-  id: number,
-  inLists: IInLists,
-  links: ILink[],
-  notes: string,
+	id: number
+	inLists: IInLists
+	links: ILink[]
+	notes: string
 }
 
 export interface DataState {
-  data: IDataItemWithLinks[],
+	data: IDataItemWithLinks[]
 }
 
 export enum DataActionTypes {
-  SET_DATA = 'SET_DATA',
+	SET_DATA = 'SET_DATA',
 }
 
 interface setData {
-  type: DataActionTypes.SET_DATA,
-  payload: IDataItemWithLinks[],
+	type: DataActionTypes.SET_DATA
+	payload: IDataItemWithLinks[]
 }
 
 export interface IDataAdditionalInfo {
-  genres: string[],
-  overview: string,
-  runtime: number,
-  countries: string[],
-  tagline: string,
-  belongsToCollection?: {
-    id: number,
-    name: string,
-  },
-  originalTitle: string,
-  status: string,
-  estimatedTime: number,
+	genres: string[]
+	overview: string
+	runtime: number
+	countries: string[]
+	tagline: string
+	belongsToCollection?: {
+		id: number
+		name: string
+	}
+	originalTitle: string
+	status: string
+	numberOfSeasons: number
 }
 
 export type DataAction = setData
 
 export interface IAdditionalInfoResponse {
-  genres: { name: string }[],
-  overview: string,
-  runtime?: number,
-  production_countries?: { name: string }[],
-  tagline?: string,
-  belongs_to_collection?: {
-    id: number,
-    name: string,
-  },
-  original_title?: string,
-  original_name?: string,
-  status?: string,
-  number_of_episodes?: number,
-  episode_run_time?: number[],
+	genres: { name: string }[]
+	overview: string
+	runtime?: number
+	production_countries?: { name: string }[]
+	tagline?: string
+	belongs_to_collection?: {
+		id: number
+		name: string
+	}
+	original_title?: string
+	original_name?: string
+	status?: string
+	number_of_seasons?: number
 }
 
-export interface IPreviewDataWithAddInfoResponse extends IAdditionalInfoResponse {
-  name?: string,
-  title?: string,
-  poster_path?: string,
-  backdrop_path?: string,
-  media_type?: MediaType,
-  release_date?: string,
-  first_air_date?: string,
-  vote_average?: number,
-  number_of_seasons?: number,
+export interface IPreviewDataWithAddInfoResponse
+	extends IAdditionalInfoResponse {
+	name?: string
+	title?: string
+	poster_path?: string
+	backdrop_path?: string
+	media_type?: MediaType
+	release_date?: string
+	first_air_date?: string
+	vote_average?: number
+	number_of_seasons?: number
 }
 
 export type MediaTypeFilterTitle = 'All' | 'Movies' | 'Series'
 export interface MediaTypeFilterOptions {
-  title: MediaTypeFilterTitle,
-  type: MediaType
+	title: MediaTypeFilterTitle
+	type: MediaType
 }
 
 export interface ICollection {
-  id: number,
-  name: string,
-  parts: IPreviewDataItem[],
+	id: number
+	name: string
+	parts: IPreviewDataItem[]
 }
 
 export interface IFetchCollectionResponse {
-  id: number,
-  name: string,
-  parts: {
-    id: number,
-    title: string,
-    release_date?: string,
-    poster_path?: string,
-    backdrop_path?: string,
-    vote_average: number,
-  }[],
+	id: number
+	name: string
+	parts: {
+		id: number
+		title: string
+		release_date?: string
+		poster_path?: string
+		backdrop_path?: string
+		vote_average: number
+	}[]
 }
 
 export interface IRecommendedItem {
-  dataId: number,
-  mediaType: MediaType,
-  title: string,
-  fullPosterUrl: string,
-  releaseDate: string,
-  vote: number,
+	dataId: number
+	mediaType: MediaType
+	title: string
+	fullPosterUrl: string
+	releaseDate: string
+	vote: number
 }
 
 export interface IDataTrailer {
-  name: string,
-  key: string,
-  site: string,
-  publishedAt: string,
+	name: string
+	key: string
+	site: string
+	publishedAt: string
+}
+
+export interface IFetchSeriesRuntimeResponse {
+	episodes: {
+		runtime: number
+	}[]
 }
